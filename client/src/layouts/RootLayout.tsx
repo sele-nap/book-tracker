@@ -1,23 +1,27 @@
 import { NavLink, Outlet } from 'react-router-dom';
-
-const nav = [
-  { to: '/',           label: 'Bibliothèque', icon: '📚' },
-  { to: '/reading',    label: 'En cours',     icon: '🕯️' },
-  { to: '/shelves',    label: 'Étagères',     icon: '🍄' },
-  { to: '/stats',      label: 'Stats',        icon: '✦'  },
-  { to: '/challenges', label: 'Challenges',   icon: '🌙' },
-];
+import LanguageToggle from '../components/LanguageToggle';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export default function RootLayout() {
+  const { t } = useLanguage();
+
+  const nav = [
+    { to: '/', label: t.nav.library, icon: '📚' },
+    { to: '/reading', label: t.nav.reading, icon: '🕯️' },
+    { to: '/shelves', label: t.nav.shelves, icon: '🍄' },
+    { to: '/stats', label: t.nav.stats, icon: '✦' },
+    { to: '/challenges', label: t.nav.challenges, icon: '🌙' },
+  ];
+
   return (
     <div className="flex min-h-screen bg-night text-cream">
-      {/* Sidebar */}
       <aside className="w-56 shrink-0 border-r border-mist/30 flex flex-col py-8 px-4 gap-2">
-        {/* Logo */}
         <div className="flex items-center gap-3 px-2 mb-6">
           <img src="/logo.svg" alt="logo" className="w-10 h-10" />
           <span className="font-display text-lg text-cream tracking-wide leading-tight">
-            Book<br />Tracker
+            Book
+            <br />
+            Tracker
           </span>
         </div>
 
@@ -38,9 +42,12 @@ export default function RootLayout() {
             <span className="font-body">{label}</span>
           </NavLink>
         ))}
+
+        <div className="mt-auto px-2 pt-4 border-t border-mist/20 flex justify-center">
+          <LanguageToggle />
+        </div>
       </aside>
 
-      {/* Contenu */}
       <main className="flex-1 p-8 overflow-y-auto">
         <Outlet />
       </main>

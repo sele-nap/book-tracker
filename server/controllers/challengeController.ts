@@ -13,7 +13,6 @@ export const createChallenge = asyncHandler(async (req, res) => {
     targetGenres?: string[];
   };
 
-  // TTL : expire le 1er janvier de l'année suivante
   const expiresAt = new Date(year + 1, 0, 1);
 
   const challenge = await Challenge.create({ year, goalBooks, targetGenres, expiresAt });

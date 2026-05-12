@@ -19,7 +19,6 @@ const challengeSchema = new Schema<IChallenge>(
   { timestamps: true },
 );
 
-// TTL index — supprime automatiquement le challenge après expiresAt
 challengeSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 export const Challenge = model<IChallenge>('Challenge', challengeSchema);

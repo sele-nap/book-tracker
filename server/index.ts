@@ -22,12 +22,10 @@ app.use('/api/shelves', shelvesRouter);
 app.use('/api/challenges', challengesRouter);
 app.use('/api/stats', statsRouter);
 
-// 404
 app.use((_req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Erreurs globales
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);
 

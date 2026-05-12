@@ -1,7 +1,6 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  /* Palette dark cottagecore */
   --color-night: #0f0d12;
   --color-dusk: #1a1620;
   --color-bark: #2a2330;
@@ -22,7 +21,6 @@
   --color-mushroom: #8a6a50;
   --color-amber: #c49a50;
 
-  /* Typographie */
   --font-display: 'Cinzel', 'Palatino Linotype', serif;
   --font-body: 'Crimson Text', 'Georgia', serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -35,7 +33,9 @@
     font-family: var(--font-body);
   }
 
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     font-family: var(--font-display);
     color: var(--color-cream);
     letter-spacing: 0.05em;
