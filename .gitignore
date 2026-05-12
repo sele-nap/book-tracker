@@ -4,16 +4,6 @@ node_modules/
 # Build
 dist/
 
-# Environment
-.env
-.env.local
-.env.*.local
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-
 # OS
 .DS_Store
 
