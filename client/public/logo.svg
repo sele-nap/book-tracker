@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <!-- Tige -->
+  <path d="M46 78 Q48 95 52 102 Q60 108 68 102 Q72 95 74 78 Z" fill="#c9b99a"/>
+  <path d="M52 102 Q58 110 68 102 Q64 106 60 107 Q56 107 52 102Z" fill="#a89070"/>
+
+  <!-- Chapeau -->
+  <path d="M18 72 Q20 40 60 32 Q100 40 102 72 Q90 62 60 60 Q30 62 18 72Z" fill="#7a2d3e"/>
+  <path d="M18 72 Q30 62 60 60 Q90 62 102 72 Q90 78 60 80 Q30 78 18 72Z" fill="#a84d5e"/>
+
+  <!-- Bord du chapeau (lamelles) -->
+  <path d="M18 72 Q30 80 60 82 Q90 80 102 72" fill="none" stroke="#e8dfc8" stroke-width="1.5" stroke-dasharray="3,3" opacity="0.5"/>
+
+  <!-- Taches -->
+  <ellipse cx="45" cy="52" rx="7" ry="5.5" fill="#e8dfc8" opacity="0.9"/>
+  <ellipse cx="72" cy="47" rx="6" ry="5" fill="#e8dfc8" opacity="0.9"/>
+  <ellipse cx="60" cy="38" rx="5" ry="4" fill="#e8dfc8" opacity="0.9"/>
+  <ellipse cx="85" cy="58" rx="5" ry="4" fill="#e8dfc8" opacity="0.9"/>
+  <ellipse cx="34" cy="61" rx="4" ry="3.5" fill="#e8dfc8" opacity="0.9"/>
+
+  <!-- Petites étoiles -->
+  <g fill="#c49a50" opacity="0.85">
+    <text x="12" y="50" font-size="11">✦</text>
+    <text x="96" y="45" font-size="9">✦</text>
+    <text x="22" y="30" font-size="7">✦</text>
+    <text x="88" y="28" font-size="8">✦</text>
+  </g>
+
+  <!-- Petites herbes sous le champignon -->
+  <g stroke="#5a8a50" stroke-width="1.5" stroke-linecap="round" fill="none">
+    <path d="M44 103 Q42 96 46 91"/>
+    <path d="M44 103 Q46 95 44 90"/>
+    <path d="M76 103 Q74 96 78 91"/>
+    <path d="M76 103 Q78 95 76 90"/>
+  </g>
+</svg>
