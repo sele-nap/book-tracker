@@ -1,13 +1,15 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { booksApi, readsApi } from '../api/books';
-import { useToast } from '../components/Toaster';
-import type { Book, Read, ReadStatus } from '../api/books';
+import type { BooksPage, Read, ReadStatus } from '../api/books';
 import AddBookForm from '../components/AddBookForm';
 import BookCard from '../components/BookCard';
 import Modal from '../components/Modal';
+import { useToast } from '../components/Toaster';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useApi } from '../hooks/useApi';
+
+const LIMIT = 20;
 
 export default function Library() {
   const { t } = useLanguage();
@@ -15,11 +17,12 @@ export default function Library() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | ReadStatus>('all');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [page, setPage] = useState(1);
 
-  const fetchBooks = useCallback(() => booksApi.getAll(), []);
+  const fetchBooks = useCallback(() => booksApi.getAll(page, LIMIT), [page]);
   const fetchReads = useCallback(() => readsApi.getAll(), []);
 
-  const { data: books, loading: booksLoading, refetch: refetchBooks } = useApi<Book[]>(fetchBooks);
+  const { data: booksPage, loading: booksLoading, refetch: refetchBooks } = useApi<BooksPage>(fetchBooks);
   const { data: reads, loading: readsLoading, refetch: refetchReads } = useApi<Read[]>(fetchReads);
 
   const STATUS_FILTERS: { value: 'all' | ReadStatus; label: string }[] = [
@@ -32,7 +35,7 @@ export default function Library() {
 
   const readsByBookId = new Map(reads?.map((r) => [r.book._id, r]) ?? []);
 
-  const filtered = (books ?? []).filter((b) => {
+  const filtered = (booksPage?.books ?? []).filter((b) => {
     const matchSearch =
       b.title.toLowerCase().includes(search.toLowerCase()) ||
       b.author.toLowerCase().includes(search.toLowerCase());
@@ -42,6 +45,12 @@ export default function Library() {
   });
 
   const loading = booksLoading || readsLoading;
+  const totalPages = booksPage?.pages ?? 1;
+
+  const goTo = (p: number) => {
+    setPage(p);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div>
@@ -53,7 +62,7 @@ export default function Library() {
       <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-3xl mb-1">{t.library.title}</h1>
-          <p className="text-parchment">{books?.length ?? '—'} {t.library.bookCount} ✨</p>
+          <p className="text-parchment">{booksPage?.total ?? '—'} {t.library.bookCount} ✨</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
@@ -67,7 +76,7 @@ export default function Library() {
         type="text"
         placeholder={t.library.search}
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => { setSearch(e.target.value); setPage(1); }}
         className="w-full bg-dusk border border-mist/30 rounded-lg px-4 py-2.5 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 mb-4"
       />
 
@@ -75,7 +84,7 @@ export default function Library() {
         {STATUS_FILTERS.map(({ value, label }) => (
           <button
             key={value}
-            onClick={() => setStatusFilter(value)}
+            onClick={() => { setStatusFilter(value); setPage(1); }}
             className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
               statusFilter === value
                 ? 'bg-wine text-cream'
@@ -109,6 +118,36 @@ export default function Library() {
               </Link>
             );
           })}
+        </div>
+      )}
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-10">
+          <button
+            onClick={() => goTo(page - 1)}
+            disabled={page === 1}
+            className="text-xs px-3 py-1.5 rounded-full bg-bark text-parchment hover:bg-mist/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          >
+            ←
+          </button>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <button
+              key={p}
+              onClick={() => goTo(p)}
+              className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
+                p === page ? 'bg-wine text-cream' : 'bg-bark text-parchment hover:bg-mist/30'
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            onClick={() => goTo(page + 1)}
+            disabled={page === totalPages}
+            className="text-xs px-3 py-1.5 rounded-full bg-bark text-parchment hover:bg-mist/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+          >
+            →
+          </button>
         </div>
       )}
     </div>

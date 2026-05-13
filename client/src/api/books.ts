@@ -27,13 +27,15 @@ export type Read = {
   review?: string;
 };
 
+export type BooksPage = { books: Book[]; total: number; page: number; pages: number };
+
 export const booksApi = {
-  getAll:  ()                    => api.get<Book[]>('/books'),
-  getById: (id: string)          => api.get<Book>(`/books/${id}`),
-  search:  (q: string)           => api.get<Book[]>(`/books/search?q=${encodeURIComponent(q)}`),
-  create:  (body: Partial<Book>) => api.post<Book>('/books', body),
+  getAll:  (page = 1, limit = 20) => api.get<BooksPage>(`/books?page=${page}&limit=${limit}`),
+  getById: (id: string)           => api.get<Book>(`/books/${id}`),
+  search:  (q: string)            => api.get<Book[]>(`/books/search?q=${encodeURIComponent(q)}`),
+  create:  (body: Partial<Book>)  => api.post<Book>('/books', body),
   update:  (id: string, body: Partial<Book>) => api.patch<Book>(`/books/${id}`, body),
-  delete:  (id: string)          => api.delete<void>(`/books/${id}`),
+  delete:  (id: string)           => api.delete<void>(`/books/${id}`),
 };
 
 export const readsApi = {

@@ -2,9 +2,17 @@ import type { Request, Response } from 'express';
 import { Book } from '../models/Book.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
-export const getBooks = asyncHandler(async (_req, res) => {
-  const books = await Book.find().sort({ createdAt: -1 });
-  res.json(books);
+export const getBooks = asyncHandler(async (req, res) => {
+  const limit = Math.min(parseInt(String(req.query.limit ?? '20')), 100);
+  const page  = Math.max(parseInt(String(req.query.page  ?? '1')), 1);
+  const skip  = (page - 1) * limit;
+
+  const [books, total] = await Promise.all([
+    Book.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+    Book.countDocuments(),
+  ]);
+
+  res.json({ books, total, page, pages: Math.ceil(total / limit) });
 });
 
 export const getBookById = asyncHandler(async (req, res) => {
