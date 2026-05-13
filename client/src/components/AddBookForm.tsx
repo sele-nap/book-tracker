@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { booksApi, readsApi } from '../api/books';
 import type { BookLanguage, ReadStatus } from '../api/books';
 import { detectLanguage, getCoverUrl, searchOpenLibrary } from '../api/openLibrary';
@@ -17,6 +17,7 @@ export default function AddBookForm({ onSuccess }: Props) {
   const [olQuery, setOlQuery] = useState('');
   const [olResults, setOlResults] = useState<OLResult[]>([]);
   const [olSearching, setOlSearching] = useState(false);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [fields, setFields] = useState({
     title: '',
@@ -43,13 +44,19 @@ export default function AddBookForm({ onSuccess }: Props) {
   const removeGenre = (g: string) =>
     setFields((f) => ({ ...f, genre: f.genre.filter((x) => x !== g) }));
 
-  const handleOLSearch = async () => {
-    if (!olQuery.trim()) return;
+  const handleOLSearch = async (query: string) => {
+    if (!query.trim()) { setOlResults([]); return; }
     setOlSearching(true);
-    const results = await searchOpenLibrary(olQuery);
+    const results = await searchOpenLibrary(query);
     setOlResults(results);
     setOlSearching(false);
   };
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => handleOLSearch(olQuery), 400);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [olQuery]);
 
   const fillFromOL = (result: OLResult) => {
     setFields((f) => ({
@@ -94,21 +101,17 @@ export default function AddBookForm({ onSuccess }: Props) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto pr-1">
       <div>
         <label className={labelClass}>{t.form.search}</label>
-        <div className="flex gap-2">
+        <div className="relative">
           <input
             className={inputClass}
             value={olQuery}
             onChange={(e) => setOlQuery(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleOLSearch(); } }}
+            onKeyDown={(e) => { if (e.key === 'Enter') e.preventDefault(); }}
             placeholder="The Name of the Wind…"
           />
-          <button
-            type="button"
-            onClick={handleOLSearch}
-            className="shrink-0 text-xs bg-bark border border-mist/20 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
-          >
-            {olSearching ? '✦' : t.form.searchBtn}
-          </button>
+          {olSearching && (
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-stone text-xs">✦</span>
+          )}
         </div>
 
         {olResults.length > 0 && (
