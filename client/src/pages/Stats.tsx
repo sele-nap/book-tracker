@@ -41,14 +41,17 @@ export default function Stats() {
   const fetchByMonth  = useCallback(() => statsApi.byMonth(year), [year]);
   const fetchByGenre  = useCallback(() => statsApi.byGenre(), []);
   const fetchRatings  = useCallback(() => statsApi.ratingsByGenre(), []);
+  const fetchStreak   = useCallback(() => statsApi.streak(), []);
 
   const { data: global }  = useApi<GlobalStats>(fetchGlobal);
   const { data: byMonth } = useApi<StatByMonth[]>(fetchByMonth);
   const { data: byGenre } = useApi<StatByGenre[]>(fetchByGenre);
   const { data: ratings } = useApi<StatByRating[]>(fetchRatings);
+  const { data: streakData } = useApi<{ streak: number }>(fetchStreak);
 
-  const finished  = global?.finished[0];
-  const statusMap = Object.fromEntries(global?.byStatus.map((s) => [s.status, s.count]) ?? []);
+  const finished   = global?.finished[0];
+  const statusMap  = Object.fromEntries(global?.byStatus.map((s) => [s.status, s.count]) ?? []);
+  const totalPages = global?.totalPages[0]?.total ?? 0;
 
   const monthData = Array.from({ length: 12 }, (_, i) => ({
     month: months[i],
@@ -68,11 +71,13 @@ export default function Stats() {
         <p className="text-parchment">{t.stats.subtitle}</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <StatCard label={t.stats.finished}  value={finished?.totalBooks ?? 0} />
-        <StatCard label={t.stats.reading}   value={statusMap['reading']  ?? 0} />
-        <StatCard label={t.stats.wishlist}  value={statusMap['wishlist'] ?? 0} />
-        <StatCard label={t.stats.avgRating} value={finished?.avgRating ? `${finished.avgRating} ★` : '—'} />
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+        <StatCard label={t.stats.finished}   value={finished?.totalBooks ?? 0} />
+        <StatCard label={t.stats.reading}    value={statusMap['reading']  ?? 0} />
+        <StatCard label={t.stats.wishlist}   value={statusMap['wishlist'] ?? 0} />
+        <StatCard label={t.stats.avgRating}  value={finished?.avgRating ? `${finished.avgRating} ★` : '—'} />
+        <StatCard label={t.stats.totalPages} value={totalPages.toLocaleString()} />
+        <StatCard label={t.stats.streak}     value={streakData?.streak ?? 0} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

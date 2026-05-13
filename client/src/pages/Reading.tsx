@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { readsApi } from '../api/books';
 import type { Read } from '../api/books';
 import { useToast } from '../components/Toaster';
@@ -53,12 +54,12 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
 
   return (
     <div className="bg-dusk border border-mist/30 rounded-xl p-5 flex gap-4">
-      <div className="w-14 h-20 bg-bark rounded-lg shrink-0 flex items-center justify-center overflow-hidden">
+      <Link to={`/books/${book._id}`} className="w-14 h-20 bg-bark rounded-lg shrink-0 flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity">
         {book.coverUrl
-          ? <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
+          ? <img src={book.coverUrl} alt="" className="w-full h-full object-cover" />
           : <span className="text-2xl opacity-30">📖</span>
         }
-      </div>
+      </Link>
 
       <div className="flex-1 min-w-0">
         <h3 className="font-display text-cream text-sm leading-snug truncate">{book.title}</h3>

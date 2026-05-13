@@ -73,6 +73,7 @@ export const translations = {
       currentBooks: 'livres dans cette étagère',
       add: '+ ajouter',
       remove: 'retirer',
+      confirmDelete: 'Supprimer cette étagère définitivement ?',
     },
     stats: {
       title: 'Stats',
@@ -81,6 +82,8 @@ export const translations = {
       reading: 'en cours',
       wishlist: 'wishlist',
       avgRating: 'note moyenne',
+      totalPages: 'pages lues',
+      streak: 'jours consécutifs',
       byMonth: 'livres lus par mois',
       byGenre: 'genres les plus lus',
       ratingsByGenre: 'note moyenne par genre',
@@ -199,6 +202,7 @@ export const translations = {
       currentBooks: 'books on this shelf',
       add: '+ add',
       remove: 'remove',
+      confirmDelete: 'Delete this shelf permanently?',
     },
     stats: {
       title: 'Stats',
@@ -207,6 +211,8 @@ export const translations = {
       reading: 'reading',
       wishlist: 'wishlist',
       avgRating: 'avg rating',
+      totalPages: 'pages read',
+      streak: 'day streak',
       byMonth: 'books read by month',
       byGenre: 'top genres',
       ratingsByGenre: 'avg rating by genre',

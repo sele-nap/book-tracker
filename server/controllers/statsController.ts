@@ -63,9 +63,43 @@ export const globalStats = asyncHandler(async (_req, res) => {
           { $group: { _id: null, totalBooks: { $sum: 1 }, avgRating: { $avg: '$rating' } } },
           { $project: { _id: 0, totalBooks: 1, avgRating: { $round: ['$avgRating', 2] } } },
         ],
+        totalPages: [
+          { $match: { status: 'finished' } },
+          { $lookup: { from: 'books', localField: 'book', foreignField: '_id', as: 'bookData' } },
+          { $unwind: { path: '$bookData', preserveNullAndEmptyArrays: true } },
+          { $group: { _id: null, total: { $sum: { $ifNull: ['$bookData.pages', 0] } } } },
+          { $project: { _id: 0, total: 1 } },
+        ],
       },
     },
   ]);
 
   res.json(result[0]);
+});
+
+export const streak = asyncHandler(async (_req, res) => {
+  const reads = await Read.find({ status: 'finished', finishedAt: { $exists: true } })
+    .select('finishedAt')
+    .sort({ finishedAt: -1 });
+
+  const days = Array.from(new Set(
+    reads.map((r) => r.finishedAt!.toISOString().split('T')[0])
+  )).sort().reverse();
+
+  if (!days.length) { res.json({ streak: 0 }); return; }
+
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+
+  if (days[0] !== today && days[0] !== yesterday) { res.json({ streak: 0 }); return; }
+
+  let count = 0;
+  let cursor = days[0] === today ? today : yesterday;
+  for (const day of days) {
+    if (day !== cursor) break;
+    count++;
+    cursor = new Date(new Date(cursor).getTime() - 86400000).toISOString().split('T')[0];
+  }
+
+  res.json({ streak: count });
 });

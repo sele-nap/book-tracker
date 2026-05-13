@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { booksApi } from '../api/books';
 import type { Book } from '../api/books';
 import { shelvesApi } from '../api/shelves';
@@ -21,14 +22,14 @@ function ShelfCard({ shelf, onDelete, onOpen }: { shelf: Shelf; onDelete: () => 
         <button onClick={onDelete} className="text-stone hover:text-blush transition-colors text-xs">✕</button>
       </div>
 
-      <div className="flex gap-1.5">
+      <div className="flex gap-2">
         {previews.map((b) => (
-          <div key={b._id} className="w-10 h-14 bg-bark rounded overflow-hidden shrink-0">
+          <Link key={b._id} to={`/books/${b._id}`} className="w-14 h-20 bg-bark rounded-lg overflow-hidden shrink-0 border border-mist/20 hover:opacity-80 transition-opacity">
             {b.coverUrl
-              ? <img src={b.coverUrl} alt={b.title} className="w-full h-full object-cover" />
-              : <span className="w-full h-full flex items-center justify-center text-lg opacity-20">📖</span>
+              ? <img src={b.coverUrl} alt="" className="w-full h-full object-cover" />
+              : <div className="w-full h-full flex items-center justify-center text-xl opacity-20">📖</div>
             }
-          </div>
+          </Link>
         ))}
         {shelf.books.length === 0 && (
           <p className="text-stone text-xs italic">{t.shelves.empty}</p>
@@ -158,6 +159,7 @@ export default function Shelves() {
   };
 
   const deleteShelf = async (id: string) => {
+    if (!window.confirm(t.shelves.confirmDelete)) return;
     await shelvesApi.delete(id);
     refetch();
   };
