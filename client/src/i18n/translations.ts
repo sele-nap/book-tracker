@@ -45,6 +45,8 @@ export const translations = {
       rating: 'Note',
       cover: 'URL de couverture',
       submit: '+ Ajouter le livre',
+      search: 'Rechercher sur Open Library',
+      searchBtn: 'chercher',
     },
     reading: {
       title: 'En cours',
@@ -149,6 +151,8 @@ export const translations = {
       rating: 'Rating',
       cover: 'Cover URL',
       submit: '+ Add book',
+      search: 'Search on Open Library',
+      searchBtn: 'search',
     },
     reading: {
       title: 'Reading',
