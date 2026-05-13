@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ToastProvider } from './components/Toaster';
 import { LanguageProvider } from './i18n/LanguageContext';
 import RootLayout from './layouts/RootLayout';
 import BookDetail from './pages/BookDetail';
@@ -11,6 +12,7 @@ import Stats from './pages/Stats';
 export default function App() {
   return (
     <LanguageProvider>
+      <ToastProvider>
       <BrowserRouter>
         <Routes>
           <Route element={<RootLayout />}>
@@ -23,6 +25,7 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </ToastProvider>
     </LanguageProvider>
   );
 }

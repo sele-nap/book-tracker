@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { readsApi } from '../api/books';
 import type { Read } from '../api/books';
+import { useToast } from '../components/Toaster';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useApi } from '../hooks/useApi';
 
@@ -24,6 +25,7 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
 
 function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [pageInput, setPageInput] = useState(String(read.currentPage ?? ''));
   const [saving, setSaving] = useState(false);
 
@@ -34,6 +36,7 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
     await readsApi.update(read._id, { currentPage: p });
     setSaving(false);
     onUpdate();
+    toast(t.toast.pageSaved);
   };
 
   const markAs = async (status: 'finished' | 'dropped') => {
@@ -42,6 +45,7 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
       finishedAt: status === 'finished' ? new Date().toISOString() : undefined,
     });
     onUpdate();
+    toast(status === 'finished' ? t.toast.markedFinished : t.toast.markedDropped);
   };
 
   const book = read.book;

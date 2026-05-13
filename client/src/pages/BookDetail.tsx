@@ -4,6 +4,7 @@ import { booksApi, readsApi } from '../api/books';
 import type { Book, Read } from '../api/books';
 import Modal from '../components/Modal';
 import EditBookForm from '../components/EditBookForm';
+import { useToast } from '../components/Toaster';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useApi } from '../hooks/useApi';
 
@@ -21,6 +22,7 @@ export default function BookDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { toast } = useToast();
 
   const [showEdit, setShowEdit] = useState(false);
   const [reviewText, setReviewText] = useState<string | null>(null);
@@ -41,6 +43,7 @@ export default function BookDetail() {
     await readsApi.update(read._id, { review: currentReview });
     setSavingReview(false);
     refetchRead();
+    toast(t.toast.reviewSaved);
   };
 
   const handleDelete = async () => {
@@ -48,6 +51,7 @@ export default function BookDetail() {
     setDeleting(true);
     if (read) await readsApi.delete(read._id);
     await booksApi.delete(book._id);
+    toast(t.toast.bookDeleted);
     navigate('/');
   };
 
@@ -67,7 +71,7 @@ export default function BookDetail() {
           <EditBookForm
             book={book}
             read={read}
-            onSuccess={() => { setShowEdit(false); refetchBook(); refetchRead(); setReviewText(null); }}
+            onSuccess={() => { setShowEdit(false); refetchBook(); refetchRead(); setReviewText(null); toast(t.toast.bookUpdated); }}
           />
         </Modal>
       )}

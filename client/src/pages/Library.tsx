@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { booksApi, readsApi } from '../api/books';
+import { useToast } from '../components/Toaster';
 import type { Book, Read, ReadStatus } from '../api/books';
 import AddBookForm from '../components/AddBookForm';
 import BookCard from '../components/BookCard';
@@ -10,6 +11,7 @@ import { useApi } from '../hooks/useApi';
 
 export default function Library() {
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | ReadStatus>('all');
   const [showAddModal, setShowAddModal] = useState(false);
@@ -45,7 +47,7 @@ export default function Library() {
     <div>
       {showAddModal && (
         <Modal title={t.library.add} onClose={() => setShowAddModal(false)}>
-          <AddBookForm onSuccess={() => { setShowAddModal(false); refetchBooks(); refetchReads(); }} />
+          <AddBookForm onSuccess={() => { setShowAddModal(false); refetchBooks(); refetchReads(); toast(t.toast.bookAdded); }} />
         </Modal>
       )}
       <div className="flex items-start justify-between mb-8">

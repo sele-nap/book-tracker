@@ -105,6 +105,15 @@ export const translations = {
       alreadyIn: 'déjà ajouté',
       add: 'ajouter',
     },
+    toast: {
+      bookAdded: 'Livre ajouté ✦',
+      bookUpdated: 'Livre modifié ✦',
+      bookDeleted: 'Livre supprimé',
+      reviewSaved: 'Critique sauvegardée ✦',
+      pageSaved: 'Progression sauvegardée ✦',
+      markedFinished: 'Livre terminé ✦',
+      markedDropped: 'Lecture abandonnée —',
+    },
     bookDetail: {
       back: '← Bibliothèque',
       edit: 'modifier',
@@ -221,6 +230,15 @@ export const translations = {
       search: 'search',
       alreadyIn: 'already added',
       add: 'add',
+    },
+    toast: {
+      bookAdded: 'Book added ✦',
+      bookUpdated: 'Book updated ✦',
+      bookDeleted: 'Book deleted',
+      reviewSaved: 'Review saved ✦',
+      pageSaved: 'Progress saved ✦',
+      markedFinished: 'Book finished ✦',
+      markedDropped: 'Reading dropped —',
     },
     bookDetail: {
       back: '← Library',
