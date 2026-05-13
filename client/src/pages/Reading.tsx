@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { readsApi } from '../api/books';
 import type { Read } from '../api/books';
+import EmptyState from '../components/EmptyState';
 import { useToast } from '../components/Toaster';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useApi } from '../hooks/useApi';
@@ -130,7 +131,7 @@ export default function Reading() {
       {loading ? (
         <p className="text-stone text-center mt-16">✦</p>
       ) : !reads?.length ? (
-        <p className="text-stone text-center mt-16">{t.reading.empty}</p>
+        <EmptyState message={t.reading.empty} variant="candle" />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {reads.map((read) => (

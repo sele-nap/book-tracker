@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import EmptyState from '../components/EmptyState';
 import { booksApi } from '../api/books';
 import type { Book } from '../api/books';
 import { challengesApi } from '../api/challenges';
@@ -259,7 +260,7 @@ export default function Challenges() {
       {loading ? (
         <p className="text-stone text-center mt-16">✦</p>
       ) : !challenges?.length ? (
-        <p className="text-stone text-center mt-16">{t.challenges.noChallenges}</p>
+        <EmptyState message={t.challenges.noChallenges} variant="moon" />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {challenges.map((c) => (

@@ -4,6 +4,7 @@ import { booksApi, readsApi } from '../api/books';
 import type { BooksPage, Read, ReadStatus } from '../api/books';
 import AddBookForm from '../components/AddBookForm';
 import BookCard from '../components/BookCard';
+import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { useToast } from '../components/Toaster';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -99,7 +100,7 @@ export default function Library() {
       {loading ? (
         <p className="text-stone text-center mt-16">✦</p>
       ) : filtered.length === 0 ? (
-        <p className="text-stone text-center mt-16">{t.library.empty}</p>
+        <EmptyState message={t.library.empty} variant="book" />
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {filtered.map((book) => {

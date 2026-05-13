@@ -4,6 +4,7 @@ import { booksApi } from '../api/books';
 import type { Book } from '../api/books';
 import { shelvesApi } from '../api/shelves';
 import type { Shelf } from '../api/shelves';
+import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { useLanguage } from '../i18n/LanguageContext';
 import { useApi } from '../hooks/useApi';
@@ -224,7 +225,7 @@ export default function Shelves() {
       {loading ? (
         <p className="text-stone text-center mt-16">✦</p>
       ) : !shelves?.length ? (
-        <p className="text-stone text-center mt-16">{t.shelves.noShelves}</p>
+        <EmptyState message={t.shelves.noShelves} variant="mushroom" />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {shelves.map((shelf) => (
