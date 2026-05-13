@@ -22,6 +22,7 @@ export type Read = {
   status: ReadStatus;
   startedAt?: string;
   finishedAt?: string;
+  currentPage?: number;
   rating?: number;
   review?: string;
 };

@@ -7,6 +7,7 @@ export interface IRead extends Document {
   status: ReadStatus;
   startedAt?: Date;
   finishedAt?: Date;
+  currentPage?: number;
   rating?: number;
   review?: string;
   createdAt: Date;
@@ -22,6 +23,7 @@ const readSchema = new Schema<IRead>(
     },
     startedAt: { type: Date },
     finishedAt: { type: Date },
+    currentPage: { type: Number, min: 0 },
     rating: { type: Number, min: 1, max: 5 },
     review: { type: String, trim: true },
   },
