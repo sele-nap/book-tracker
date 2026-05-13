@@ -1,15 +1,24 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { booksApi } from '../api/books';
 import type { Book } from '../api/books';
-import { shelvesApi } from '../api/shelves';
+import { booksApi } from '../api/books';
 import type { Shelf } from '../api/shelves';
+import { shelvesApi } from '../api/shelves';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
-import { useLanguage } from '../i18n/LanguageContext';
+import { ShelvesSkeleton } from '../components/Skeleton';
 import { useApi } from '../hooks/useApi';
+import { useLanguage } from '../i18n/LanguageContext';
 
-function ShelfCard({ shelf, onDelete, onOpen }: { shelf: Shelf; onDelete: () => void; onOpen: () => void }) {
+function ShelfCard({
+  shelf,
+  onDelete,
+  onOpen,
+}: {
+  shelf: Shelf;
+  onDelete: () => void;
+  onOpen: () => void;
+}) {
   const { t } = useLanguage();
   const previews = shelf.books.slice(0, 4);
 
@@ -18,18 +27,36 @@ function ShelfCard({ shelf, onDelete, onOpen }: { shelf: Shelf; onDelete: () => 
       <div className="flex items-start justify-between">
         <div>
           <h3 className="font-display text-cream">{shelf.name}</h3>
-          {shelf.description && <p className="text-stone text-xs mt-0.5">{shelf.description}</p>}
+          {shelf.description && (
+            <p className="text-stone text-xs mt-0.5">{shelf.description}</p>
+          )}
         </div>
-        <button onClick={onDelete} className="text-stone hover:text-blush transition-colors text-xs">✕</button>
+        <button
+          onClick={onDelete}
+          className="text-stone hover:text-blush transition-colors text-xs"
+        >
+          ✕
+        </button>
       </div>
 
       <div className="flex gap-2">
         {previews.map((b) => (
-          <Link key={b._id} to={`/books/${b._id}`} className="w-14 h-20 bg-bark rounded-lg overflow-hidden shrink-0 border border-mist/20 hover:opacity-80 transition-opacity">
-            {b.coverUrl
-              ? <img src={b.coverUrl} alt="" className="w-full h-full object-cover" />
-              : <div className="w-full h-full flex items-center justify-center text-xl opacity-20">📖</div>
-            }
+          <Link
+            key={b._id}
+            to={`/books/${b._id}`}
+            className="w-14 h-20 bg-bark rounded-lg overflow-hidden shrink-0 border border-mist/20 hover:opacity-80 transition-opacity"
+          >
+            {b.coverUrl ? (
+              <img
+                src={b.coverUrl}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-xl opacity-20">
+                📖
+              </div>
+            )}
           </Link>
         ))}
         {shelf.books.length === 0 && (
@@ -38,8 +65,13 @@ function ShelfCard({ shelf, onDelete, onOpen }: { shelf: Shelf; onDelete: () => 
       </div>
 
       <div className="flex items-center justify-between mt-auto">
-        <span className="text-stone text-xs">{shelf.books.length} {t.shelves.bookCount}</span>
-        <button onClick={onOpen} className="text-xs text-parchment hover:text-cream transition-colors">
+        <span className="text-stone text-xs">
+          {shelf.books.length} {t.shelves.bookCount}
+        </span>
+        <button
+          onClick={onOpen}
+          className="text-xs text-parchment hover:text-cream transition-colors"
+        >
           {t.shelves.manage} →
         </button>
       </div>
@@ -47,7 +79,15 @@ function ShelfCard({ shelf, onDelete, onOpen }: { shelf: Shelf; onDelete: () => 
   );
 }
 
-function ManageShelfModal({ shelf, onClose, onUpdate }: { shelf: Shelf; onClose: () => void; onUpdate: () => void }) {
+function ManageShelfModal({
+  shelf,
+  onClose,
+  onUpdate,
+}: {
+  shelf: Shelf;
+  onClose: () => void;
+  onUpdate: () => void;
+}) {
   const { t } = useLanguage();
   const [search, setSearch] = useState('');
   const [results, setResults] = useState<Book[]>([]);
@@ -80,7 +120,9 @@ function ManageShelfModal({ shelf, onClose, onUpdate }: { shelf: Shelf; onClose:
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') searchBooks(); }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') searchBooks();
+            }}
             placeholder={t.shelves.searchBooks}
             className="flex-1 bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
           />
@@ -95,17 +137,26 @@ function ManageShelfModal({ shelf, onClose, onUpdate }: { shelf: Shelf; onClose:
         {results.length > 0 && (
           <div className="space-y-1 max-h-40 overflow-y-auto">
             {results.map((b) => (
-              <div key={b._id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-bark/50">
+              <div
+                key={b._id}
+                className="flex items-center justify-between px-3 py-2 rounded-lg bg-bark/50"
+              >
                 <div>
                   <p className="text-cream text-xs font-display">{b.title}</p>
                   <p className="text-stone text-xs">{b.author}</p>
                 </div>
                 {shelfBookIds.has(b._id) ? (
-                  <button onClick={() => removeBook(b._id)} className="text-xs text-blush hover:text-rose transition-colors">
+                  <button
+                    onClick={() => removeBook(b._id)}
+                    className="text-xs text-blush hover:text-rose transition-colors"
+                  >
                     {t.shelves.remove}
                   </button>
                 ) : (
-                  <button onClick={() => addBook(b._id)} className="text-xs text-sage hover:text-fern transition-colors">
+                  <button
+                    onClick={() => addBook(b._id)}
+                    className="text-xs text-sage hover:text-fern transition-colors"
+                  >
                     {t.shelves.add}
                   </button>
                 )}
@@ -115,18 +166,26 @@ function ManageShelfModal({ shelf, onClose, onUpdate }: { shelf: Shelf; onClose:
         )}
 
         <div>
-          <p className="text-parchment text-xs mb-2">{t.shelves.currentBooks}</p>
+          <p className="text-parchment text-xs mb-2">
+            {t.shelves.currentBooks}
+          </p>
           {shelf.books.length === 0 ? (
             <p className="text-stone text-xs italic">{t.shelves.empty}</p>
           ) : (
             <div className="space-y-1 max-h-48 overflow-y-auto">
               {shelf.books.map((b) => (
-                <div key={b._id} className="flex items-center justify-between px-3 py-2 rounded-lg bg-bark/50">
+                <div
+                  key={b._id}
+                  className="flex items-center justify-between px-3 py-2 rounded-lg bg-bark/50"
+                >
                   <div>
                     <p className="text-cream text-xs font-display">{b.title}</p>
                     <p className="text-stone text-xs">{b.author}</p>
                   </div>
-                  <button onClick={() => removeBook(b._id)} className="text-xs text-blush hover:text-rose transition-colors">
+                  <button
+                    onClick={() => removeBook(b._id)}
+                    className="text-xs text-blush hover:text-rose transition-colors"
+                  >
                     {t.shelves.remove}
                   </button>
                 </div>
@@ -179,7 +238,9 @@ export default function Shelves() {
         <Modal title={t.shelves.create} onClose={() => setShowCreate(false)}>
           <form onSubmit={createShelf} className="space-y-4">
             <div>
-              <label className="block text-xs text-parchment mb-1">{t.shelves.name} *</label>
+              <label className="block text-xs text-parchment mb-1">
+                {t.shelves.name} *
+              </label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -189,7 +250,9 @@ export default function Shelves() {
               />
             </div>
             <div>
-              <label className="block text-xs text-parchment mb-1">{t.shelves.description}</label>
+              <label className="block text-xs text-parchment mb-1">
+                {t.shelves.description}
+              </label>
               <input
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -197,7 +260,10 @@ export default function Shelves() {
                 className="w-full bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
               />
             </div>
-            <button type="submit" className="w-full bg-wine hover:bg-rose text-cream text-sm py-2.5 rounded-lg transition-colors">
+            <button
+              type="submit"
+              className="w-full bg-wine hover:bg-rose text-cream text-sm py-2.5 rounded-lg transition-colors"
+            >
               {t.shelves.create}
             </button>
           </form>
@@ -217,13 +283,16 @@ export default function Shelves() {
           <h1 className="text-3xl mb-1">{t.shelves.title}</h1>
           <p className="text-parchment">{t.shelves.subtitle}</p>
         </div>
-        <button onClick={() => setShowCreate(true)} className="bg-wine hover:bg-rose text-cream text-sm px-4 py-2 rounded-lg transition-colors font-body">
+        <button
+          onClick={() => setShowCreate(true)}
+          className="bg-wine hover:bg-rose text-cream text-sm px-4 py-2 rounded-lg transition-colors font-body"
+        >
           {t.shelves.new}
         </button>
       </div>
 
       {loading ? (
-        <p className="text-stone text-center mt-16">✦</p>
+        <ShelvesSkeleton />
       ) : !shelves?.length ? (
         <EmptyState message={t.shelves.noShelves} variant="mushroom" />
       ) : (

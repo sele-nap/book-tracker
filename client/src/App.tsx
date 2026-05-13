@@ -13,18 +13,18 @@ export default function App() {
   return (
     <LanguageProvider>
       <ToastProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<RootLayout />}>
-            <Route index element={<Library />} />
-            <Route path="books/:id" element={<BookDetail />} />
-            <Route path="reading" element={<Reading />} />
-            <Route path="shelves" element={<Shelves />} />
-            <Route path="stats" element={<Stats />} />
-            <Route path="challenges" element={<Challenges />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<RootLayout />}>
+              <Route index element={<Library />} />
+              <Route path="books/:id" element={<BookDetail />} />
+              <Route path="reading" element={<Reading />} />
+              <Route path="shelves" element={<Shelves />} />
+              <Route path="stats" element={<Stats />} />
+              <Route path="challenges" element={<Challenges />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </ToastProvider>
     </LanguageProvider>
   );

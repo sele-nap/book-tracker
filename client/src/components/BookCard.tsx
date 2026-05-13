@@ -13,26 +13,38 @@ type Props = {
 };
 
 const statusStyles: Record<Props['status'], string> = {
-  reading:  'bg-sage/20 text-sage',
+  reading: 'bg-sage/20 text-sage',
   finished: 'bg-wine/20 text-blush',
-  dropped:  'bg-stone/20 text-stone',
+  dropped: 'bg-stone/20 text-stone',
   wishlist: 'bg-amber/20 text-amber',
 };
 
 const languageStyles: Record<BookLanguage, string> = {
-  vo:    'bg-fern/20 text-fern',
-  vf:    'bg-mushroom/20 text-parchment',
+  vo: 'bg-fern/20 text-fern',
+  vf: 'bg-mushroom/20 text-parchment',
   other: 'bg-mist/20 text-stone',
 };
 
-export default function BookCard({ title, author, genre, status, language, rating, coverUrl }: Props) {
+export default function BookCard({
+  title,
+  author,
+  genre,
+  status,
+  language,
+  rating,
+  coverUrl,
+}: Props) {
   const { t } = useLanguage();
 
   return (
     <div className="bg-dusk border border-mist/30 rounded-xl overflow-hidden hover:border-mist/60 transition-colors group">
       <div className="h-40 bg-bark flex items-center justify-center overflow-hidden">
         {coverUrl ? (
-          <img src={coverUrl} alt={title} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          <img
+            src={coverUrl}
+            alt={title}
+            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
         ) : (
           <span className="text-4xl opacity-30">📖</span>
         )}
@@ -40,11 +52,15 @@ export default function BookCard({ title, author, genre, status, language, ratin
 
       <div className="p-4">
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className={`text-xs px-2 py-0.5 rounded-full ${statusStyles[status]}`}>
+          <span
+            className={`text-xs px-2 py-0.5 rounded-full ${statusStyles[status]}`}
+          >
             {t.status[status]}
           </span>
           {language && (
-            <span className={`text-xs px-2 py-0.5 rounded-full ${languageStyles[language]}`}>
+            <span
+              className={`text-xs px-2 py-0.5 rounded-full ${languageStyles[language]}`}
+            >
               {t.bookLanguage[language]}
             </span>
           )}
@@ -58,14 +74,22 @@ export default function BookCard({ title, author, genre, status, language, ratin
         {rating && (
           <div className="flex gap-0.5 mt-2">
             {Array.from({ length: 5 }).map((_, i) => (
-              <span key={i} className={`text-xs ${i < rating ? 'text-amber' : 'text-mist'}`}>★</span>
+              <span
+                key={i}
+                className={`text-xs ${i < rating ? 'text-amber' : 'text-mist'}`}
+              >
+                ★
+              </span>
             ))}
           </div>
         )}
 
         <div className="flex flex-wrap gap-1 mt-2">
           {genre.slice(0, 2).map((g) => (
-            <span key={g} className="text-xs text-parchment/60 bg-bark px-2 py-0.5 rounded-full">
+            <span
+              key={g}
+              className="text-xs text-parchment/60 bg-bark px-2 py-0.5 rounded-full"
+            >
               {g}
             </span>
           ))}

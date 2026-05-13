@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import {
-  readsByMonth,
-  readsByGenre,
   avgRatingByGenre,
   globalStats,
+  readsByGenre,
+  readsByMonth,
   streak,
 } from '../controllers/statsController.js';
 

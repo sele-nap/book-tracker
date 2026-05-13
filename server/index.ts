@@ -1,4 +1,8 @@
-import express, { type NextFunction, type Request, type Response } from 'express';
+import express, {
+  type NextFunction,
+  type Request,
+  type Response,
+} from 'express';
 import { Error as MongooseError } from 'mongoose';
 import connectDB from './config/db.js';
 import booksRouter from './routes/books.js';

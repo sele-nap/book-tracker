@@ -15,7 +15,7 @@ export const addBookToShelf = asyncHandler(async (req, res) => {
   const shelf = await Shelf.findByIdAndUpdate(
     req.params.id,
     { $addToSet: { books: req.params.bookId } },
-    { new: true }
+    { new: true },
   ).populate('books');
   if (!shelf) {
     res.status(404).json({ message: 'Shelf not found' });
@@ -28,7 +28,7 @@ export const removeBookFromShelf = asyncHandler(async (req, res) => {
   const shelf = await Shelf.findByIdAndUpdate(
     req.params.id,
     { $pull: { books: req.params.bookId } },
-    { new: true }
+    { new: true },
   ).populate('books');
   if (!shelf) {
     res.status(404).json({ message: 'Shelf not found' });

@@ -31,7 +31,10 @@ export default function LanguageToggle() {
         onClick={handleToggle}
         aria-label={`Switch to ${locale === 'fr' ? 'English' : 'French'}`}
         className="flex w-fit cursor-pointer appearance-none rounded-full border border-moss/60 p-0.5 relative z-[1] shadow-[0_2px_10px_rgba(0,0,0,0.4)] transition-[border-color,box-shadow] duration-300 hover:border-wine hover:shadow-[0_4px_15px_rgba(122,45,62,0.3)]"
-        style={{ background: 'linear-gradient(135deg, rgba(42,35,48,0.8), rgba(58,92,58,0.5))' }}
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(42,35,48,0.8), rgba(58,92,58,0.5))',
+        }}
       >
         {(['fr', 'en'] as const).map((l) => (
           <span

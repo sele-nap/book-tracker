@@ -1,18 +1,21 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { readsApi } from '../api/books';
 import type { Read } from '../api/books';
+import { readsApi } from '../api/books';
 import EmptyState from '../components/EmptyState';
-import { useToast } from '../components/Toaster';
-import { useLanguage } from '../i18n/LanguageContext';
+import { ReadingSkeleton } from '../components/Skeleton';
+import { useToast } from '../hooks/useToast';
 import { useApi } from '../hooks/useApi';
+import { useLanguage } from '../i18n/LanguageContext';
 
 function ProgressBar({ current, total }: { current: number; total: number }) {
   const pct = Math.min(100, Math.round((current / total) * 100));
   return (
     <div>
       <div className="flex justify-between text-xs text-stone mb-1">
-        <span>{current} / {total} p.</span>
+        <span>
+          {current} / {total} p.
+        </span>
         <span>{pct}%</span>
       </div>
       <div className="h-1.5 bg-bark rounded-full overflow-hidden">
@@ -47,7 +50,9 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
       finishedAt: status === 'finished' ? new Date().toISOString() : undefined,
     });
     onUpdate();
-    toast(status === 'finished' ? t.toast.markedFinished : t.toast.markedDropped);
+    toast(
+      status === 'finished' ? t.toast.markedFinished : t.toast.markedDropped,
+    );
   };
 
   const book = read.book;
@@ -55,15 +60,25 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
 
   return (
     <div className="bg-dusk border border-mist/30 rounded-xl p-5 flex gap-4">
-      <Link to={`/books/${book._id}`} className="w-14 h-20 bg-bark rounded-lg shrink-0 flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity">
-        {book.coverUrl
-          ? <img src={book.coverUrl} alt="" className="w-full h-full object-cover" />
-          : <span className="text-2xl opacity-30">📖</span>
-        }
+      <Link
+        to={`/books/${book._id}`}
+        className="w-14 h-20 bg-bark rounded-lg shrink-0 flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity"
+      >
+        {book.coverUrl ? (
+          <img
+            src={book.coverUrl}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-2xl opacity-30">📖</span>
+        )}
       </Link>
 
       <div className="flex-1 min-w-0">
-        <h3 className="font-display text-cream text-sm leading-snug truncate">{book.title}</h3>
+        <h3 className="font-display text-cream text-sm leading-snug truncate">
+          {book.title}
+        </h3>
         <p className="text-stone text-xs mt-0.5">{book.author}</p>
 
         {read.startedAt && (
@@ -129,7 +144,7 @@ export default function Reading() {
       </div>
 
       {loading ? (
-        <p className="text-stone text-center mt-16">✦</p>
+        <ReadingSkeleton />
       ) : !reads?.length ? (
         <EmptyState message={t.reading.empty} variant="candle" />
       ) : (

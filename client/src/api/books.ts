@@ -27,22 +27,31 @@ export type Read = {
   review?: string;
 };
 
-export type BooksPage = { books: Book[]; total: number; page: number; pages: number };
+export type BooksPage = {
+  books: Book[];
+  total: number;
+  page: number;
+  pages: number;
+};
 
 export const booksApi = {
-  getAll:  (page = 1, limit = 20) => api.get<BooksPage>(`/books?page=${page}&limit=${limit}`),
-  getById: (id: string)           => api.get<Book>(`/books/${id}`),
-  search:  (q: string)            => api.get<Book[]>(`/books/search?q=${encodeURIComponent(q)}`),
-  create:  (body: Partial<Book>)  => api.post<Book>('/books', body),
-  update:  (id: string, body: Partial<Book>) => api.patch<Book>(`/books/${id}`, body),
-  delete:  (id: string)           => api.delete<void>(`/books/${id}`),
+  getAll: (page = 1, limit = 20) =>
+    api.get<BooksPage>(`/books?page=${page}&limit=${limit}`),
+  getById: (id: string) => api.get<Book>(`/books/${id}`),
+  search: (q: string) =>
+    api.get<Book[]>(`/books/search?q=${encodeURIComponent(q)}`),
+  create: (body: Partial<Book>) => api.post<Book>('/books', body),
+  update: (id: string, body: Partial<Book>) =>
+    api.patch<Book>(`/books/${id}`, body),
+  delete: (id: string) => api.delete<void>(`/books/${id}`),
 };
 
 export const readsApi = {
-  getAll:     ()                     => api.get<Read[]>('/reads'),
-  byStatus:   (status: ReadStatus)   => api.get<Read[]>(`/reads/status/${status}`),
-  byBook:     (bookId: string)       => api.get<Read>(`/reads/book/${bookId}`),
-  create:     (body: Partial<Read>)  => api.post<Read>('/reads', body),
-  update:     (id: string, body: Partial<Read>) => api.patch<Read>(`/reads/${id}`, body),
-  delete:     (id: string)           => api.delete<void>(`/reads/${id}`),
+  getAll: () => api.get<Read[]>('/reads'),
+  byStatus: (status: ReadStatus) => api.get<Read[]>(`/reads/status/${status}`),
+  byBook: (bookId: string) => api.get<Read>(`/reads/book/${bookId}`),
+  create: (body: Partial<Read>) => api.post<Read>('/reads', body),
+  update: (id: string, body: Partial<Read>) =>
+    api.patch<Read>(`/reads/${id}`, body),
+  delete: (id: string) => api.delete<void>(`/reads/${id}`),
 };

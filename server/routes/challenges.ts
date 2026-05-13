@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import {
-  getChallenges,
-  createChallenge,
   addBookToChallenge,
+  createChallenge,
   getChallengeProgress,
+  getChallenges,
 } from '../controllers/challengeController.js';
 
 const router = Router();

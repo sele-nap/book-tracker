@@ -15,7 +15,12 @@ export const createChallenge = asyncHandler(async (req, res) => {
 
   const expiresAt = new Date(year + 1, 0, 1);
 
-  const challenge = await Challenge.create({ year, goalBooks, targetGenres, expiresAt });
+  const challenge = await Challenge.create({
+    year,
+    goalBooks,
+    targetGenres,
+    expiresAt,
+  });
   res.status(201).json(challenge);
 });
 
@@ -23,7 +28,7 @@ export const addBookToChallenge = asyncHandler(async (req, res) => {
   const challenge = await Challenge.findByIdAndUpdate(
     req.params.id,
     { $addToSet: { books: req.params.bookId } },
-    { new: true }
+    { new: true },
   ).populate('books');
   if (!challenge) {
     res.status(404).json({ message: 'Challenge not found' });
@@ -42,7 +47,9 @@ export const getChallengeProgress = asyncHandler(async (req, res) => {
     year: challenge.year,
     goal: challenge.goalBooks,
     current: challenge.books.length,
-    percentage: Math.round((challenge.books.length / challenge.goalBooks) * 100),
+    percentage: Math.round(
+      (challenge.books.length / challenge.goalBooks) * 100,
+    ),
     targetGenres: challenge.targetGenres,
   });
 });

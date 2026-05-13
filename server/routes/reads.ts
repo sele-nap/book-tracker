@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import {
+  createRead,
+  deleteRead,
+  getReadByBook,
   getReads,
   getReadsByStatus,
-  getReadByBook,
-  createRead,
   updateRead,
-  deleteRead,
 } from '../controllers/readController.js';
 
 const router = Router();

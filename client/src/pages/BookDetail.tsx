@@ -1,20 +1,20 @@
 import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { booksApi, readsApi } from '../api/books';
 import type { Book, Read } from '../api/books';
-import Modal from '../components/Modal';
+import { booksApi, readsApi } from '../api/books';
 import EditBookForm from '../components/EditBookForm';
-import { useToast } from '../components/Toaster';
-import { useLanguage } from '../i18n/LanguageContext';
+import Modal from '../components/Modal';
+import { useToast } from '../hooks/useToast';
 import { useApi } from '../hooks/useApi';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const labelClass = 'text-xs text-stone uppercase tracking-widest';
 const valueClass = 'text-cream text-sm mt-0.5';
 
 const statusStyles = {
-  reading:  'bg-sage/20 text-sage',
+  reading: 'bg-sage/20 text-sage',
   finished: 'bg-wine/20 text-blush',
-  dropped:  'bg-stone/20 text-stone',
+  dropped: 'bg-stone/20 text-stone',
   wishlist: 'bg-amber/20 text-amber',
 };
 
@@ -70,8 +70,14 @@ export default function BookDetail() {
         <Modal title={t.bookDetail.edit} onClose={() => setShowEdit(false)}>
           <EditBookForm
             book={book}
-            read={read}
-            onSuccess={() => { setShowEdit(false); refetchBook(); refetchRead(); setReviewText(null); toast(t.toast.bookUpdated); }}
+            read={read ?? undefined}
+            onSuccess={() => {
+              setShowEdit(false);
+              refetchBook();
+              refetchRead();
+              setReviewText(null);
+              toast(t.toast.bookUpdated);
+            }}
           />
         </Modal>
       )}
@@ -80,9 +86,15 @@ export default function BookDetail() {
         <div className="shrink-0">
           <div className="w-40 h-56 bg-bark rounded-xl overflow-hidden">
             {book.coverUrl ? (
-              <img src={book.coverUrl} alt={book.title} className="w-full h-full object-cover" />
+              <img
+                src={book.coverUrl}
+                alt={book.title}
+                className="w-full h-full object-cover"
+              />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl opacity-30">📖</div>
+              <div className="w-full h-full flex items-center justify-center text-4xl opacity-30">
+                📖
+              </div>
             )}
           </div>
         </div>
@@ -90,7 +102,9 @@ export default function BookDetail() {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-4 mb-2">
             <div>
-              <h1 className="text-3xl font-display text-cream leading-tight">{book.title}</h1>
+              <h1 className="text-3xl font-display text-cream leading-tight">
+                {book.title}
+              </h1>
               <p className="text-parchment mt-1">{book.author}</p>
             </div>
             <div className="flex gap-2 shrink-0">
@@ -112,7 +126,9 @@ export default function BookDetail() {
 
           <div className="flex flex-wrap gap-2 mt-4">
             {read && (
-              <span className={`text-xs px-2.5 py-1 rounded-full ${statusStyles[read.status]}`}>
+              <span
+                className={`text-xs px-2.5 py-1 rounded-full ${statusStyles[read.status]}`}
+              >
                 {t.status[read.status]}
               </span>
             )}
@@ -122,7 +138,12 @@ export default function BookDetail() {
               </span>
             )}
             {book.genre.map((g) => (
-              <span key={g} className="text-xs px-2.5 py-1 rounded-full bg-bark text-parchment/60">{g}</span>
+              <span
+                key={g}
+                className="text-xs px-2.5 py-1 rounded-full bg-bark text-parchment/60"
+              >
+                {g}
+              </span>
             ))}
           </div>
 
@@ -144,7 +165,12 @@ export default function BookDetail() {
                 <p className={labelClass}>{t.form.rating}</p>
                 <p className={valueClass}>
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <span key={i} className={i < read.rating! ? 'text-amber' : 'text-mist'}>★</span>
+                    <span
+                      key={i}
+                      className={i < read.rating! ? 'text-amber' : 'text-mist'}
+                    >
+                      ★
+                    </span>
                   ))}
                 </p>
               </div>
@@ -152,7 +178,9 @@ export default function BookDetail() {
             {read?.currentPage && book.pages && (
               <div>
                 <p className={labelClass}>{t.reading.currentPage}</p>
-                <p className={valueClass}>{read.currentPage} / {book.pages}</p>
+                <p className={valueClass}>
+                  {read.currentPage} / {book.pages}
+                </p>
               </div>
             )}
           </div>

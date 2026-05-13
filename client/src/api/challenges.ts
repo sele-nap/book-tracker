@@ -1,5 +1,5 @@
-import { api } from './client';
 import type { Book } from './books';
+import { api } from './client';
 
 export type Challenge = {
   _id: string;
@@ -19,8 +19,14 @@ export type ChallengeProgress = {
 };
 
 export const challengesApi = {
-  getAll:      ()                              => api.get<Challenge[]>('/challenges'),
-  create:      (body: { year: number; goalBooks: number; targetGenres?: string[] }) => api.post<Challenge>('/challenges', body),
-  addBook:     (id: string, bookId: string)    => api.patch<Challenge>(`/challenges/${id}/books/${bookId}`, {}),
-  getProgress: (id: string)                    => api.get<ChallengeProgress>(`/challenges/${id}/progress`),
+  getAll: () => api.get<Challenge[]>('/challenges'),
+  create: (body: {
+    year: number;
+    goalBooks: number;
+    targetGenres?: string[];
+  }) => api.post<Challenge>('/challenges', body),
+  addBook: (id: string, bookId: string) =>
+    api.patch<Challenge>(`/challenges/${id}/books/${bookId}`, {}),
+  getProgress: (id: string) =>
+    api.get<ChallengeProgress>(`/challenges/${id}/progress`),
 };

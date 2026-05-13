@@ -1,4 +1,5 @@
 import { Read } from '../models/Read.js';
+import type { ReadStatus } from '../models/Read.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
 export const getReads = asyncHandler(async (_req, res) => {
@@ -7,7 +8,7 @@ export const getReads = asyncHandler(async (_req, res) => {
 });
 
 export const getReadsByStatus = asyncHandler(async (req, res) => {
-  const reads = await Read.find({ status: req.params.status }).populate('book');
+  const reads = await Read.find({ status: req.params.status as ReadStatus }).populate('book');
   res.json(reads);
 });
 

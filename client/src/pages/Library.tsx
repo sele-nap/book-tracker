@@ -1,14 +1,15 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { booksApi, readsApi } from '../api/books';
 import type { BooksPage, Read, ReadStatus } from '../api/books';
+import { booksApi, readsApi } from '../api/books';
 import AddBookForm from '../components/AddBookForm';
 import BookCard from '../components/BookCard';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
-import { useToast } from '../components/Toaster';
-import { useLanguage } from '../i18n/LanguageContext';
+import { LibrarySkeleton } from '../components/Skeleton';
+import { useToast } from '../hooks/useToast';
 import { useApi } from '../hooks/useApi';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const LIMIT = 20;
 
@@ -23,15 +24,23 @@ export default function Library() {
   const fetchBooks = useCallback(() => booksApi.getAll(page, LIMIT), [page]);
   const fetchReads = useCallback(() => readsApi.getAll(), []);
 
-  const { data: booksPage, loading: booksLoading, refetch: refetchBooks } = useApi<BooksPage>(fetchBooks);
-  const { data: reads, loading: readsLoading, refetch: refetchReads } = useApi<Read[]>(fetchReads);
+  const {
+    data: booksPage,
+    loading: booksLoading,
+    refetch: refetchBooks,
+  } = useApi<BooksPage>(fetchBooks);
+  const {
+    data: reads,
+    loading: readsLoading,
+    refetch: refetchReads,
+  } = useApi<Read[]>(fetchReads);
 
   const STATUS_FILTERS: { value: 'all' | ReadStatus; label: string }[] = [
-    { value: 'all',      label: t.library.filters.all },
-    { value: 'reading',  label: t.library.filters.reading },
+    { value: 'all', label: t.library.filters.all },
+    { value: 'reading', label: t.library.filters.reading },
     { value: 'finished', label: t.library.filters.finished },
     { value: 'wishlist', label: t.library.filters.wishlist },
-    { value: 'dropped',  label: t.library.filters.dropped },
+    { value: 'dropped', label: t.library.filters.dropped },
   ];
 
   const readsByBookId = new Map(reads?.map((r) => [r.book._id, r]) ?? []);
@@ -57,13 +66,22 @@ export default function Library() {
     <div>
       {showAddModal && (
         <Modal title={t.library.add} onClose={() => setShowAddModal(false)}>
-          <AddBookForm onSuccess={() => { setShowAddModal(false); refetchBooks(); refetchReads(); toast(t.toast.bookAdded); }} />
+          <AddBookForm
+            onSuccess={() => {
+              setShowAddModal(false);
+              refetchBooks();
+              refetchReads();
+              toast(t.toast.bookAdded);
+            }}
+          />
         </Modal>
       )}
       <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-3xl mb-1">{t.library.title}</h1>
-          <p className="text-parchment">{booksPage?.total ?? '—'} {t.library.bookCount} ✨</p>
+          <p className="text-parchment">
+            {booksPage?.total ?? '—'} {t.library.bookCount} ✨
+          </p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
@@ -77,7 +95,10 @@ export default function Library() {
         type="text"
         placeholder={t.library.search}
         value={search}
-        onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          setPage(1);
+        }}
         className="w-full bg-dusk border border-mist/30 rounded-lg px-4 py-2.5 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 mb-4"
       />
 
@@ -85,7 +106,10 @@ export default function Library() {
         {STATUS_FILTERS.map(({ value, label }) => (
           <button
             key={value}
-            onClick={() => { setStatusFilter(value); setPage(1); }}
+            onClick={() => {
+              setStatusFilter(value);
+              setPage(1);
+            }}
             className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
               statusFilter === value
                 ? 'bg-wine text-cream'
@@ -98,7 +122,7 @@ export default function Library() {
       </div>
 
       {loading ? (
-        <p className="text-stone text-center mt-16">✦</p>
+        <LibrarySkeleton />
       ) : filtered.length === 0 ? (
         <EmptyState message={t.library.empty} variant="book" />
       ) : (
@@ -136,7 +160,9 @@ export default function Library() {
               key={p}
               onClick={() => goTo(p)}
               className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
-                p === page ? 'bg-wine text-cream' : 'bg-bark text-parchment hover:bg-mist/30'
+                p === page
+                  ? 'bg-wine text-cream'
+                  : 'bg-bark text-parchment hover:bg-mist/30'
               }`}
             >
               {p}

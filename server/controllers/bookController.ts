@@ -4,8 +4,8 @@ import asyncHandler from '../utils/asyncHandler.js';
 
 export const getBooks = asyncHandler(async (req, res) => {
   const limit = Math.min(parseInt(String(req.query.limit ?? '20')), 100);
-  const page  = Math.max(parseInt(String(req.query.page  ?? '1')), 1);
-  const skip  = (page - 1) * limit;
+  const page = Math.max(parseInt(String(req.query.page ?? '1')), 1);
+  const skip = (page - 1) * limit;
 
   const [books, total] = await Promise.all([
     Book.find().sort({ createdAt: -1 }).skip(skip).limit(limit),

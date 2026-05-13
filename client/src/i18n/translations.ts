@@ -65,7 +65,7 @@ export const translations = {
       name: 'Nom',
       description: 'Description',
       empty: 'aucun livre',
-      noShelves: 'aucune étagère pour l\'instant 🍂',
+      noShelves: "aucune étagère pour l'instant 🍂",
       bookCount: 'livres',
       manage: 'gérer',
       searchBooks: 'chercher un livre…',

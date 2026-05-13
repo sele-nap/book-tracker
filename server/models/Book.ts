@@ -28,6 +28,9 @@ const bookSchema = new Schema<IBook>(
   { timestamps: true },
 );
 
-bookSchema.index({ title: 'text', author: 'text' }, { language_override: 'searchLanguage' });
+bookSchema.index(
+  { title: 'text', author: 'text' },
+  { language_override: 'searchLanguage' },
+);
 
 export const Book = model<IBook>('Book', bookSchema);

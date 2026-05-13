@@ -1,17 +1,16 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useCallback, useState } from 'react';
 
 type ToastType = 'success' | 'error';
 type Toast = { id: number; message: string; type: ToastType };
 
-type ToastContextValue = {
+export type ToastContextValue = {
   toast: (message: string, type?: ToastType) => void;
 };
 
-const ToastContext = createContext<ToastContextValue>({ toast: () => {} });
-
-export function useToast() {
-  return useContext(ToastContext);
-}
+export const ToastContext = createContext<ToastContextValue>({
+  toast: () => {},
+});
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -30,9 +29,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             className={`px-4 py-2.5 rounded-lg text-sm text-cream shadow-lg border animate-fade-in
-              ${t.type === 'error'
-                ? 'bg-bark border-blush/40 text-blush'
-                : 'bg-bark border-mist/30'
+              ${
+                t.type === 'error'
+                  ? 'bg-bark border-blush/40 text-blush'
+                  : 'bg-bark border-mist/30'
               }`}
           >
             {t.message}

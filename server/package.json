@@ -1,7 +1,7 @@
 {
   "name": "book-tracker-server",
   "version": "1.0.0",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "dev": "node --env-file=.env ./node_modules/.bin/tsx watch index.ts",
     "build": "tsc",

@@ -15,7 +15,7 @@ type OLResponse = { docs: OLResult[] };
 export async function searchOpenLibrary(query: string): Promise<OLResult[]> {
   const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=8&fields=key,title,author_name,first_publish_year,number_of_pages_median,isbn,cover_i,language,subject`;
   const res = await fetch(url);
-  const data = await res.json() as OLResponse;
+  const data = (await res.json()) as OLResponse;
   return data.docs;
 }
 

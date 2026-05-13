@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import {
-  getShelves,
-  createShelf,
   addBookToShelf,
-  removeBookFromShelf,
+  createShelf,
   deleteShelf,
+  getShelves,
+  removeBookFromShelf,
 } from '../controllers/shelfController.js';
 
 const router = Router();
