@@ -1,24 +1,25 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { booksApi, readsApi } from '../api/books';
+import type { Book, Read, ReadStatus } from '../api/books';
+import AddBookForm from '../components/AddBookForm';
 import BookCard from '../components/BookCard';
+import Modal from '../components/Modal';
 import { useLanguage } from '../i18n/LanguageContext';
-
-const MOCK_BOOKS = [
-  { id: '1', title: 'The Name of the Wind',    author: 'Patrick Rothfuss',    genre: ['fantasy', 'aventure'], status: 'finished' as const, rating: 5, language: 'vo' as const },
-  { id: '2', title: 'Piranesi',                author: 'Susanna Clarke',       genre: ['fantasy', 'mystère'],  status: 'finished' as const, rating: 5, language: 'vf' as const },
-  { id: '3', title: 'The Way of Kings',        author: 'Brandon Sanderson',    genre: ['fantasy', 'épique'],   status: 'reading'  as const,             language: 'vo' as const },
-  { id: '4', title: 'Mexican Gothic',          author: 'Silvia Moreno-Garcia', genre: ['horreur', 'gothic'],   status: 'wishlist' as const },
-  { id: '5', title: 'A Memory Called Empire',  author: 'Arkady Martine',       genre: ['sci-fi', 'politique'], status: 'finished' as const, rating: 4, language: 'vo' as const },
-  { id: '6', title: 'Spinning Silver',         author: 'Naomi Novik',          genre: ['fantasy', 'conte'],    status: 'dropped'  as const, rating: 3, language: 'vf' as const },
-  { id: '7', title: 'The Starless Sea',        author: 'Erin Morgenstern',     genre: ['fantasy', 'littéraire'], status: 'wishlist' as const },
-  { id: '8', title: 'Babel',                   author: 'R.F. Kuang',           genre: ['fantasy', 'historique'], status: 'reading' as const, language: 'vo' as const },
-];
+import { useApi } from '../hooks/useApi';
 
 export default function Library() {
   const { t } = useLanguage();
   const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | ReadStatus>('all');
+  const [showAddModal, setShowAddModal] = useState(false);
 
-  const STATUS_FILTERS = [
+  const fetchBooks = useCallback(() => booksApi.getAll(), []);
+  const fetchReads = useCallback(() => readsApi.getAll(), []);
+
+  const { data: books, loading: booksLoading, refetch: refetchBooks } = useApi<Book[]>(fetchBooks);
+  const { data: reads, loading: readsLoading, refetch: refetchReads } = useApi<Read[]>(fetchReads);
+
+  const STATUS_FILTERS: { value: 'all' | ReadStatus; label: string }[] = [
     { value: 'all',      label: t.library.filters.all },
     { value: 'reading',  label: t.library.filters.reading },
     { value: 'finished', label: t.library.filters.finished },
@@ -26,22 +27,35 @@ export default function Library() {
     { value: 'dropped',  label: t.library.filters.dropped },
   ];
 
-  const filtered = MOCK_BOOKS.filter((b) => {
+  const readsByBookId = new Map(reads?.map((r) => [r.book._id, r]) ?? []);
+
+  const filtered = (books ?? []).filter((b) => {
     const matchSearch =
       b.title.toLowerCase().includes(search.toLowerCase()) ||
       b.author.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = statusFilter === 'all' || b.status === statusFilter;
+    const read = readsByBookId.get(b._id);
+    const matchStatus = statusFilter === 'all' || read?.status === statusFilter;
     return matchSearch && matchStatus;
   });
 
+  const loading = booksLoading || readsLoading;
+
   return (
     <div>
+      {showAddModal && (
+        <Modal title={t.library.add} onClose={() => setShowAddModal(false)}>
+          <AddBookForm onSuccess={() => { setShowAddModal(false); refetchBooks(); refetchReads(); }} />
+        </Modal>
+      )}
       <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-3xl mb-1">{t.library.title}</h1>
-          <p className="text-parchment">{MOCK_BOOKS.length} livres ✨</p>
+          <p className="text-parchment">{books?.length ?? '—'} {t.library.bookCount} ✨</p>
         </div>
-        <button className="bg-wine hover:bg-rose text-cream text-sm px-4 py-2 rounded-lg transition-colors font-body">
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="bg-wine hover:bg-rose text-cream text-sm px-4 py-2 rounded-lg transition-colors font-body"
+        >
           {t.library.add}
         </button>
       </div>
@@ -70,13 +84,27 @@ export default function Library() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <p className="text-stone text-center mt-16">✦</p>
+      ) : filtered.length === 0 ? (
         <p className="text-stone text-center mt-16">{t.library.empty}</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {filtered.map((book) => (
-            <BookCard key={book.id} {...book} />
-          ))}
+          {filtered.map((book) => {
+            const read = readsByBookId.get(book._id);
+            return (
+              <BookCard
+                key={book._id}
+                title={book.title}
+                author={book.author}
+                genre={book.genre}
+                language={book.language}
+                coverUrl={book.coverUrl}
+                status={read?.status ?? 'wishlist'}
+                rating={read?.rating}
+              />
+            );
+          })}
         </div>
       )}
     </div>
