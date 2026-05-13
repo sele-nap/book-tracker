@@ -12,7 +12,7 @@ A cozy witchy grimoire to track your reading life — because a TBR pile is just
 **Client**
 
 - React 19 + TypeScript + Vite
-- Tailwind CSS v4 (dark cottagecore theme)
+- Tailwind CSS v4
 - Recharts
 - React Router v7
 
