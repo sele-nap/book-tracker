@@ -5,12 +5,14 @@ import {
   getReadByBook,
   getReads,
   getReadsByStatus,
+  getTimeline,
   updateRead,
 } from '../controllers/readController.js';
 
 const router = Router();
 
 router.get('/', getReads);
+router.get('/timeline', getTimeline);
 router.get('/status/:status', getReadsByStatus);
 router.get('/book/:bookId', getReadByBook);
 router.post('/', createRead);

@@ -5,6 +5,7 @@ export const translations = {
     nav: {
       library: 'Bibliothèque',
       reading: 'En cours',
+      timeline: 'Timeline',
       shelves: 'Étagères',
       stats: 'Stats',
       challenges: 'Challenges',
@@ -128,12 +129,20 @@ export const translations = {
       pages: 'pages',
       publishedIn: 'publié en',
     },
+    timeline: {
+      title: 'Timeline',
+      subtitle: 'ton historique de lecture ✦',
+      empty: 'aucun livre terminé pour l'instant 🍂',
+      days: 'jours',
+      noDate: 'date inconnue',
+    },
   },
 
   en: {
     nav: {
       library: 'Library',
       reading: 'Reading',
+      timeline: 'Timeline',
       shelves: 'Shelves',
       stats: 'Stats',
       challenges: 'Challenges',
@@ -256,6 +265,13 @@ export const translations = {
       saveReview: 'save',
       pages: 'pages',
       publishedIn: 'published in',
+    },
+    timeline: {
+      title: 'Timeline',
+      subtitle: 'your reading history ✦',
+      empty: 'no finished books yet 🍂',
+      days: 'days',
+      noDate: 'unknown date',
     },
   },
 } satisfies Record<Locale, unknown>;

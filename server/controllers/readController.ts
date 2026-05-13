@@ -6,6 +6,10 @@ export const getReads = asyncHandler(async (_req, res) => {
   res.json(await readService.getAll());
 });
 
+export const getTimeline = asyncHandler(async (_req, res) => {
+  res.json(await readService.getTimeline());
+});
+
 export const getReadsByStatus = asyncHandler(async (req, res) => {
   res.json(await readService.getByStatus(String(req.params.status) as ReadStatus));
 });

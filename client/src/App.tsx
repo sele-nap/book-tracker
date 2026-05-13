@@ -8,6 +8,7 @@ import Library from './pages/Library';
 import Reading from './pages/Reading';
 import Shelves from './pages/Shelves';
 import Stats from './pages/Stats';
+import Timeline from './pages/Timeline';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
               <Route path="shelves" element={<Shelves />} />
               <Route path="stats" element={<Stats />} />
               <Route path="challenges" element={<Challenges />} />
+              <Route path="timeline" element={<Timeline />} />
             </Route>
           </Routes>
         </BrowserRouter>

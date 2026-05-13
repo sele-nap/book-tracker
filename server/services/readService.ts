@@ -25,4 +25,10 @@ export const readService = {
   async delete(id: string) {
     return Read.findByIdAndDelete(id);
   },
+
+  async getTimeline() {
+    return Read.find({ status: 'finished', finishedAt: { $exists: true } })
+      .populate('book')
+      .sort({ finishedAt: -1 });
+  },
 };

@@ -48,6 +48,7 @@ export const booksApi = {
 
 export const readsApi = {
   getAll: () => api.get<Read[]>('/reads'),
+  timeline: () => api.get<Read[]>('/reads/timeline'),
   byStatus: (status: ReadStatus) => api.get<Read[]>(`/reads/status/${status}`),
   byBook: (bookId: string) => api.get<Read>(`/reads/book/${bookId}`),
   create: (body: Partial<Read>) => api.post<Read>('/reads', body),

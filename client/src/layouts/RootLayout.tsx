@@ -8,6 +8,7 @@ export default function RootLayout() {
   const nav = [
     { to: '/', label: t.nav.library, icon: '📚' },
     { to: '/reading', label: t.nav.reading, icon: '🕯️' },
+    { to: '/timeline', label: t.nav.timeline, icon: '📜' },
     { to: '/shelves', label: t.nav.shelves, icon: '🍄' },
     { to: '/stats', label: t.nav.stats, icon: '✦' },
     { to: '/challenges', label: t.nav.challenges, icon: '🌙' },
