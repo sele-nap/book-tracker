@@ -105,6 +105,17 @@ export const translations = {
       alreadyIn: 'déjà ajouté',
       add: 'ajouter',
     },
+    bookDetail: {
+      back: '← Bibliothèque',
+      edit: 'modifier',
+      delete: 'supprimer',
+      confirmDelete: 'Supprimer ce livre définitivement ?',
+      review: 'Critique',
+      reviewPlaceholder: 'Tes impressions sur ce livre…',
+      saveReview: 'sauver',
+      pages: 'pages',
+      publishedIn: 'publié en',
+    },
   },
 
   en: {
@@ -210,6 +221,17 @@ export const translations = {
       search: 'search',
       alreadyIn: 'already added',
       add: 'add',
+    },
+    bookDetail: {
+      back: '← Library',
+      edit: 'edit',
+      delete: 'delete',
+      confirmDelete: 'Delete this book permanently?',
+      review: 'Review',
+      reviewPlaceholder: 'Your thoughts on this book…',
+      saveReview: 'save',
+      pages: 'pages',
+      publishedIn: 'published in',
     },
   },
 } satisfies Record<Locale, unknown>;

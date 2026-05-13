@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { LanguageProvider } from './i18n/LanguageContext';
 import RootLayout from './layouts/RootLayout';
+import BookDetail from './pages/BookDetail';
 import Challenges from './pages/Challenges';
 import Library from './pages/Library';
 import Reading from './pages/Reading';
@@ -14,6 +15,7 @@ export default function App() {
         <Routes>
           <Route element={<RootLayout />}>
             <Route index element={<Library />} />
+            <Route path="books/:id" element={<BookDetail />} />
             <Route path="reading" element={<Reading />} />
             <Route path="shelves" element={<Shelves />} />
             <Route path="stats" element={<Stats />} />

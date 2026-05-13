@@ -39,6 +39,7 @@ export const booksApi = {
 export const readsApi = {
   getAll:     ()                     => api.get<Read[]>('/reads'),
   byStatus:   (status: ReadStatus)   => api.get<Read[]>(`/reads/status/${status}`),
+  byBook:     (bookId: string)       => api.get<Read>(`/reads/book/${bookId}`),
   create:     (body: Partial<Read>)  => api.post<Read>('/reads', body),
   update:     (id: string, body: Partial<Read>) => api.patch<Read>(`/reads/${id}`, body),
   delete:     (id: string)           => api.delete<void>(`/reads/${id}`),

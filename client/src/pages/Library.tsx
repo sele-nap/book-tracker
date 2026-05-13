@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { booksApi, readsApi } from '../api/books';
 import type { Book, Read, ReadStatus } from '../api/books';
 import AddBookForm from '../components/AddBookForm';
@@ -93,16 +94,17 @@ export default function Library() {
           {filtered.map((book) => {
             const read = readsByBookId.get(book._id);
             return (
-              <BookCard
-                key={book._id}
-                title={book.title}
-                author={book.author}
-                genre={book.genre}
-                language={book.language}
-                coverUrl={book.coverUrl}
-                status={read?.status ?? 'wishlist'}
-                rating={read?.rating}
-              />
+              <Link key={book._id} to={`/books/${book._id}`}>
+                <BookCard
+                  title={book.title}
+                  author={book.author}
+                  genre={book.genre}
+                  language={book.language}
+                  coverUrl={book.coverUrl}
+                  status={read?.status ?? 'wishlist'}
+                  rating={read?.rating}
+                />
+              </Link>
             );
           })}
         </div>

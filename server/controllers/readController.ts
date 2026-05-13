@@ -28,6 +28,15 @@ export const updateRead = asyncHandler(async (req, res) => {
   res.json(read);
 });
 
+export const getReadByBook = asyncHandler(async (req, res) => {
+  const read = await Read.findOne({ book: req.params.bookId }).populate('book');
+  if (!read) {
+    res.status(404).json({ message: 'Read not found' });
+    return;
+  }
+  res.json(read);
+});
+
 export const deleteRead = asyncHandler(async (req, res) => {
   const read = await Read.findByIdAndDelete(req.params.id);
   if (!read) {
