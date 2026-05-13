@@ -5,13 +5,16 @@ A cozy witchy grimoire to track your reading life — because a TBR pile is just
 ## Stack
 
 **Server**
+
 - Node.js + TypeScript + Express
-- MongoDB + Mongoose
+- MongoDB + Mongoose (aggregations, text index, TTL index)
 
 **Client**
-- React 19 + TypeScript
-- Tailwind CSS v4 + Framer Motion
-- Vite
+
+- React 19 + TypeScript + Vite
+- Tailwind CSS v4 (dark cottagecore theme)
+- Recharts
+- React Router v7
 
 ## Run locally
 
@@ -20,12 +23,12 @@ A cozy witchy grimoire to track your reading life — because a TBR pile is just
 cd server && npm install
 cd ../client && npm install
 
-# Fill in your env files
+# Create your env file
 cp server/.env.example server/.env
-cp client/.env.example client/.env
+# Fill in MONGO_URI and PORT
 
 # Start both server and client
-cd .. && npm run dev
+bash scripts/dev.sh
 ```
 
 Server runs on `http://localhost:3000` · Client on `http://localhost:5173`
