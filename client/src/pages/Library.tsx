@@ -76,7 +76,7 @@ export default function Library() {
           />
         </Modal>
       )}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-8">
         <div>
           <h1 className="text-3xl mb-1">{t.library.title}</h1>
           <p className="text-parchment">

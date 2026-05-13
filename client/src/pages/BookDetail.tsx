@@ -100,9 +100,9 @@ export default function BookDetail() {
         </div>
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-4 mb-2">
-            <div>
-              <h1 className="text-3xl font-display text-cream leading-tight">
+          <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
+            <div className="min-w-0">
+              <h1 className="text-2xl md:text-3xl font-display text-cream leading-tight">
                 {book.title}
               </h1>
               <p className="text-parchment mt-1">{book.author}</p>

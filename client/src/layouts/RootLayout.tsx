@@ -15,7 +15,8 @@ export default function RootLayout() {
 
   return (
     <div className="flex min-h-screen bg-night text-cream">
-      <aside className="w-56 shrink-0 border-r border-mist/30 flex flex-col py-8 px-4 gap-2">
+      {/* Sidebar — desktop only */}
+      <aside className="hidden md:flex w-56 shrink-0 border-r border-mist/30 flex-col py-8 px-4 gap-2">
         <div className="flex items-center gap-3 px-2 mb-6">
           <img src="/logo.svg" alt="logo" className="w-10 h-10" />
           <span className="font-display text-lg text-cream tracking-wide leading-tight">
@@ -48,9 +49,34 @@ export default function RootLayout() {
         </div>
       </aside>
 
-      <main className="flex-1 p-8 overflow-y-auto">
+      {/* Main content */}
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto pb-24 md:pb-8">
         <Outlet />
       </main>
+
+      {/* Bottom nav — mobile only */}
+      <nav className="md:hidden fixed bottom-0 inset-x-0 bg-dusk border-t border-mist/30 flex items-center z-40">
+        {nav.map(({ to, label, icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={to === '/'}
+            className={({ isActive }) =>
+              `flex-1 flex flex-col items-center gap-0.5 py-2.5 text-xs transition-colors ${
+                isActive ? 'text-cream' : 'text-stone'
+              }`
+            }
+          >
+            <span className="text-base leading-none">{icon}</span>
+            <span className="font-body leading-tight truncate max-w-full px-1">
+              {label}
+            </span>
+          </NavLink>
+        ))}
+        <div className="flex flex-col items-center justify-center py-2.5 px-2">
+          <LanguageToggle />
+        </div>
+      </nav>
     </div>
   );
 }

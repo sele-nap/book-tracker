@@ -142,7 +142,7 @@ export default function Stats() {
         <p className="text-parchment">{t.stats.subtitle}</p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
         <StatCard label={t.stats.finished} value={finished?.totalBooks ?? 0} />
         <StatCard label={t.stats.reading} value={statusMap['reading'] ?? 0} />
         <StatCard label={t.stats.wishlist} value={statusMap['wishlist'] ?? 0} />
@@ -157,7 +157,7 @@ export default function Stats() {
         <StatCard label={t.stats.streak} value={streakData?.streak ?? 0} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-dusk border border-mist/30 rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <p className="text-parchment text-sm">{t.stats.byMonth}</p>
