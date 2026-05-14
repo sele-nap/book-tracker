@@ -132,7 +132,7 @@ export const translations = {
     timeline: {
       title: 'Timeline',
       subtitle: 'ton historique de lecture ✦',
-      empty: 'aucun livre terminé pour l'instant 🍂',
+      empty: 'aucun livre terminé pour le moment 🍂',
       days: 'jours',
       noDate: 'date inconnue',
     },
