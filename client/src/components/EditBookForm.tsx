@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import type { Book, BookLanguage, Read, ReadStatus } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 
 type Props = { book: Book; read?: Read; onSuccess: () => void };
 
 const inputClass =
-  'w-full bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50 transition-colors';
+  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 transition-colors';
 const labelClass = 'block text-xs text-parchment mb-1';
 
 export default function EditBookForm({ book, read, onSuccess }: Props) {
@@ -80,7 +80,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
     >
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2">
-          <label htmlFor="edit-title" className={labelClass}>{t.form.title} *</label>
+          <label htmlFor="edit-title" className={labelClass}>
+            {t.form.title} *
+          </label>
           <input
             id="edit-title"
             className={inputClass}
@@ -90,7 +92,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           />
         </div>
         <div className="col-span-2">
-          <label htmlFor="edit-author" className={labelClass}>{t.form.author} *</label>
+          <label htmlFor="edit-author" className={labelClass}>
+            {t.form.author} *
+          </label>
           <input
             id="edit-author"
             className={inputClass}
@@ -100,7 +104,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           />
         </div>
         <div>
-          <label htmlFor="edit-pages" className={labelClass}>{t.form.pages}</label>
+          <label htmlFor="edit-pages" className={labelClass}>
+            {t.form.pages}
+          </label>
           <input
             id="edit-pages"
             className={inputClass}
@@ -111,7 +117,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           />
         </div>
         <div>
-          <label htmlFor="edit-year" className={labelClass}>{t.form.year}</label>
+          <label htmlFor="edit-year" className={labelClass}>
+            {t.form.year}
+          </label>
           <input
             id="edit-year"
             className={inputClass}
@@ -124,7 +132,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
       </div>
 
       <div>
-        <label htmlFor="edit-genre" className={labelClass}>{t.form.genre}</label>
+        <label htmlFor="edit-genre" className={labelClass}>
+          {t.form.genre}
+        </label>
         <div className="flex gap-2">
           <input
             id="edit-genre"
@@ -143,7 +153,7 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
             type="button"
             onClick={addGenre}
             aria-label="Add genre"
-            className="text-xs bg-bark border border-mist/20 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
+            className="text-xs bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
             +
           </button>
@@ -172,7 +182,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="edit-language" className={labelClass}>{t.bookLanguage.label}</label>
+          <label htmlFor="edit-language" className={labelClass}>
+            {t.bookLanguage.label}
+          </label>
           <select
             id="edit-language"
             className={inputClass}
@@ -186,7 +198,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           </select>
         </div>
         <div>
-          <label htmlFor="edit-status" className={labelClass}>{t.form.status}</label>
+          <label htmlFor="edit-status" className={labelClass}>
+            {t.form.status}
+          </label>
           <select
             id="edit-status"
             className={inputClass}
@@ -203,7 +217,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
 
       {fields.status === 'finished' && (
         <div>
-          <label htmlFor="edit-rating" className={labelClass}>{t.form.rating}</label>
+          <label htmlFor="edit-rating" className={labelClass}>
+            {t.form.rating}
+          </label>
           <select
             id="edit-rating"
             className={inputClass}
@@ -213,7 +229,7 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
             <option value="">—</option>
             {[1, 2, 3, 4, 5].map((n) => (
               <option key={n} value={n}>
-                {'★'.repeat(n)}
+                {'★'.repeat(n)} — {n} star{n > 1 ? 's' : ''}
               </option>
             ))}
           </select>
@@ -221,7 +237,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
       )}
 
       <div>
-        <label htmlFor="edit-cover" className={labelClass}>{t.form.cover}</label>
+        <label htmlFor="edit-cover" className={labelClass}>
+          {t.form.cover}
+        </label>
         <input
           id="edit-cover"
           className={inputClass}
@@ -241,9 +259,10 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
       <button
         type="submit"
         disabled={loading}
+        aria-busy={loading}
         className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-lg transition-colors font-body"
       >
-        {loading ? '✦' : t.bookDetail.edit}
+        {loading ? <span aria-hidden="true">✦</span> : t.bookDetail.edit}
       </button>
     </form>
   );

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Book } from '../api/books';
 import { booksApi } from '../api/books';
@@ -9,7 +9,7 @@ import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { ShelvesSkeleton } from '../components/Skeleton';
 import { useApi } from '../hooks/useApi';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 
 function ShelfCard({
   shelf,
@@ -46,16 +46,21 @@ function ShelfCard({
           <Link
             key={b._id}
             to={`/books/${b._id}`}
-            className="w-14 h-20 bg-bark rounded-lg overflow-hidden shrink-0 border border-mist/20 hover:opacity-80 transition-opacity"
+            aria-label={b.title}
+            className="w-14 h-20 bg-bark rounded-lg overflow-hidden shrink-0 border border-mist/40 hover:opacity-80 transition-opacity"
           >
             {b.coverUrl ? (
               <img
                 src={b.coverUrl}
                 alt=""
+                aria-hidden="true"
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-xl opacity-20">
+              <div
+                aria-hidden="true"
+                className="w-full h-full flex items-center justify-center text-xl opacity-20"
+              >
                 📖
               </div>
             )}
@@ -126,11 +131,11 @@ function ManageShelfModal({
               if (e.key === 'Enter') searchBooks();
             }}
             placeholder={t.shelves.searchBooks}
-            className="flex-1 bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
+            className="flex-1 bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
           />
           <button
             onClick={searchBooks}
-            className="text-sm bg-bark border border-mist/20 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
+            className="text-sm bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
             {searching ? '✦' : t.shelves.search}
           </button>
@@ -208,7 +213,16 @@ export default function Shelves() {
   const [description, setDescription] = useState('');
 
   const fetchShelves = useCallback(() => shelvesApi.getAll(), []);
-  const { data: shelves, loading, error, refetch } = useApi<Shelf[]>(fetchShelves);
+  const {
+    data: shelves,
+    loading,
+    error,
+    refetch,
+  } = useApi<Shelf[]>(fetchShelves);
+
+  useEffect(() => {
+    document.title = `${t.shelves.title} — Book Tracker`;
+  }, [t]);
 
   const createShelf = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -240,7 +254,10 @@ export default function Shelves() {
         <Modal title={t.shelves.create} onClose={() => setShowCreate(false)}>
           <form onSubmit={createShelf} className="space-y-4">
             <div>
-              <label htmlFor="shelf-name" className="block text-xs text-parchment mb-1">
+              <label
+                htmlFor="shelf-name"
+                className="block text-xs text-parchment mb-1"
+              >
                 {t.shelves.name} *
               </label>
               <input
@@ -249,11 +266,14 @@ export default function Shelves() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="fantasy favs…"
                 required
-                className="w-full bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
+                className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
               />
             </div>
             <div>
-              <label htmlFor="shelf-description" className="block text-xs text-parchment mb-1">
+              <label
+                htmlFor="shelf-description"
+                className="block text-xs text-parchment mb-1"
+              >
                 {t.shelves.description}
               </label>
               <input
@@ -261,7 +281,7 @@ export default function Shelves() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="my favourite books…"
-                className="w-full bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
+                className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
               />
             </div>
             <button

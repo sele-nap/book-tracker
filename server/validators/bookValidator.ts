@@ -8,7 +8,12 @@ export const createBookSchema = z.object({
   pages: z.number().int().positive().optional(),
   isbn: z.string().optional(),
   coverUrl: z.string().url().optional().or(z.literal('')),
-  publishedYear: z.number().int().min(1000).max(new Date().getFullYear() + 1).optional(),
+  publishedYear: z
+    .number()
+    .int()
+    .min(1000)
+    .max(new Date().getFullYear() + 1)
+    .optional(),
 });
 
 export const updateBookSchema = createBookSchema.partial();

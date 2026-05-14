@@ -10,19 +10,34 @@ export const createShelf = asyncHandler(async (req, res) => {
 });
 
 export const addBookToShelf = asyncHandler(async (req, res) => {
-  const shelf = await shelfService.addBook(String(req.params.id), String(req.params.bookId));
-  if (!shelf) { res.status(404).json({ message: 'Shelf not found' }); return; }
+  const shelf = await shelfService.addBook(
+    String(req.params.id),
+    String(req.params.bookId),
+  );
+  if (!shelf) {
+    res.status(404).json({ message: 'Shelf not found' });
+    return;
+  }
   res.json(shelf);
 });
 
 export const removeBookFromShelf = asyncHandler(async (req, res) => {
-  const shelf = await shelfService.removeBook(String(req.params.id), String(req.params.bookId));
-  if (!shelf) { res.status(404).json({ message: 'Shelf not found' }); return; }
+  const shelf = await shelfService.removeBook(
+    String(req.params.id),
+    String(req.params.bookId),
+  );
+  if (!shelf) {
+    res.status(404).json({ message: 'Shelf not found' });
+    return;
+  }
   res.json(shelf);
 });
 
 export const deleteShelf = asyncHandler(async (req, res) => {
   const shelf = await shelfService.delete(String(req.params.id));
-  if (!shelf) { res.status(404).json({ message: 'Shelf not found' }); return; }
+  if (!shelf) {
+    res.status(404).json({ message: 'Shelf not found' });
+    return;
+  }
   res.status(204).send();
 });

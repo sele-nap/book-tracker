@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import type { BooksPage, Read, ReadStatus } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
 import AddBookForm from '../components/AddBookForm';
-import BookCard from '../components/BookCard';
 import ApiError from '../components/ApiError';
+import BookCard from '../components/BookCard';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { LibrarySkeleton } from '../components/Skeleton';
-import { useToast } from '../hooks/useToast';
 import { useApi } from '../hooks/useApi';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
+import { useToast } from '../hooks/useToast';
 
 const LIMIT = 20;
 
@@ -25,12 +25,14 @@ export default function Library() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    debounceRef.current && clearTimeout(debounceRef.current);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setDebouncedSearch(search);
       setPage(1);
     }, 350);
-    return () => { debounceRef.current && clearTimeout(debounceRef.current); };
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
   }, [search]);
 
   const fetchBooks = useCallback(
@@ -69,6 +71,10 @@ export default function Library() {
   const loading = booksLoading || readsLoading;
   const totalPages = booksPage?.pages ?? 1;
 
+  useEffect(() => {
+    document.title = `${t.library.title} — Book Tracker`;
+  }, [t]);
+
   const goTo = (p: number) => {
     setPage(p);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -103,15 +109,23 @@ export default function Library() {
         </button>
       </div>
 
+      <label htmlFor="library-search" className="sr-only">
+        {t.library.search}
+      </label>
       <input
-        type="text"
+        id="library-search"
+        type="search"
         placeholder={t.library.search}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full bg-dusk border border-mist/30 rounded-lg px-4 py-2.5 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 mb-4"
+        className="w-full bg-dusk border border-mist/40 rounded-lg px-4 py-2.5 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 mb-4"
       />
 
-      <div className="flex flex-wrap gap-2 mb-8">
+      <div
+        role="group"
+        aria-label="Filter by status"
+        className="flex flex-wrap gap-2 mb-8"
+      >
         {STATUS_FILTERS.map(({ value, label }) => (
           <button
             key={value}
@@ -119,6 +133,7 @@ export default function Library() {
               setStatusFilter(value);
               setPage(1);
             }}
+            aria-pressed={statusFilter === value}
             className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
               statusFilter === value
                 ? 'bg-wine text-cream'
@@ -141,7 +156,11 @@ export default function Library() {
           {books.map((book) => {
             const read = readsByBookId.get(book._id);
             return (
-              <Link key={book._id} to={`/books/${book._id}`}>
+              <Link
+                key={book._id}
+                to={`/books/${book._id}`}
+                aria-label={`${book.title} by ${book.author}`}
+              >
                 <BookCard
                   title={book.title}
                   author={book.author}

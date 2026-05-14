@@ -1,14 +1,41 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { Read } from '../api/books';
 import { readsApi } from '../api/books';
 import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
+import StarRating from '../components/StarRating';
 import { useApi } from '../hooks/useApi';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 
-const MONTHS_FR = ['jan', 'fév', 'mar', 'avr', 'mai', 'jun', 'jul', 'aoû', 'sep', 'oct', 'nov', 'déc'];
-const MONTHS_EN = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+const MONTHS_FR = [
+  'jan',
+  'fév',
+  'mar',
+  'avr',
+  'mai',
+  'jun',
+  'jul',
+  'aoû',
+  'sep',
+  'oct',
+  'nov',
+  'déc',
+];
+const MONTHS_EN = [
+  'jan',
+  'feb',
+  'mar',
+  'apr',
+  'may',
+  'jun',
+  'jul',
+  'aug',
+  'sep',
+  'oct',
+  'nov',
+  'dec',
+];
 
 function readDuration(startedAt?: string, finishedAt?: string): number | null {
   if (!startedAt || !finishedAt) return null;
@@ -39,8 +66,12 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
         <div className="shrink-0 w-10 text-right mt-0.5">
           {finished ? (
             <>
-              <p className="text-stone text-xs leading-none">{months[finished.getMonth()]}</p>
-              <p className="text-parchment text-sm font-display leading-tight">{finished.getDate()}</p>
+              <p className="text-stone text-xs leading-none">
+                {months[finished.getMonth()]}
+              </p>
+              <p className="text-parchment text-sm font-display leading-tight">
+                {finished.getDate()}
+              </p>
             </>
           ) : (
             <p className="text-stone text-xs">{t.timeline.noDate}</p>
@@ -50,21 +81,29 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
         {/* Cover */}
         <div className="w-10 h-14 bg-bark rounded overflow-hidden shrink-0">
           {read.book.coverUrl ? (
-            <img src={read.book.coverUrl} alt="" className="w-full h-full object-cover" />
+            <img
+              src={read.book.coverUrl}
+              alt=""
+              className="w-full h-full object-cover"
+            />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-base opacity-20">📖</div>
+            <div className="w-full h-full flex items-center justify-center text-base opacity-20">
+              📖
+            </div>
           )}
         </div>
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-display text-cream text-sm leading-snug truncate">{read.book.title}</h3>
+          <h3 className="font-display text-cream text-sm leading-snug truncate">
+            {read.book.title}
+          </h3>
           <p className="text-stone text-xs mt-0.5">{read.book.author}</p>
 
           <div className="flex flex-wrap items-center gap-2 mt-1.5">
             {read.rating && (
-              <span className="text-xs text-amber">
-                {'★'.repeat(read.rating)}{'★'.repeat(5 - read.rating).split('').map(() => '☆').join('')}
+              <span className="text-xs">
+                <StarRating value={read.rating} />
               </span>
             )}
             {duration && (
@@ -73,7 +112,10 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
               </span>
             )}
             {read.book.genre.slice(0, 2).map((g) => (
-              <span key={g} className="text-xs text-parchment/50 bg-bark px-2 py-0.5 rounded-full">
+              <span
+                key={g}
+                className="text-xs text-parchment/50 bg-bark px-2 py-0.5 rounded-full"
+              >
                 {g}
               </span>
             ))}
@@ -84,7 +126,15 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
   );
 }
 
-function YearGroup({ year, reads, locale }: { year: string; reads: Read[]; locale: string }) {
+function YearGroup({
+  year,
+  reads,
+  locale,
+}: {
+  year: string;
+  reads: Read[];
+  locale: string;
+}) {
   return (
     <div>
       <div className="flex items-center gap-3 mb-4">
@@ -104,6 +154,10 @@ export default function Timeline() {
   const { t, locale } = useLanguage();
   const fetchTimeline = useCallback(() => readsApi.timeline(), []);
   const { data: reads, loading, error } = useApi<Read[]>(fetchTimeline);
+
+  useEffect(() => {
+    document.title = `${t.timeline.title} — Book Tracker`;
+  }, [t]);
 
   const grouped = (reads ?? []).reduce<Record<string, Read[]>>((acc, read) => {
     const year = read.finishedAt
@@ -148,7 +202,12 @@ export default function Timeline() {
       ) : (
         <div className="space-y-10">
           {years.map((year) => (
-            <YearGroup key={year} year={year} reads={grouped[year]} locale={locale} />
+            <YearGroup
+              key={year}
+              year={year}
+              reads={grouped[year]}
+              locale={locale}
+            />
           ))}
         </div>
       )}

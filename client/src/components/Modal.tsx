@@ -12,7 +12,10 @@ export default function Modal({ title, onClose, children }: Props) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { onClose(); return; }
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
 
       if (e.key === 'Tab' && dialogRef.current) {
         const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
@@ -54,7 +57,9 @@ export default function Modal({ title, onClose, children }: Props) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 id={titleId} className="text-xl font-display text-cream">{title}</h2>
+          <h2 id={titleId} className="text-xl font-display text-cream">
+            {title}
+          </h2>
           <button
             onClick={onClose}
             aria-label="Close"

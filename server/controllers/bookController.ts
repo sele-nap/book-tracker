@@ -11,7 +11,10 @@ export const getBooks = asyncHandler(async (req, res) => {
 
 export const getBookById = asyncHandler(async (req, res) => {
   const book = await bookService.getById(String(req.params.id));
-  if (!book) { res.status(404).json({ message: 'Book not found' }); return; }
+  if (!book) {
+    res.status(404).json({ message: 'Book not found' });
+    return;
+  }
   res.json(book);
 });
 
@@ -21,13 +24,19 @@ export const createBook = asyncHandler(async (req, res) => {
 
 export const updateBook = asyncHandler(async (req, res) => {
   const book = await bookService.update(String(req.params.id), req.body);
-  if (!book) { res.status(404).json({ message: 'Book not found' }); return; }
+  if (!book) {
+    res.status(404).json({ message: 'Book not found' });
+    return;
+  }
   res.json(book);
 });
 
 export const deleteBook = asyncHandler(async (req, res) => {
   const book = await bookService.delete(String(req.params.id));
-  if (!book) { res.status(404).json({ message: 'Book not found' }); return; }
+  if (!book) {
+    res.status(404).json({ message: 'Book not found' });
+    return;
+  }
   res.status(204).send();
 });
 

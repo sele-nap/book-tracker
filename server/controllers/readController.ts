@@ -11,12 +11,17 @@ export const getTimeline = asyncHandler(async (_req, res) => {
 });
 
 export const getReadsByStatus = asyncHandler(async (req, res) => {
-  res.json(await readService.getByStatus(String(req.params.status) as ReadStatus));
+  res.json(
+    await readService.getByStatus(String(req.params.status) as ReadStatus),
+  );
 });
 
 export const getReadByBook = asyncHandler(async (req, res) => {
   const read = await readService.getByBook(String(req.params.bookId));
-  if (!read) { res.status(404).json({ message: 'Read not found' }); return; }
+  if (!read) {
+    res.status(404).json({ message: 'Read not found' });
+    return;
+  }
   res.json(read);
 });
 
@@ -26,12 +31,18 @@ export const createRead = asyncHandler(async (req, res) => {
 
 export const updateRead = asyncHandler(async (req, res) => {
   const read = await readService.update(String(req.params.id), req.body);
-  if (!read) { res.status(404).json({ message: 'Read not found' }); return; }
+  if (!read) {
+    res.status(404).json({ message: 'Read not found' });
+    return;
+  }
   res.json(read);
 });
 
 export const deleteRead = asyncHandler(async (req, res) => {
   const read = await readService.delete(String(req.params.id));
-  if (!read) { res.status(404).json({ message: 'Read not found' }); return; }
+  if (!read) {
+    res.status(404).json({ message: 'Read not found' });
+    return;
+  }
   res.status(204).send();
 });

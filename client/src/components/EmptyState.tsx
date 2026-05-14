@@ -90,22 +90,91 @@ const illustrations: Record<Variant, ReactElement> = {
   ),
   moon: (
     <svg viewBox="0 0 80 80" className="w-20 h-20" fill="none">
-      <path
-        d="M48 20c-12 3-20 14-18 26s12 20 24 18c-8 4-18 2-24-6S24 36 30 26a20 20 0 0118-6z"
-        fill="#2a2330"
-        stroke="#3d3547"
-        strokeWidth="1.5"
+      <defs>
+        <mask id="moon-crescent-mask">
+          <rect width="80" height="80" fill="white" />
+          {/* cutout circle that bites into the right side, creating the crescent */}
+          <circle cx="50" cy="37" r="17" fill="black" />
+        </mask>
+        <radialGradient id="moon-glow" cx="35%" cy="40%" r="60%">
+          <stop offset="0%" stopColor="#c49a50" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="#c49a50" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* Soft glow halo behind the crescent */}
+      <circle
+        cx="37"
+        cy="41"
+        r="23"
+        fill="url(#moon-glow)"
+        mask="url(#moon-crescent-mask)"
       />
-      <text x="50" y="28" fontSize="10" fill="#c49a50" opacity="0.7">
+
+      {/* Moon body */}
+      <circle
+        cx="37"
+        cy="41"
+        r="19"
+        fill="#2a2330"
+        stroke="#c49a50"
+        strokeWidth="1.2"
+        strokeOpacity="0.7"
+        mask="url(#moon-crescent-mask)"
+      />
+
+      {/* Inner concave edge highlight */}
+      <circle
+        cx="50"
+        cy="37"
+        r="17"
+        fill="none"
+        stroke="#c49a50"
+        strokeWidth="0.6"
+        strokeOpacity="0.25"
+        mask="url(#moon-crescent-mask)"
+      />
+
+      {/* Subtle craters */}
+      <circle
+        cx="30"
+        cy="43"
+        r="2.5"
+        fill="none"
+        stroke="#3d3547"
+        strokeWidth="0.8"
+        mask="url(#moon-crescent-mask)"
+      />
+      <circle
+        cx="36"
+        cy="53"
+        r="1.6"
+        fill="none"
+        stroke="#3d3547"
+        strokeWidth="0.7"
+        mask="url(#moon-crescent-mask)"
+      />
+      <circle
+        cx="24"
+        cy="34"
+        r="1.8"
+        fill="none"
+        stroke="#3d3547"
+        strokeWidth="0.6"
+        mask="url(#moon-crescent-mask)"
+      />
+
+      {/* Stars */}
+      <text x="54" y="24" fontSize="10" fill="#c49a50" opacity="0.7">
         ✦
       </text>
-      <text x="24" y="24" fontSize="7" fill="#c49a50" opacity="0.5">
+      <text x="17" y="22" fontSize="7" fill="#c49a50" opacity="0.5">
         ✦
       </text>
-      <text x="52" y="50" fontSize="8" fill="#c49a50" opacity="0.4">
+      <text x="59" y="53" fontSize="8" fill="#c49a50" opacity="0.45">
         ✦
       </text>
-      <text x="30" y="62" fontSize="6" fill="#c49a50" opacity="0.3">
+      <text x="14" y="58" fontSize="5" fill="#c49a50" opacity="0.3">
         ✦
       </text>
     </svg>

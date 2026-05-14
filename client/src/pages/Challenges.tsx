@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Book } from '../api/books';
 import { booksApi } from '../api/books';
 import type { Challenge } from '../api/challenges';
@@ -8,7 +8,7 @@ import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { ChallengesSkeleton } from '../components/Skeleton';
 import { useApi } from '../hooks/useApi';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 
 function ChallengeCard({
   challenge,
@@ -115,7 +115,7 @@ function ChallengeCard({
 
       <button
         onClick={onAddBook}
-        className="w-full text-sm border border-mist/20 rounded-lg py-2 text-parchment hover:text-cream hover:border-mist/50 transition-colors"
+        className="w-full text-sm border border-mist/40 rounded-lg py-2 text-parchment hover:text-cream hover:border-mist/50 transition-colors"
       >
         + {t.challenges.addBook}
       </button>
@@ -166,11 +166,11 @@ function AddBookModal({
               if (e.key === 'Enter') searchBooks();
             }}
             placeholder={t.challenges.searchBooks}
-            className="flex-1 bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
+            className="flex-1 bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
           />
           <button
             onClick={searchBooks}
-            className="text-sm bg-bark border border-mist/20 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
+            className="text-sm bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
             {searching ? '✦' : t.challenges.search}
           </button>
@@ -236,13 +236,16 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
   };
 
   const inputClass =
-    'w-full bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50';
+    'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="challenge-year" className="block text-xs text-parchment mb-1">
+          <label
+            htmlFor="challenge-year"
+            className="block text-xs text-parchment mb-1"
+          >
             {t.challenges.year}
           </label>
           <input
@@ -255,7 +258,10 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
           />
         </div>
         <div>
-          <label htmlFor="challenge-goal" className="block text-xs text-parchment mb-1">
+          <label
+            htmlFor="challenge-goal"
+            className="block text-xs text-parchment mb-1"
+          >
             {t.challenges.goal} *
           </label>
           <input
@@ -272,7 +278,10 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
       </div>
 
       <div>
-        <label htmlFor="challenge-genre" className="block text-xs text-parchment mb-1">
+        <label
+          htmlFor="challenge-genre"
+          className="block text-xs text-parchment mb-1"
+        >
           {t.challenges.targetGenres}
         </label>
         <div className="flex gap-2">
@@ -292,7 +301,7 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
           <button
             type="button"
             onClick={addGenre}
-            className="text-xs bg-bark border border-mist/20 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
+            className="text-xs bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
             +
           </button>
@@ -343,6 +352,10 @@ export default function Challenges() {
     error,
     refetch,
   } = useApi<Challenge[]>(fetchChallenges);
+
+  useEffect(() => {
+    document.title = `${t.challenges.title} — Book Tracker`;
+  }, [t]);
 
   const handleUpdate = () => {
     refetch();

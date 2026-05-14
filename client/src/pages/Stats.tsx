@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -21,7 +21,7 @@ import { statsApi } from '../api/stats';
 import ApiError from '../components/ApiError';
 import { StatsSkeleton } from '../components/Skeleton';
 import { useApi } from '../hooks/useApi';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 
 const MONTHS_FR = [
   'Jan',
@@ -103,6 +103,10 @@ export default function Stats() {
   const fetchStreak = useCallback(() => statsApi.streak(), []);
 
   const { data: global, loading, error } = useApi<GlobalStats>(fetchGlobal);
+
+  useEffect(() => {
+    document.title = `${t.stats.title} — Book Tracker`;
+  }, [t]);
   const { data: byMonth } = useApi<StatByMonth[]>(fetchByMonth);
   const { data: byGenre } = useApi<StatByGenre[]>(fetchByGenre);
   const { data: ratings } = useApi<StatByRating[]>(fetchRatings);
@@ -162,11 +166,12 @@ export default function Stats() {
         <div className="bg-dusk border border-mist/30 rounded-xl p-5">
           <div className="flex items-center justify-between mb-4">
             <p className="text-parchment text-sm">{t.stats.byMonth}</p>
-            <div className="flex gap-1">
+            <div role="group" aria-label="Select year" className="flex gap-1">
               {[currentYear - 1, currentYear].map((y) => (
                 <button
                   key={y}
                   onClick={() => setYear(y)}
+                  aria-pressed={year === y}
                   className={`text-xs px-2.5 py-1 rounded-full transition-colors ${year === y ? 'bg-wine text-cream' : 'text-stone hover:text-parchment'}`}
                 >
                   {y}

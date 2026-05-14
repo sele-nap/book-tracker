@@ -1,13 +1,6 @@
-import { createContext, useContext, useState } from 'react';
-import { type Locale, type Translations, translations } from './translations';
-
-type LanguageContextType = {
-  locale: Locale;
-  t: Translations;
-  setLocale: (l: Locale) => void;
-};
-
-const LanguageContext = createContext<LanguageContextType | null>(null);
+import { useState } from 'react';
+import { LanguageContext } from '../contexts/language';
+import { type Locale, translations } from './translations';
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState<Locale>(() => {
@@ -30,11 +23,4 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
       {children}
     </LanguageContext.Provider>
   );
-}
-
-// eslint-disable-next-line react-refresh/only-export-components
-export function useLanguage() {
-  const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error('useLanguage must be used within LanguageProvider');
-  return ctx;
 }

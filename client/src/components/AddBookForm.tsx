@@ -7,12 +7,12 @@ import {
   getCoverUrl,
   searchOpenLibrary,
 } from '../api/openLibrary';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 
 type Props = { onSuccess: () => void };
 
 const inputClass =
-  'w-full bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50 transition-colors';
+  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 transition-colors';
 const labelClass = 'block text-xs text-parchment mb-1';
 
 export default function AddBookForm({ onSuccess }: Props) {
@@ -121,7 +121,9 @@ export default function AddBookForm({ onSuccess }: Props) {
       className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto pr-1"
     >
       <div>
-        <label htmlFor="add-ol-search" className={labelClass}>{t.form.search}</label>
+        <label htmlFor="add-ol-search" className={labelClass}>
+          {t.form.search}
+        </label>
         <div className="relative">
           <input
             id="add-ol-search"
@@ -177,7 +179,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       <div className="border-t border-mist/20 pt-4 grid grid-cols-2 gap-3">
         <div className="col-span-2">
-          <label htmlFor="add-title" className={labelClass}>{t.form.title} *</label>
+          <label htmlFor="add-title" className={labelClass}>
+            {t.form.title} *
+          </label>
           <input
             id="add-title"
             className={inputClass}
@@ -188,7 +192,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div className="col-span-2">
-          <label htmlFor="add-author" className={labelClass}>{t.form.author} *</label>
+          <label htmlFor="add-author" className={labelClass}>
+            {t.form.author} *
+          </label>
           <input
             id="add-author"
             className={inputClass}
@@ -199,7 +205,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div>
-          <label htmlFor="add-pages" className={labelClass}>{t.form.pages}</label>
+          <label htmlFor="add-pages" className={labelClass}>
+            {t.form.pages}
+          </label>
           <input
             id="add-pages"
             className={inputClass}
@@ -211,7 +219,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div>
-          <label htmlFor="add-year" className={labelClass}>{t.form.year}</label>
+          <label htmlFor="add-year" className={labelClass}>
+            {t.form.year}
+          </label>
           <input
             id="add-year"
             className={inputClass}
@@ -225,7 +235,9 @@ export default function AddBookForm({ onSuccess }: Props) {
       </div>
 
       <div>
-        <label htmlFor="add-genre" className={labelClass}>{t.form.genre}</label>
+        <label htmlFor="add-genre" className={labelClass}>
+          {t.form.genre}
+        </label>
         <div className="flex gap-2">
           <input
             id="add-genre"
@@ -244,7 +256,7 @@ export default function AddBookForm({ onSuccess }: Props) {
             type="button"
             onClick={addGenre}
             aria-label="Add genre"
-            className="text-xs bg-bark border border-mist/20 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
+            className="text-xs bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
             +
           </button>
@@ -273,7 +285,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="add-language" className={labelClass}>{t.bookLanguage.label}</label>
+          <label htmlFor="add-language" className={labelClass}>
+            {t.bookLanguage.label}
+          </label>
           <select
             id="add-language"
             className={inputClass}
@@ -287,7 +301,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           </select>
         </div>
         <div>
-          <label htmlFor="add-status" className={labelClass}>{t.form.status}</label>
+          <label htmlFor="add-status" className={labelClass}>
+            {t.form.status}
+          </label>
           <select
             id="add-status"
             className={inputClass}
@@ -304,7 +320,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       {fields.status === 'finished' && (
         <div>
-          <label htmlFor="add-rating" className={labelClass}>{t.form.rating}</label>
+          <label htmlFor="add-rating" className={labelClass}>
+            {t.form.rating}
+          </label>
           <select
             id="add-rating"
             className={inputClass}
@@ -314,7 +332,7 @@ export default function AddBookForm({ onSuccess }: Props) {
             <option value="">—</option>
             {[1, 2, 3, 4, 5].map((n) => (
               <option key={n} value={n}>
-                {'★'.repeat(n)}
+                {'★'.repeat(n)} — {n} star{n > 1 ? 's' : ''}
               </option>
             ))}
           </select>
@@ -322,7 +340,9 @@ export default function AddBookForm({ onSuccess }: Props) {
       )}
 
       <div>
-        <label htmlFor="add-cover" className={labelClass}>{t.form.cover}</label>
+        <label htmlFor="add-cover" className={labelClass}>
+          {t.form.cover}
+        </label>
         <input
           id="add-cover"
           className={inputClass}
@@ -342,9 +362,10 @@ export default function AddBookForm({ onSuccess }: Props) {
       <button
         type="submit"
         disabled={loading}
+        aria-busy={loading}
         className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-lg transition-colors font-body"
       >
-        {loading ? '✦' : t.form.submit}
+        {loading ? <span aria-hidden="true">✦</span> : t.form.submit}
       </button>
     </form>
   );

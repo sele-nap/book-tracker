@@ -9,7 +9,10 @@ import {
   updateRead,
 } from '../controllers/readController.js';
 import { validate } from '../utils/validate.js';
-import { createReadSchema, updateReadSchema } from '../validators/readValidator.js';
+import {
+  createReadSchema,
+  updateReadSchema,
+} from '../validators/readValidator.js';
 
 const router = Router();
 

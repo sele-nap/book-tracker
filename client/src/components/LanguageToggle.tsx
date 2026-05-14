@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
 import './LanguageToggle.css';
 
 export default function LanguageToggle() {

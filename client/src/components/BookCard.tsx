@@ -1,4 +1,5 @@
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
+import StarRating from './StarRating';
 
 type BookLanguage = 'vo' | 'vf' | 'other';
 
@@ -72,15 +73,8 @@ export default function BookCard({
         <p className="text-stone text-xs mt-1">{author}</p>
 
         {rating && (
-          <div className="flex gap-0.5 mt-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <span
-                key={i}
-                className={`text-xs ${i < rating ? 'text-amber' : 'text-mist'}`}
-              >
-                ★
-              </span>
-            ))}
+          <div className="text-xs mt-2">
+            <StarRating value={rating} />
           </div>
         )}
 

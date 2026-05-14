@@ -8,7 +8,10 @@ import {
   updateBook,
 } from '../controllers/bookController.js';
 import { validate } from '../utils/validate.js';
-import { createBookSchema, updateBookSchema } from '../validators/bookValidator.js';
+import {
+  createBookSchema,
+  updateBookSchema,
+} from '../validators/bookValidator.js';
 
 const router = Router();
 

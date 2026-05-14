@@ -1,6 +1,10 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable react-hooks/refs */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
 type State<T> = {
   data: T | null;
@@ -15,10 +19,13 @@ export function useApi<T>(fetcher: () => Promise<T>) {
     error: null,
   });
   const fetcherRef = useRef(fetcher);
-  fetcherRef.current = fetcher;
 
-  const run = useCallback(() => {
-    setState((s) => ({ ...s, loading: true, error: null }));
+  useLayoutEffect(() => {
+    fetcherRef.current = fetcher;
+  });
+
+  // Async-only fetch: no synchronous setState, safe to call from effects
+  const fetch = useCallback(() => {
     fetcherRef
       .current()
       .then((data) => setState({ data, loading: false, error: null }))
@@ -28,9 +35,15 @@ export function useApi<T>(fetcher: () => Promise<T>) {
       });
   }, []);
 
-  useEffect(() => {
-    run();
-  }, [fetcher, run]);
+  // Manual refetch: resets loading state synchronously (called from event handlers)
+  const refetch = useCallback(() => {
+    setState((s) => ({ ...s, loading: true, error: null }));
+    fetch();
+  }, [fetch]);
 
-  return { ...state, refetch: run };
+  useEffect(() => {
+    fetch();
+  }, [fetcher, fetch]);
+
+  return { ...state, refetch };
 }

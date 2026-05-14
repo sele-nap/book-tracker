@@ -36,7 +36,10 @@ export type BooksPage = {
 
 export const booksApi = {
   getAll: (page = 1, limit = 20, q?: string) => {
-    const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+    });
     if (q) params.set('q', q);
     return api.get<BooksPage>(`/books?${params}`);
   },

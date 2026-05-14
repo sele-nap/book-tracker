@@ -1,12 +1,13 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Book, Read } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
 import EditBookForm from '../components/EditBookForm';
 import Modal from '../components/Modal';
-import { useToast } from '../hooks/useToast';
+import StarRating from '../components/StarRating';
 import { useApi } from '../hooks/useApi';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
+import { useToast } from '../hooks/useToast';
 
 const labelClass = 'text-xs text-stone uppercase tracking-widest';
 const valueClass = 'text-cream text-sm mt-0.5';
@@ -34,6 +35,13 @@ export default function BookDetail() {
 
   const { data: book, refetch: refetchBook } = useApi<Book>(fetchBook);
   const { data: read, refetch: refetchRead } = useApi<Read>(fetchRead);
+
+  useEffect(() => {
+    if (book) document.title = `${book.title} — Book Tracker`;
+    return () => {
+      document.title = 'Book Tracker';
+    };
+  }, [book]);
 
   const currentReview = reviewText ?? read?.review ?? '';
 
@@ -117,7 +125,7 @@ export default function BookDetail() {
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="text-xs text-stone hover:text-blush border border-mist/20 hover:border-blush/40 rounded-lg px-3 py-1.5 transition-colors disabled:opacity-50"
+                className="text-xs text-stone hover:text-blush border border-mist/40 hover:border-blush/40 rounded-lg px-3 py-1.5 transition-colors disabled:opacity-50"
               >
                 {t.bookDetail.delete}
               </button>
@@ -164,14 +172,7 @@ export default function BookDetail() {
               <div>
                 <p className={labelClass}>{t.form.rating}</p>
                 <p className={valueClass}>
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <span
-                      key={i}
-                      className={i < read.rating! ? 'text-amber' : 'text-mist'}
-                    >
-                      ★
-                    </span>
-                  ))}
+                  <StarRating value={read.rating} />
                 </p>
               </div>
             )}
@@ -188,21 +189,32 @@ export default function BookDetail() {
       </div>
 
       <div className="mt-8 bg-dusk border border-mist/30 rounded-xl p-5">
-        <p className="text-parchment text-sm mb-3">{t.bookDetail.review}</p>
+        <label
+          htmlFor="book-review"
+          className="block text-parchment text-sm mb-3"
+        >
+          {t.bookDetail.review}
+        </label>
         <textarea
+          id="book-review"
           value={currentReview}
           onChange={(e) => setReviewText(e.target.value)}
           placeholder={t.bookDetail.reviewPlaceholder}
           rows={5}
-          className="w-full bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50 transition-colors resize-none"
+          className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/60 transition-colors resize-none"
         />
         {reviewText !== null && reviewText !== (read?.review ?? '') && (
           <button
             onClick={handleSaveReview}
             disabled={savingReview}
+            aria-busy={savingReview}
             className="mt-2 text-xs bg-wine hover:bg-rose text-cream px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50"
           >
-            {savingReview ? '✦' : t.bookDetail.saveReview}
+            {savingReview ? (
+              <span aria-hidden="true">✦</span>
+            ) : (
+              t.bookDetail.saveReview
+            )}
           </button>
         )}
       </div>

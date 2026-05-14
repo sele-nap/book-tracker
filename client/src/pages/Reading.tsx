@@ -1,25 +1,43 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Read } from '../api/books';
 import { readsApi } from '../api/books';
 import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import { ReadingSkeleton } from '../components/Skeleton';
-import { useToast } from '../hooks/useToast';
 import { useApi } from '../hooks/useApi';
-import { useLanguage } from '../i18n/LanguageContext';
+import { useLanguage } from '../hooks/useLanguage';
+import { useToast } from '../hooks/useToast';
 
-function ProgressBar({ current, total }: { current: number; total: number }) {
+function ProgressBar({
+  current,
+  total,
+  bookTitle,
+}: {
+  current: number;
+  total: number;
+  bookTitle: string;
+}) {
   const pct = Math.min(100, Math.round((current / total) * 100));
   return (
     <div>
-      <div className="flex justify-between text-xs text-stone mb-1">
+      <div
+        className="flex justify-between text-xs text-stone mb-1"
+        aria-hidden="true"
+      >
         <span>
           {current} / {total} p.
         </span>
         <span>{pct}%</span>
       </div>
-      <div className="h-1.5 bg-bark rounded-full overflow-hidden">
+      <div
+        role="progressbar"
+        aria-valuenow={current}
+        aria-valuemin={0}
+        aria-valuemax={total}
+        aria-label={`Reading progress for ${bookTitle}: ${pct}%`}
+        className="h-1.5 bg-bark rounded-full overflow-hidden"
+      >
         <div
           className="h-full bg-gradient-to-r from-wine to-blush rounded-full transition-all duration-500"
           style={{ width: `${pct}%` }}
@@ -34,6 +52,7 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
   const { toast } = useToast();
   const [pageInput, setPageInput] = useState(String(read.currentPage ?? ''));
   const [saving, setSaving] = useState(false);
+  const pageInputId = `page-input-${read._id}`;
 
   const savePage = async () => {
     const p = parseInt(pageInput);
@@ -63,16 +82,20 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
     <div className="bg-dusk border border-mist/30 rounded-xl p-5 flex gap-4">
       <Link
         to={`/books/${book._id}`}
+        aria-label={book.title}
         className="w-14 h-20 bg-bark rounded-lg shrink-0 flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity"
       >
         {book.coverUrl ? (
           <img
             src={book.coverUrl}
             alt=""
+            aria-hidden="true"
             className="w-full h-full object-cover"
           />
         ) : (
-          <span className="text-2xl opacity-30">📖</span>
+          <span aria-hidden="true" className="text-2xl opacity-30">
+            📖
+          </span>
         )}
       </Link>
 
@@ -84,31 +107,41 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
 
         {read.startedAt && (
           <p className="text-stone text-xs mt-1">
-            🕯️ {new Date(read.startedAt).toLocaleDateString()}
+            <span aria-hidden="true">🕯️ </span>
+            {new Date(read.startedAt).toLocaleDateString()}
           </p>
         )}
 
         <div className="mt-3 space-y-3">
           {hasPages && (
-            <ProgressBar current={read.currentPage ?? 0} total={book.pages!} />
+            <ProgressBar
+              current={read.currentPage ?? 0}
+              total={book.pages!}
+              bookTitle={book.title}
+            />
           )}
 
           <div className="flex gap-2 items-center">
+            <label htmlFor={pageInputId} className="sr-only">
+              {t.reading.currentPage}
+            </label>
             <input
+              id={pageInputId}
               type="number"
               min={0}
               max={book.pages}
               value={pageInput}
               onChange={(e) => setPageInput(e.target.value)}
               placeholder={t.reading.currentPage}
-              className="w-24 bg-bark border border-mist/20 rounded-lg px-2 py-1 text-cream text-xs outline-none focus:border-mist/50"
+              className="w-24 bg-bark border border-mist/40 rounded-lg px-2 py-1 text-cream text-xs outline-none focus:border-mist/60"
             />
             <button
               onClick={savePage}
               disabled={saving}
-              className="text-xs bg-bark border border-mist/20 rounded-lg px-3 py-1 text-parchment hover:text-cream transition-colors"
+              aria-busy={saving}
+              className="text-xs bg-bark border border-mist/40 rounded-lg px-3 py-1 text-parchment hover:text-cream transition-colors"
             >
-              {saving ? '✦' : t.reading.save}
+              {saving ? <span aria-hidden="true">✦</span> : t.reading.save}
             </button>
           </div>
 
@@ -136,6 +169,10 @@ export default function Reading() {
   const { t } = useLanguage();
   const fetchReads = useCallback(() => readsApi.byStatus('reading'), []);
   const { data: reads, loading, error, refetch } = useApi<Read[]>(fetchReads);
+
+  useEffect(() => {
+    document.title = `${t.reading.title} — Book Tracker`;
+  }, [t]);
 
   return (
     <div>
