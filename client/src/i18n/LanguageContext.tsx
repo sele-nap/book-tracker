@@ -12,12 +12,15 @@ const LanguageContext = createContext<LanguageContextType | null>(null);
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState<Locale>(() => {
     const saved = localStorage.getItem('locale');
-    return saved === 'fr' || saved === 'en' ? saved : 'fr';
+    const l: Locale = saved === 'fr' || saved === 'en' ? saved : 'fr';
+    document.documentElement.lang = l;
+    return l;
   });
 
   const handleSetLocale = (l: Locale) => {
     setLocale(l);
     localStorage.setItem('locale', l);
+    document.documentElement.lang = l;
   };
 
   return (
