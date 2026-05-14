@@ -80,8 +80,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
     >
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2">
-          <label className={labelClass}>{t.form.title} *</label>
+          <label htmlFor="edit-title" className={labelClass}>{t.form.title} *</label>
           <input
+            id="edit-title"
             className={inputClass}
             value={fields.title}
             onChange={set('title')}
@@ -89,8 +90,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           />
         </div>
         <div className="col-span-2">
-          <label className={labelClass}>{t.form.author} *</label>
+          <label htmlFor="edit-author" className={labelClass}>{t.form.author} *</label>
           <input
+            id="edit-author"
             className={inputClass}
             value={fields.author}
             onChange={set('author')}
@@ -98,8 +100,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           />
         </div>
         <div>
-          <label className={labelClass}>{t.form.pages}</label>
+          <label htmlFor="edit-pages" className={labelClass}>{t.form.pages}</label>
           <input
+            id="edit-pages"
             className={inputClass}
             type="number"
             min={1}
@@ -108,8 +111,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           />
         </div>
         <div>
-          <label className={labelClass}>{t.form.year}</label>
+          <label htmlFor="edit-year" className={labelClass}>{t.form.year}</label>
           <input
+            id="edit-year"
             className={inputClass}
             type="number"
             min={1}
@@ -120,9 +124,10 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
       </div>
 
       <div>
-        <label className={labelClass}>{t.form.genre}</label>
+        <label htmlFor="edit-genre" className={labelClass}>{t.form.genre}</label>
         <div className="flex gap-2">
           <input
+            id="edit-genre"
             className={inputClass}
             value={genreInput}
             onChange={(e) => setGenreInput(e.target.value)}
@@ -137,6 +142,7 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           <button
             type="button"
             onClick={addGenre}
+            aria-label="Add genre"
             className="text-xs bg-bark border border-mist/20 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
             +
@@ -153,6 +159,7 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
                 <button
                   type="button"
                   onClick={() => removeGenre(g)}
+                  aria-label={`Remove genre ${g}`}
                   className="text-stone hover:text-cream"
                 >
                   ✕
@@ -165,8 +172,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className={labelClass}>{t.bookLanguage.label}</label>
+          <label htmlFor="edit-language" className={labelClass}>{t.bookLanguage.label}</label>
           <select
+            id="edit-language"
             className={inputClass}
             value={fields.language}
             onChange={set('language')}
@@ -178,8 +186,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
           </select>
         </div>
         <div>
-          <label className={labelClass}>{t.form.status}</label>
+          <label htmlFor="edit-status" className={labelClass}>{t.form.status}</label>
           <select
+            id="edit-status"
             className={inputClass}
             value={fields.status}
             onChange={set('status')}
@@ -194,8 +203,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
 
       {fields.status === 'finished' && (
         <div>
-          <label className={labelClass}>{t.form.rating}</label>
+          <label htmlFor="edit-rating" className={labelClass}>{t.form.rating}</label>
           <select
+            id="edit-rating"
             className={inputClass}
             value={fields.rating}
             onChange={set('rating')}
@@ -211,8 +221,9 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
       )}
 
       <div>
-        <label className={labelClass}>{t.form.cover}</label>
+        <label htmlFor="edit-cover" className={labelClass}>{t.form.cover}</label>
         <input
+          id="edit-cover"
           className={inputClass}
           value={fields.coverUrl}
           onChange={set('coverUrl')}

@@ -242,10 +242,11 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs text-parchment mb-1">
+          <label htmlFor="challenge-year" className="block text-xs text-parchment mb-1">
             {t.challenges.year}
           </label>
           <input
+            id="challenge-year"
             className={inputClass}
             type="number"
             value={year}
@@ -254,10 +255,11 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
           />
         </div>
         <div>
-          <label className="block text-xs text-parchment mb-1">
+          <label htmlFor="challenge-goal" className="block text-xs text-parchment mb-1">
             {t.challenges.goal} *
           </label>
           <input
+            id="challenge-goal"
             className={inputClass}
             type="number"
             min={1}
@@ -270,11 +272,12 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
       </div>
 
       <div>
-        <label className="block text-xs text-parchment mb-1">
+        <label htmlFor="challenge-genre" className="block text-xs text-parchment mb-1">
           {t.challenges.targetGenres}
         </label>
         <div className="flex gap-2">
           <input
+            id="challenge-genre"
             className={inputClass}
             value={genreInput}
             onChange={(e) => setGenreInput(e.target.value)}

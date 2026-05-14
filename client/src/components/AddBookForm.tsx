@@ -121,9 +121,10 @@ export default function AddBookForm({ onSuccess }: Props) {
       className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto pr-1"
     >
       <div>
-        <label className={labelClass}>{t.form.search}</label>
+        <label htmlFor="add-ol-search" className={labelClass}>{t.form.search}</label>
         <div className="relative">
           <input
+            id="add-ol-search"
             className={inputClass}
             value={olQuery}
             onChange={(e) => setOlQuery(e.target.value)}
@@ -176,8 +177,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       <div className="border-t border-mist/20 pt-4 grid grid-cols-2 gap-3">
         <div className="col-span-2">
-          <label className={labelClass}>{t.form.title} *</label>
+          <label htmlFor="add-title" className={labelClass}>{t.form.title} *</label>
           <input
+            id="add-title"
             className={inputClass}
             value={fields.title}
             onChange={set('title')}
@@ -186,8 +188,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div className="col-span-2">
-          <label className={labelClass}>{t.form.author} *</label>
+          <label htmlFor="add-author" className={labelClass}>{t.form.author} *</label>
           <input
+            id="add-author"
             className={inputClass}
             value={fields.author}
             onChange={set('author')}
@@ -196,8 +199,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div>
-          <label className={labelClass}>{t.form.pages}</label>
+          <label htmlFor="add-pages" className={labelClass}>{t.form.pages}</label>
           <input
+            id="add-pages"
             className={inputClass}
             type="number"
             min={1}
@@ -207,8 +211,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div>
-          <label className={labelClass}>{t.form.year}</label>
+          <label htmlFor="add-year" className={labelClass}>{t.form.year}</label>
           <input
+            id="add-year"
             className={inputClass}
             type="number"
             min={1}
@@ -220,9 +225,10 @@ export default function AddBookForm({ onSuccess }: Props) {
       </div>
 
       <div>
-        <label className={labelClass}>{t.form.genre}</label>
+        <label htmlFor="add-genre" className={labelClass}>{t.form.genre}</label>
         <div className="flex gap-2">
           <input
+            id="add-genre"
             className={inputClass}
             value={genreInput}
             onChange={(e) => setGenreInput(e.target.value)}
@@ -237,6 +243,7 @@ export default function AddBookForm({ onSuccess }: Props) {
           <button
             type="button"
             onClick={addGenre}
+            aria-label="Add genre"
             className="text-xs bg-bark border border-mist/20 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
             +
@@ -253,6 +260,7 @@ export default function AddBookForm({ onSuccess }: Props) {
                 <button
                   type="button"
                   onClick={() => removeGenre(g)}
+                  aria-label={`Remove genre ${g}`}
                   className="text-stone hover:text-cream"
                 >
                   ✕
@@ -265,8 +273,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className={labelClass}>{t.bookLanguage.label}</label>
+          <label htmlFor="add-language" className={labelClass}>{t.bookLanguage.label}</label>
           <select
+            id="add-language"
             className={inputClass}
             value={fields.language}
             onChange={set('language')}
@@ -278,8 +287,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           </select>
         </div>
         <div>
-          <label className={labelClass}>{t.form.status}</label>
+          <label htmlFor="add-status" className={labelClass}>{t.form.status}</label>
           <select
+            id="add-status"
             className={inputClass}
             value={fields.status}
             onChange={set('status')}
@@ -294,8 +304,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       {fields.status === 'finished' && (
         <div>
-          <label className={labelClass}>{t.form.rating}</label>
+          <label htmlFor="add-rating" className={labelClass}>{t.form.rating}</label>
           <select
+            id="add-rating"
             className={inputClass}
             value={fields.rating}
             onChange={set('rating')}
@@ -311,8 +322,9 @@ export default function AddBookForm({ onSuccess }: Props) {
       )}
 
       <div>
-        <label className={labelClass}>{t.form.cover}</label>
+        <label htmlFor="add-cover" className={labelClass}>{t.form.cover}</label>
         <input
+          id="add-cover"
           className={inputClass}
           value={fields.coverUrl}
           onChange={set('coverUrl')}

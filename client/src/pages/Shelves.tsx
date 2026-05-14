@@ -240,10 +240,11 @@ export default function Shelves() {
         <Modal title={t.shelves.create} onClose={() => setShowCreate(false)}>
           <form onSubmit={createShelf} className="space-y-4">
             <div>
-              <label className="block text-xs text-parchment mb-1">
+              <label htmlFor="shelf-name" className="block text-xs text-parchment mb-1">
                 {t.shelves.name} *
               </label>
               <input
+                id="shelf-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="fantasy favs…"
@@ -252,13 +253,14 @@ export default function Shelves() {
               />
             </div>
             <div>
-              <label className="block text-xs text-parchment mb-1">
+              <label htmlFor="shelf-description" className="block text-xs text-parchment mb-1">
                 {t.shelves.description}
               </label>
               <input
+                id="shelf-description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="mes livres préférés…"
+                placeholder="my favourite books…"
                 className="w-full bg-bark border border-mist/20 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
               />
             </div>
