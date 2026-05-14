@@ -1,12 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { BookLanguage, ReadStatus } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
-import type { OLResult } from '../api/openLibrary';
-import {
-  detectLanguage,
-  getCoverUrl,
-  searchOpenLibrary,
-} from '../api/openLibrary';
+import type { BookSearchResult } from '../api/bookSearch';
+import { searchBooks } from '../api/bookSearch';
 import { useLanguage } from '../hooks/useLanguage';
 
 type Props = { onSuccess: () => void };
@@ -15,13 +11,22 @@ const inputClass =
   'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 transition-colors';
 const labelClass = 'block text-xs text-parchment mb-1';
 
+const SOURCE_LABEL: Record<BookSearchResult['source'], string> = {
+  ol: 'OL',
+  gb: 'GB',
+};
+const SOURCE_CLASS: Record<BookSearchResult['source'], string> = {
+  ol: 'bg-mist/30 text-parchment',
+  gb: 'bg-fern/20 text-fern',
+};
+
 export default function AddBookForm({ onSuccess }: Props) {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [genreInput, setGenreInput] = useState('');
-  const [olQuery, setOlQuery] = useState('');
-  const [olResults, setOlResults] = useState<OLResult[]>([]);
-  const [olSearching, setOlSearching] = useState(false);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<BookSearchResult[]>([]);
+  const [searching, setSearching] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [fields, setFields] = useState({
@@ -51,41 +56,40 @@ export default function AddBookForm({ onSuccess }: Props) {
   const removeGenre = (g: string) =>
     setFields((f) => ({ ...f, genre: f.genre.filter((x) => x !== g) }));
 
-  const handleOLSearch = async (query: string) => {
-    if (!query.trim()) {
-      setOlResults([]);
+  const handleSearch = async (q: string) => {
+    if (!q.trim()) {
+      setResults([]);
       return;
     }
-    setOlSearching(true);
-    const results = await searchOpenLibrary(query);
-    setOlResults(results);
-    setOlSearching(false);
+    setSearching(true);
+    try {
+      const results = await searchBooks(q);
+      setResults(results);
+    } finally {
+      setSearching(false);
+    }
   };
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => handleOLSearch(olQuery), 400);
+    debounceRef.current = setTimeout(() => handleSearch(query), 400);
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [olQuery]);
+  }, [query]);
 
-  const fillFromOL = (result: OLResult) => {
+  const fillFrom = (result: BookSearchResult) => {
     setFields((f) => ({
       ...f,
       title: result.title,
-      author: result.author_name?.[0] ?? f.author,
-      pages: result.number_of_pages_median
-        ? String(result.number_of_pages_median)
-        : f.pages,
-      publishedYear: result.first_publish_year
-        ? String(result.first_publish_year)
-        : f.publishedYear,
-      coverUrl: result.cover_i ? getCoverUrl(result.cover_i) : f.coverUrl,
-      language: detectLanguage(result.language) ?? f.language,
+      author: result.author ?? f.author,
+      pages: result.pages ? String(result.pages) : f.pages,
+      publishedYear: result.year ? String(result.year) : f.publishedYear,
+      coverUrl: result.coverUrl ?? f.coverUrl,
+      language: result.language ?? f.language,
     }));
-    setOlResults([]);
-    setOlQuery('');
+    setResults([]);
+    setQuery('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -121,56 +125,67 @@ export default function AddBookForm({ onSuccess }: Props) {
       className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto pr-1"
     >
       <div>
-        <label htmlFor="add-ol-search" className={labelClass}>
+        <label htmlFor="add-book-search" className={labelClass}>
           {t.form.search}
         </label>
         <div className="relative">
           <input
-            id="add-ol-search"
+            id="add-book-search"
             className={inputClass}
-            value={olQuery}
-            onChange={(e) => setOlQuery(e.target.value)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') e.preventDefault();
             }}
             placeholder="The Name of the Wind…"
           />
-          {olSearching && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-stone text-xs">
+          {searching && (
+            <span
+              aria-hidden="true"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-stone text-xs"
+            >
               ✦
             </span>
           )}
         </div>
 
-        {olResults.length > 0 && (
+        {results.length > 0 && (
           <div className="mt-2 border border-mist/20 rounded-lg overflow-hidden divide-y divide-mist/10">
-            {olResults.map((r) => (
+            {results.map((r) => (
               <button
                 key={r.key}
                 type="button"
-                onClick={() => fillFromOL(r)}
+                onClick={() => fillFrom(r)}
                 className="w-full flex items-center gap-3 px-3 py-2 hover:bg-bark/60 transition-colors text-left"
               >
-                {r.cover_i ? (
+                {r.coverUrl ? (
                   <img
-                    src={getCoverUrl(r.cover_i, 'S')}
+                    src={r.coverUrl}
                     alt=""
                     className="w-8 h-11 object-cover rounded shrink-0"
                   />
                 ) : (
-                  <div className="w-8 h-11 bg-bark rounded shrink-0 flex items-center justify-center text-xs opacity-30">
+                  <div
+                    aria-hidden="true"
+                    className="w-8 h-11 bg-bark rounded shrink-0 flex items-center justify-center text-xs opacity-30"
+                  >
                     📖
                   </div>
                 )}
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="text-cream text-xs font-display truncate">
                     {r.title}
                   </p>
                   <p className="text-stone text-xs">
-                    {r.author_name?.[0]}{' '}
-                    {r.first_publish_year ? `· ${r.first_publish_year}` : ''}
+                    {r.author}
+                    {r.year ? ` · ${r.year}` : ''}
                   </p>
                 </div>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded font-mono shrink-0 ${SOURCE_CLASS[r.source]}`}
+                >
+                  {SOURCE_LABEL[r.source]}
+                </span>
               </button>
             ))}
           </div>

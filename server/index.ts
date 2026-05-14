@@ -11,6 +11,7 @@ import connectDB from './config/db.js';
 import booksRouter from './routes/books.js';
 import challengesRouter from './routes/challenges.js';
 import readsRouter from './routes/reads.js';
+import searchRouter from './routes/search.js';
 import shelvesRouter from './routes/shelves.js';
 import statsRouter from './routes/stats.js';
 
@@ -53,6 +54,7 @@ app.get('/', (_req, res) => {
 });
 
 app.use('/api/books', booksRouter);
+app.use('/api/search', searchRouter);
 app.use('/api/reads', readsRouter);
 app.use('/api/shelves', shelvesRouter);
 app.use('/api/challenges', challengesRouter);
@@ -63,7 +65,7 @@ app.use((_req, res) => {
 });
 
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-  console.error(err);
+  console.error('❌', err);
 
   if (err instanceof MongooseError.ValidationError) {
     const messages = Object.values(err.errors).map((e) => e.message);
@@ -81,9 +83,9 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 
 connectDB()
   .then(() => {
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch((err: unknown) => {
-    console.error('Failed to connect to MongoDB:', err);
+    console.error('❌ Failed to connect to MongoDB:', err);
     process.exit(1);
   });
