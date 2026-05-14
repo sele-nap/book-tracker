@@ -15,10 +15,18 @@ export const readService = {
   },
 
   async create(data: Record<string, unknown>) {
+    if (data.status === 'finished' && !data.finishedAt)
+      data.finishedAt = new Date();
+    if (data.status === 'reading' && !data.startedAt)
+      data.startedAt = new Date();
     return Read.create(data);
   },
 
   async update(id: string, data: Record<string, unknown>) {
+    if (data.status === 'finished' && !data.finishedAt)
+      data.finishedAt = new Date();
+    if (data.status === 'reading' && !data.startedAt)
+      data.startedAt = new Date();
     return Read.findByIdAndUpdate(id, data, { new: true, runValidators: true });
   },
 
