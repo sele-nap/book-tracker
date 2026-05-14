@@ -1,5 +1,6 @@
 import cors from 'cors';
 import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import express, {
   type NextFunction,
   type Request,
@@ -21,6 +22,16 @@ const allowedOrigins = process.env.CLIENT_URL
   : ['http://localhost:5173'];
 
 app.use(helmet());
+
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 300,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { message: 'Too many requests, please try again later.' },
+  }),
+);
 
 app.use(
   cors({
