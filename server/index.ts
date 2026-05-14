@@ -1,4 +1,5 @@
 import cors from 'cors';
+import helmet from 'helmet';
 import express, {
   type NextFunction,
   type Request,
@@ -18,6 +19,8 @@ const PORT = process.env.PORT ?? 3000;
 const allowedOrigins = process.env.CLIENT_URL
   ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
   : ['http://localhost:5173'];
+
+app.use(helmet());
 
 app.use(
   cors({
