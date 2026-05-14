@@ -33,6 +33,22 @@ type GBVolumeInfo = {
 type GBItem = { id: string; volumeInfo: GBVolumeInfo };
 type GBResponse = { items?: GBItem[] };
 
+const FETCH_TIMEOUT_MS = 5_000;
+const CACHE_TTL_MS = 5 * 60 * 1_000;
+
+const cache = new Map<
+  string,
+  { results: BookSearchResult[]; expiresAt: number }
+>();
+
+function fetchWithTimeout(url: string): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+  return fetch(url, { signal: controller.signal }).finally(() =>
+    clearTimeout(timer),
+  );
+}
+
 function detectLanguage(languages?: string[]): 'vo' | 'vf' | undefined {
   if (!languages?.length) return undefined;
   return languages.includes('fre') ? 'vf' : 'vo';
@@ -44,7 +60,7 @@ function getCoverUrl(coverId: number): string {
 
 async function searchOpenLibrary(query: string): Promise<BookSearchResult[]> {
   const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=8&fields=key,title,author_name,first_publish_year,number_of_pages_median,cover_i,language`;
-  const res = await fetch(url);
+  const res = await fetchWithTimeout(url);
   const data = (await res.json()) as OLResponse;
   return data.docs.map((r) => ({
     key: r.key,
@@ -60,7 +76,7 @@ async function searchOpenLibrary(query: string): Promise<BookSearchResult[]> {
 
 async function searchGoogleBooks(query: string): Promise<BookSearchResult[]> {
   const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=8&langRestrict=fr`;
-  const res = await fetch(url);
+  const res = await fetchWithTimeout(url);
   const data = (await res.json()) as GBResponse;
   return (data.items ?? []).map((item) => ({
     key: `gb-${item.id}`,
@@ -81,10 +97,19 @@ async function searchGoogleBooks(query: string): Promise<BookSearchResult[]> {
 export async function searchExternalBooks(
   query: string,
 ): Promise<BookSearchResult[]> {
+  const cacheKey = query.toLowerCase();
+  const cached = cache.get(cacheKey);
+  if (cached && cached.expiresAt > Date.now()) return cached.results;
+
   const [olRaw, gbRaw] = await Promise.allSettled([
     searchOpenLibrary(query),
     searchGoogleBooks(query),
   ]);
+
+  if (olRaw.status === 'rejected')
+    console.warn('⚠️  OpenLibrary search failed:', olRaw.reason);
+  if (gbRaw.status === 'rejected')
+    console.warn('⚠️  Google Books search failed:', gbRaw.reason);
 
   const olResults = olRaw.status === 'fulfilled' ? olRaw.value : [];
   const gbResults = gbRaw.status === 'fulfilled' ? gbRaw.value : [];
@@ -99,5 +124,7 @@ export async function searchExternalBooks(
     }
   }
 
-  return merged.slice(0, 10);
+  const results = merged.slice(0, 10);
+  cache.set(cacheKey, { results, expiresAt: Date.now() + CACHE_TTL_MS });
+  return results;
 }

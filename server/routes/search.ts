@@ -12,6 +12,10 @@ router.get(
       res.json([]);
       return;
     }
+    if (q.length > 200) {
+      res.status(400).json({ message: 'Query too long (max 200 characters)' });
+      return;
+    }
     const results = await searchExternalBooks(q);
     res.json(results);
   }),
