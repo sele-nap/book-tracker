@@ -83,13 +83,18 @@ async function searchGoogleBooks(query: string): Promise<BookSearchResult[]> {
     title: item.volumeInfo.title,
     author: item.volumeInfo.authors?.[0],
     year: item.volumeInfo.publishedDate
-      ? parseInt(item.volumeInfo.publishedDate)
+      ? parseInt(item.volumeInfo.publishedDate, 10)
       : undefined,
     pages: item.volumeInfo.pageCount,
     coverUrl: item.volumeInfo.imageLinks?.thumbnail
       ?.replace('http://', 'https://')
       .replace('&edge=curl', ''),
-    language: item.volumeInfo.language === 'fr' ? 'vf' : 'vo',
+    language:
+      item.volumeInfo.language === 'fr'
+        ? 'vf'
+        : item.volumeInfo.language
+          ? 'vo'
+          : undefined,
     source: 'gb' as const,
   }));
 }
@@ -125,6 +130,7 @@ export async function searchExternalBooks(
   }
 
   const results = merged.slice(0, 10);
+  if (cache.size > 500) cache.clear();
   cache.set(cacheKey, { results, expiresAt: Date.now() + CACHE_TTL_MS });
   return results;
 }
