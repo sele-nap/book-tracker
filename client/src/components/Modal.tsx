@@ -28,6 +28,7 @@ export default function Modal({ title, onClose, children }: Props) {
           <h2 className="text-xl font-display text-cream">{title}</h2>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="text-stone hover:text-cream transition-colors text-lg leading-none"
           >
             ✕

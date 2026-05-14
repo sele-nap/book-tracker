@@ -9,7 +9,7 @@ export default function ApiError({ message, onRetry }: Props) {
           onClick={onRetry}
           className="text-xs text-parchment hover:text-cream border border-mist/20 hover:border-mist/50 rounded-lg px-3 py-1.5 transition-colors"
         >
-          réessayer
+          retry
         </button>
       )}
     </div>

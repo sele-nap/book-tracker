@@ -34,6 +34,7 @@ function ShelfCard({
         </div>
         <button
           onClick={onDelete}
+          aria-label={`Delete shelf ${shelf.name}`}
           className="text-stone hover:text-blush transition-colors text-xs"
         >
           ✕

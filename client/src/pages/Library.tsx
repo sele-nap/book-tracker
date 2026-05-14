@@ -162,6 +162,7 @@ export default function Library() {
           <button
             onClick={() => goTo(page - 1)}
             disabled={page === 1}
+            aria-label="Previous page"
             className="text-xs px-3 py-1.5 rounded-full bg-bark text-parchment hover:bg-mist/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             ←
@@ -170,6 +171,8 @@ export default function Library() {
             <button
               key={p}
               onClick={() => goTo(p)}
+              aria-label={`Go to page ${p}`}
+              aria-current={p === page ? 'page' : undefined}
               className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
                 p === page
                   ? 'bg-wine text-cream'
@@ -182,6 +185,7 @@ export default function Library() {
           <button
             onClick={() => goTo(page + 1)}
             disabled={page === totalPages}
+            aria-label="Next page"
             className="text-xs px-3 py-1.5 rounded-full bg-bark text-parchment hover:bg-mist/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
           >
             →
