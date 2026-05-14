@@ -49,13 +49,27 @@ function fetchWithTimeout(url: string): Promise<Response> {
   );
 }
 
+function settled<T>(result: PromiseSettledResult<T[]>, label: string): T[] {
+  if (result.status === 'rejected') {
+    console.warn(`⚠️  ${label} search failed:`, result.reason);
+    return [];
+  }
+  return result.value;
+}
+
+function deduplicate(results: BookSearchResult[]): BookSearchResult[] {
+  const seen = new Set<string>();
+  return results.filter((r) => {
+    const key = `${r.title.toLowerCase()}|${(r.author ?? '').toLowerCase()}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function detectLanguage(languages?: string[]): 'vo' | 'vf' | undefined {
   if (!languages?.length) return undefined;
   return languages.includes('fre') ? 'vf' : 'vo';
-}
-
-function getCoverUrl(coverId: number): string {
-  return `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`;
 }
 
 async function searchOpenLibrary(query: string): Promise<BookSearchResult[]> {
@@ -68,7 +82,9 @@ async function searchOpenLibrary(query: string): Promise<BookSearchResult[]> {
     author: r.author_name?.[0],
     year: r.first_publish_year,
     pages: r.number_of_pages_median,
-    coverUrl: r.cover_i ? getCoverUrl(r.cover_i) : undefined,
+    coverUrl: r.cover_i
+      ? `https://covers.openlibrary.org/b/id/${r.cover_i}-M.jpg`
+      : undefined,
     language: detectLanguage(r.language),
     source: 'ol' as const,
   }));
@@ -111,25 +127,11 @@ export async function searchExternalBooks(
     searchGoogleBooks(query),
   ]);
 
-  if (olRaw.status === 'rejected')
-    console.warn('⚠️  OpenLibrary search failed:', olRaw.reason);
-  if (gbRaw.status === 'rejected')
-    console.warn('⚠️  Google Books search failed:', gbRaw.reason);
+  const results = deduplicate([
+    ...settled(olRaw, 'OpenLibrary'),
+    ...settled(gbRaw, 'Google Books'),
+  ]).slice(0, 10);
 
-  const olResults = olRaw.status === 'fulfilled' ? olRaw.value : [];
-  const gbResults = gbRaw.status === 'fulfilled' ? gbRaw.value : [];
-
-  const seen = new Set<string>();
-  const merged: BookSearchResult[] = [];
-  for (const r of [...olResults, ...gbResults]) {
-    const key = `${r.title.toLowerCase()}|${(r.author ?? '').toLowerCase()}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      merged.push(r);
-    }
-  }
-
-  const results = merged.slice(0, 10);
   if (cache.size > 500) cache.clear();
   cache.set(cacheKey, { results, expiresAt: Date.now() + CACHE_TTL_MS });
   return results;
