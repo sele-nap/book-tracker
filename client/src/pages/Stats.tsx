@@ -18,6 +18,7 @@ import type {
   StatByRating,
 } from '../api/stats';
 import { statsApi } from '../api/stats';
+import ApiError from '../components/ApiError';
 import { StatsSkeleton } from '../components/Skeleton';
 import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -101,7 +102,7 @@ export default function Stats() {
   const fetchRatings = useCallback(() => statsApi.ratingsByGenre(), []);
   const fetchStreak = useCallback(() => statsApi.streak(), []);
 
-  const { data: global, loading } = useApi<GlobalStats>(fetchGlobal);
+  const { data: global, loading, error } = useApi<GlobalStats>(fetchGlobal);
   const { data: byMonth } = useApi<StatByMonth[]>(fetchByMonth);
   const { data: byGenre } = useApi<StatByGenre[]>(fetchByGenre);
   const { data: ratings } = useApi<StatByRating[]>(fetchRatings);
@@ -124,14 +125,14 @@ export default function Stats() {
     fill: COLORS[i % COLORS.length],
   }));
 
-  if (loading)
+  if (loading || error)
     return (
       <div>
         <div className="mb-8">
           <h1 className="text-3xl mb-1">{t.stats.title}</h1>
           <p className="text-parchment">{t.stats.subtitle}</p>
         </div>
-        <StatsSkeleton />
+        {loading ? <StatsSkeleton /> : <ApiError message={error!} />}
       </div>
     );
 

@@ -1,9 +1,10 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { BooksPage, Read, ReadStatus } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
 import AddBookForm from '../components/AddBookForm';
 import BookCard from '../components/BookCard';
+import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { LibrarySkeleton } from '../components/Skeleton';
@@ -17,16 +18,31 @@ export default function Library() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [search, setSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | ReadStatus>('all');
   const [showAddModal, setShowAddModal] = useState(false);
   const [page, setPage] = useState(1);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const fetchBooks = useCallback(() => booksApi.getAll(page, LIMIT), [page]);
+  useEffect(() => {
+    debounceRef.current && clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(1);
+    }, 350);
+    return () => { debounceRef.current && clearTimeout(debounceRef.current); };
+  }, [search]);
+
+  const fetchBooks = useCallback(
+    () => booksApi.getAll(page, LIMIT, debouncedSearch || undefined),
+    [page, debouncedSearch],
+  );
   const fetchReads = useCallback(() => readsApi.getAll(), []);
 
   const {
     data: booksPage,
     loading: booksLoading,
+    error: booksError,
     refetch: refetchBooks,
   } = useApi<BooksPage>(fetchBooks);
   const {
@@ -45,13 +61,9 @@ export default function Library() {
 
   const readsByBookId = new Map(reads?.map((r) => [r.book._id, r]) ?? []);
 
-  const filtered = (booksPage?.books ?? []).filter((b) => {
-    const matchSearch =
-      b.title.toLowerCase().includes(search.toLowerCase()) ||
-      b.author.toLowerCase().includes(search.toLowerCase());
-    const read = readsByBookId.get(b._id);
-    const matchStatus = statusFilter === 'all' || read?.status === statusFilter;
-    return matchSearch && matchStatus;
+  const books = (booksPage?.books ?? []).filter((b) => {
+    if (statusFilter === 'all') return true;
+    return readsByBookId.get(b._id)?.status === statusFilter;
   });
 
   const loading = booksLoading || readsLoading;
@@ -95,10 +107,7 @@ export default function Library() {
         type="text"
         placeholder={t.library.search}
         value={search}
-        onChange={(e) => {
-          setSearch(e.target.value);
-          setPage(1);
-        }}
+        onChange={(e) => setSearch(e.target.value)}
         className="w-full bg-dusk border border-mist/30 rounded-lg px-4 py-2.5 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 mb-4"
       />
 
@@ -123,11 +132,13 @@ export default function Library() {
 
       {loading ? (
         <LibrarySkeleton />
-      ) : filtered.length === 0 ? (
+      ) : booksError ? (
+        <ApiError message={booksError} onRetry={refetchBooks} />
+      ) : books.length === 0 ? (
         <EmptyState message={t.library.empty} variant="book" />
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {filtered.map((book) => {
+          {books.map((book) => {
             const read = readsByBookId.get(book._id);
             return (
               <Link key={book._id} to={`/books/${book._id}`}>

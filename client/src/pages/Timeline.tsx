@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import type { Read } from '../api/books';
 import { readsApi } from '../api/books';
+import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -102,7 +103,7 @@ function YearGroup({ year, reads, locale }: { year: string; reads: Read[]; local
 export default function Timeline() {
   const { t, locale } = useLanguage();
   const fetchTimeline = useCallback(() => readsApi.timeline(), []);
-  const { data: reads, loading } = useApi<Read[]>(fetchTimeline);
+  const { data: reads, loading, error } = useApi<Read[]>(fetchTimeline);
 
   const grouped = (reads ?? []).reduce<Record<string, Read[]>>((acc, read) => {
     const year = read.finishedAt
@@ -121,7 +122,9 @@ export default function Timeline() {
         <p className="text-parchment">{t.timeline.subtitle}</p>
       </div>
 
-      {loading ? (
+      {error ? (
+        <ApiError message={error} onRetry={() => window.location.reload()} />
+      ) : loading ? (
         <div className="space-y-6">
           {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="flex gap-4 animate-pulse">

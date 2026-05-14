@@ -5,7 +5,8 @@ import asyncHandler from '../utils/asyncHandler.js';
 export const getBooks = asyncHandler(async (req, res) => {
   const limit = Math.min(parseInt(String(req.query.limit ?? '20')), 100);
   const page = Math.max(parseInt(String(req.query.page ?? '1')), 1);
-  res.json(await bookService.getPaginated(page, limit));
+  const q = req.query.q ? String(req.query.q) : undefined;
+  res.json(await bookService.getPaginated(page, limit, q));
 });
 
 export const getBookById = asyncHandler(async (req, res) => {

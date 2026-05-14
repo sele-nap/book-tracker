@@ -3,6 +3,7 @@ import type { Book } from '../api/books';
 import { booksApi } from '../api/books';
 import type { Challenge } from '../api/challenges';
 import { challengesApi } from '../api/challenges';
+import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { ChallengesSkeleton } from '../components/Skeleton';
@@ -336,6 +337,7 @@ export default function Challenges() {
   const {
     data: challenges,
     loading,
+    error,
     refetch,
   } = useApi<Challenge[]>(fetchChallenges);
 
@@ -383,6 +385,8 @@ export default function Challenges() {
 
       {loading ? (
         <ChallengesSkeleton />
+      ) : error ? (
+        <ApiError message={error} onRetry={refetch} />
       ) : !challenges?.length ? (
         <EmptyState message={t.challenges.noChallenges} variant="moon" />
       ) : (

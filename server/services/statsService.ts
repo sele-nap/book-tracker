@@ -122,9 +122,10 @@ export const statsService = {
   },
 
   async streak() {
+    const oneYearAgo = new Date(Date.now() - 365 * 86400000);
     const reads = await Read.find({
       status: 'finished',
-      finishedAt: { $exists: true },
+      finishedAt: { $exists: true, $gte: oneYearAgo },
     })
       .select('finishedAt')
       .sort({ finishedAt: -1 });

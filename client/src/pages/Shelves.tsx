@@ -4,6 +4,7 @@ import type { Book } from '../api/books';
 import { booksApi } from '../api/books';
 import type { Shelf } from '../api/shelves';
 import { shelvesApi } from '../api/shelves';
+import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { ShelvesSkeleton } from '../components/Skeleton';
@@ -206,7 +207,7 @@ export default function Shelves() {
   const [description, setDescription] = useState('');
 
   const fetchShelves = useCallback(() => shelvesApi.getAll(), []);
-  const { data: shelves, loading, refetch } = useApi<Shelf[]>(fetchShelves);
+  const { data: shelves, loading, error, refetch } = useApi<Shelf[]>(fetchShelves);
 
   const createShelf = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -293,6 +294,8 @@ export default function Shelves() {
 
       {loading ? (
         <ShelvesSkeleton />
+      ) : error ? (
+        <ApiError message={error} onRetry={refetch} />
       ) : !shelves?.length ? (
         <EmptyState message={t.shelves.noShelves} variant="mushroom" />
       ) : (

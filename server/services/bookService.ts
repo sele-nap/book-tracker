@@ -1,11 +1,12 @@
 import { Book } from '../models/Book.js';
 
 export const bookService = {
-  async getPaginated(page: number, limit: number) {
+  async getPaginated(page: number, limit: number, q?: string) {
+    const filter = q ? { $text: { $search: q } } : {};
     const skip = (page - 1) * limit;
     const [books, total] = await Promise.all([
-      Book.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
-      Book.countDocuments(),
+      Book.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Book.countDocuments(filter),
     ]);
     return { books, total, page, pages: Math.ceil(total / limit) };
   },
