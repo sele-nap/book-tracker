@@ -1,12 +1,12 @@
 import { Book as BookIcon, CircleNotch } from '@phosphor-icons/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import useSWR from 'swr';
 import type { Book, Read } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
 import EditBookForm from '../components/EditBookForm';
 import Modal from '../components/Modal';
 import StarRating from '../components/StarRating';
-import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../hooks/useLanguage';
 import { useToast } from '../hooks/useToast';
 
@@ -31,11 +31,23 @@ export default function BookDetail() {
   const [savingReview, setSavingReview] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const fetchBook = useCallback(() => booksApi.getById(id!), [id]);
-  const fetchRead = useCallback(() => readsApi.byBook(id!), [id]);
-
-  const { data: book, refetch: refetchBook } = useApi<Book>(fetchBook);
-  const { data: read, refetch: refetchRead } = useApi<Read>(fetchRead);
+  const { data: book, mutate: refetchBook } = useSWR<Book>(
+    id ? ['/books', id] : null,
+    () => booksApi.getById(id!),
+  );
+  const { data: read, mutate: refetchRead } = useSWR<Read | null>(
+    id ? ['/reads/book', id] : null,
+    () =>
+      readsApi.byBook(id!).catch((err: unknown) => {
+        if (
+          err instanceof Error &&
+          'status' in err &&
+          (err as { status: number }).status === 404
+        )
+          return null;
+        throw err;
+      }),
+  );
 
   useEffect(() => {
     if (book) document.title = `${book.title} — Book Tracker`;

@@ -1,12 +1,12 @@
 import { Book, Check, CircleNotch, Flame } from '@phosphor-icons/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useSWR from 'swr';
 import type { Read } from '../api/books';
 import { readsApi } from '../api/books';
 import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import { ReadingSkeleton } from '../components/Skeleton';
-import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../hooks/useLanguage';
 import { useToast } from '../hooks/useToast';
 
@@ -180,8 +180,14 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
 
 export default function Reading() {
   const { t } = useLanguage();
-  const fetchReads = useCallback(() => readsApi.byStatus('reading'), []);
-  const { data: reads, loading, error, refetch } = useApi<Read[]>(fetchReads);
+  const {
+    data: reads,
+    isLoading: loading,
+    error: readsErr,
+    mutate: refetch,
+  } = useSWR<Read[]>('/reads/status/reading', () =>
+    readsApi.byStatus('reading'),
+  );
 
   useEffect(() => {
     document.title = `${t.reading.title} — Book Tracker`;
@@ -196,8 +202,11 @@ export default function Reading() {
 
       {loading ? (
         <ReadingSkeleton />
-      ) : error ? (
-        <ApiError message={error} onRetry={refetch} />
+      ) : readsErr ? (
+        <ApiError
+          message={readsErr?.message ?? 'Unknown error'}
+          onRetry={() => refetch()}
+        />
       ) : !reads?.length ? (
         <EmptyState message={t.reading.empty} variant="candle" />
       ) : (

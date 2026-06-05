@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -11,6 +11,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import useSWR from 'swr';
 import type {
   GlobalStats,
   StatByGenre,
@@ -20,7 +21,6 @@ import type {
 import { statsApi } from '../api/stats';
 import ApiError from '../components/ApiError';
 import { StatsSkeleton } from '../components/Skeleton';
-import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../hooks/useLanguage';
 
 const MONTHS_FR = [
@@ -96,21 +96,31 @@ export default function Stats() {
   const [year, setYear] = useState(currentYear);
   const months = locale === 'fr' ? MONTHS_FR : MONTHS_EN;
 
-  const fetchGlobal = useCallback(() => statsApi.global(), []);
-  const fetchByMonth = useCallback(() => statsApi.byMonth(year), [year]);
-  const fetchByGenre = useCallback(() => statsApi.byGenre(), []);
-  const fetchRatings = useCallback(() => statsApi.ratingsByGenre(), []);
-  const fetchStreak = useCallback(() => statsApi.streak(), []);
-
-  const { data: global, loading, error } = useApi<GlobalStats>(fetchGlobal);
+  const {
+    data: global,
+    isLoading: loading,
+    error: statsErr,
+  } = useSWR<GlobalStats>('/stats/global', statsApi.global);
+  const { data: byMonth } = useSWR<StatByMonth[]>(
+    ['/stats/by-month', year],
+    () => statsApi.byMonth(year),
+  );
+  const { data: byGenre } = useSWR<StatByGenre[]>(
+    '/stats/by-genre',
+    statsApi.byGenre,
+  );
+  const { data: ratings } = useSWR<StatByRating[]>(
+    '/stats/ratings-by-genre',
+    statsApi.ratingsByGenre,
+  );
+  const { data: streakData } = useSWR<{ streak: number }>(
+    '/stats/streak',
+    statsApi.streak,
+  );
 
   useEffect(() => {
     document.title = `${t.stats.title} — Book Tracker`;
   }, [t]);
-  const { data: byMonth } = useApi<StatByMonth[]>(fetchByMonth);
-  const { data: byGenre } = useApi<StatByGenre[]>(fetchByGenre);
-  const { data: ratings } = useApi<StatByRating[]>(fetchRatings);
-  const { data: streakData } = useApi<{ streak: number }>(fetchStreak);
 
   const finished = global?.finished[0];
   const statusMap = Object.fromEntries(
@@ -129,14 +139,18 @@ export default function Stats() {
     fill: COLORS[i % COLORS.length],
   }));
 
-  if (loading || error)
+  if (loading || statsErr)
     return (
       <div>
         <div className="mb-8">
           <h1 className="text-3xl mb-1">{t.stats.title}</h1>
           <p className="text-parchment">{t.stats.subtitle}</p>
         </div>
-        {loading ? <StatsSkeleton /> : <ApiError message={error!} />}
+        {loading ? (
+          <StatsSkeleton />
+        ) : (
+          <ApiError message={statsErr?.message ?? 'Unknown error'} />
+        )}
       </div>
     );
 

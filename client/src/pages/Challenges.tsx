@@ -4,7 +4,8 @@ import {
   CircleNotch,
   Star,
 } from '@phosphor-icons/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import type { Book } from '../api/books';
 import { booksApi } from '../api/books';
 import type { Challenge } from '../api/challenges';
@@ -13,7 +14,6 @@ import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { ChallengesSkeleton } from '../components/Skeleton';
-import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../hooks/useLanguage';
 
 function ChallengeCard({
@@ -375,13 +375,12 @@ export default function Challenges() {
     null,
   );
 
-  const fetchChallenges = useCallback(() => challengesApi.getAll(), []);
   const {
     data: challenges,
-    loading,
-    error,
-    refetch,
-  } = useApi<Challenge[]>(fetchChallenges);
+    isLoading: loading,
+    error: challengesErr,
+    mutate: refetch,
+  } = useSWR<Challenge[]>('/challenges', challengesApi.getAll);
 
   useEffect(() => {
     document.title = `${t.challenges.title} — Book Tracker`;
@@ -431,8 +430,11 @@ export default function Challenges() {
 
       {loading ? (
         <ChallengesSkeleton />
-      ) : error ? (
-        <ApiError message={error} onRetry={refetch} />
+      ) : challengesErr ? (
+        <ApiError
+          message={challengesErr?.message ?? 'Unknown error'}
+          onRetry={refetch}
+        />
       ) : !challenges?.length ? (
         <EmptyState message={t.challenges.noChallenges} variant="moon" />
       ) : (

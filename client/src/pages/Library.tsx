@@ -6,8 +6,9 @@ import {
   Minus,
   Moon,
 } from '@phosphor-icons/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useSWR from 'swr';
 import type { BooksPage, Read, ReadStatus } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
 import AddBookForm from '../components/AddBookForm';
@@ -16,7 +17,6 @@ import BookCard from '../components/BookCard';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { LibrarySkeleton } from '../components/Skeleton';
-import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../hooks/useLanguage';
 import { useToast } from '../hooks/useToast';
 
@@ -43,23 +43,19 @@ export default function Library() {
     };
   }, [search]);
 
-  const fetchBooks = useCallback(
-    () => booksApi.getAll(page, LIMIT, debouncedSearch || undefined),
-    [page, debouncedSearch],
-  );
-  const fetchReads = useCallback(() => readsApi.getAll(), []);
-
   const {
     data: booksPage,
-    loading: booksLoading,
-    error: booksError,
-    refetch: refetchBooks,
-  } = useApi<BooksPage>(fetchBooks);
+    isLoading: booksLoading,
+    error: booksErr,
+    mutate: refetchBooks,
+  } = useSWR<BooksPage>(['/books', page, debouncedSearch], () =>
+    booksApi.getAll(page, LIMIT, debouncedSearch || undefined),
+  );
   const {
     data: reads,
-    loading: readsLoading,
-    refetch: refetchReads,
-  } = useApi<Read[]>(fetchReads);
+    isLoading: readsLoading,
+    mutate: refetchReads,
+  } = useSWR<Read[]>('/reads', readsApi.getAll);
 
   const STATUS_FILTERS: {
     value: 'all' | ReadStatus;
@@ -160,8 +156,11 @@ export default function Library() {
 
       {loading ? (
         <LibrarySkeleton />
-      ) : booksError ? (
-        <ApiError message={booksError} onRetry={refetchBooks} />
+      ) : booksErr ? (
+        <ApiError
+          message={booksErr?.message ?? 'Unknown error'}
+          onRetry={() => refetchBooks()}
+        />
       ) : books.length === 0 ? (
         <EmptyState message={t.library.empty} variant="book" />
       ) : (

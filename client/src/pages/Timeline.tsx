@@ -1,12 +1,12 @@
 import { Book, Sparkle } from '@phosphor-icons/react';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import useSWR from 'swr';
 import type { Read } from '../api/books';
 import { readsApi } from '../api/books';
 import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import StarRating from '../components/StarRating';
-import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../hooks/useLanguage';
 
 const MONTHS_FR = [
@@ -159,8 +159,11 @@ function YearGroup({
 
 export default function Timeline() {
   const { t, locale } = useLanguage();
-  const fetchTimeline = useCallback(() => readsApi.timeline(), []);
-  const { data: reads, loading, error } = useApi<Read[]>(fetchTimeline);
+  const {
+    data: reads,
+    isLoading: loading,
+    error: timelineErr,
+  } = useSWR<Read[]>('/reads/timeline', readsApi.timeline);
 
   useEffect(() => {
     document.title = `${t.timeline.title} — Book Tracker`;
@@ -183,8 +186,11 @@ export default function Timeline() {
         <p className="text-parchment">{t.timeline.subtitle}</p>
       </div>
 
-      {error ? (
-        <ApiError message={error} onRetry={() => window.location.reload()} />
+      {timelineErr ? (
+        <ApiError
+          message={timelineErr?.message ?? 'Unknown error'}
+          onRetry={() => window.location.reload()}
+        />
       ) : loading ? (
         <div className="space-y-6">
           {Array.from({ length: 5 }).map((_, i) => (

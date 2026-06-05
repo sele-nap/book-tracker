@@ -1,6 +1,7 @@
 import { Book as BookIcon, CircleNotch } from '@phosphor-icons/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import useSWR from 'swr';
 import type { Book } from '../api/books';
 import { booksApi } from '../api/books';
 import type { Shelf } from '../api/shelves';
@@ -9,7 +10,6 @@ import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { ShelvesSkeleton } from '../components/Skeleton';
-import { useApi } from '../hooks/useApi';
 import { useLanguage } from '../hooks/useLanguage';
 
 function ShelfCard({
@@ -221,13 +221,12 @@ export default function Shelves() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  const fetchShelves = useCallback(() => shelvesApi.getAll(), []);
   const {
     data: shelves,
-    loading,
-    error,
-    refetch,
-  } = useApi<Shelf[]>(fetchShelves);
+    isLoading: loading,
+    error: shelvesErr,
+    mutate: refetch,
+  } = useSWR<Shelf[]>('/shelves', shelvesApi.getAll);
 
   useEffect(() => {
     document.title = `${t.shelves.title} — Book Tracker`;
@@ -326,8 +325,11 @@ export default function Shelves() {
 
       {loading ? (
         <ShelvesSkeleton />
-      ) : error ? (
-        <ApiError message={error} onRetry={refetch} />
+      ) : shelvesErr ? (
+        <ApiError
+          message={shelvesErr?.message ?? 'Unknown error'}
+          onRetry={refetch}
+        />
       ) : !shelves?.length ? (
         <EmptyState message={t.shelves.noShelves} variant="mushroom" />
       ) : (
