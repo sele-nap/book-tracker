@@ -1,8 +1,7 @@
 import { Book } from '@phosphor-icons/react';
+import type { BookLanguage } from '../api/books';
 import { useLanguage } from '../hooks/useLanguage';
 import StarRating from './StarRating';
-
-type BookLanguage = 'vo' | 'vf' | 'other';
 
 type Props = {
   title: string;
