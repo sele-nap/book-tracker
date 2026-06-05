@@ -30,8 +30,20 @@ const authLimiter = rateLimit({
 router.post('/register', authLimiter, validate(registerSchema), register);
 router.post('/login', authLimiter, validate(loginSchema), login);
 router.get('/me', requireAuth, me);
-router.patch('/me', requireAuth, validate(updateMeSchema), updateMe);
-router.delete('/me', requireAuth, validate(deleteMeSchema), deleteMe);
+router.patch(
+  '/me',
+  requireAuth,
+  authLimiter,
+  validate(updateMeSchema),
+  updateMe,
+);
+router.delete(
+  '/me',
+  requireAuth,
+  authLimiter,
+  validate(deleteMeSchema),
+  deleteMe,
+);
 router.post('/logout', requireAuth, logout);
 
 export default router;

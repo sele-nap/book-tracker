@@ -22,7 +22,7 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
 export const me = asyncHandler(async (req: Request, res: Response) => {
   const user = await User.findById(req.userId).select('-password');
   if (!user) {
-    res.status(401).json({ message: 'User not found' });
+    res.status(401).send();
     return;
   }
   res.json({ id: user._id, email: user.email });

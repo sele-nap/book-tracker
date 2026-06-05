@@ -10,7 +10,7 @@ import {
 } from '@phosphor-icons/react';
 import { NavLink, Outlet } from 'react-router-dom';
 import LanguageToggle from '../components/LanguageToggle.js';
-import { useAuth } from '../contexts/auth.js';
+import { useAuth } from '../hooks/useAuth.js';
 import { useLanguage } from '../hooks/useLanguage.js';
 
 export default function RootLayout() {
@@ -32,7 +32,7 @@ export default function RootLayout() {
       {/* 2.4.1 — Skip link */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-wine focus:text-cream focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:bg-wine focus:text-cream focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm"
       >
         Skip to main content
       </a>

@@ -6,10 +6,11 @@ export function validate(schema: ZodSchema) {
     const result = schema.safeParse(req.body);
     if (!result.success) {
       res.status(400).json({
-        message: 'Validation error',
-        errors: result.error.issues.map(
-          (i) => `${i.path.join('.')}: ${i.message}`,
-        ),
+        errors: result.error.issues.map((i) => ({
+          id: i.path.join('.') || 'body',
+          type: 'invalid',
+          message: i.message,
+        })),
       });
       return;
     }

@@ -25,7 +25,7 @@ export const getReadByBook = asyncHandler(async (req, res) => {
     String(req.params.bookId),
   );
   if (!read) {
-    res.status(404).json({ message: 'Read not found' });
+    res.status(404).send();
     return;
   }
   res.json(read);
@@ -42,7 +42,7 @@ export const updateRead = asyncHandler(async (req, res) => {
     req.body,
   );
   if (!read) {
-    res.status(404).json({ message: 'Read not found' });
+    res.status(404).send();
     return;
   }
   res.json(read);
@@ -51,7 +51,7 @@ export const updateRead = asyncHandler(async (req, res) => {
 export const deleteRead = asyncHandler(async (req, res) => {
   const read = await readService.delete(req.userId, String(req.params.id));
   if (!read) {
-    res.status(404).json({ message: 'Read not found' });
+    res.status(404).send();
     return;
   }
   res.status(204).send();

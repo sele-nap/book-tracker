@@ -18,6 +18,11 @@ import searchRouter from './routes/search.js';
 import shelvesRouter from './routes/shelves.js';
 import statsRouter from './routes/stats.js';
 
+if (!process.env.JWT_SECRET) {
+  console.error('❌ JWT_SECRET is not set. Exiting.');
+  process.exit(1);
+}
+
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
@@ -66,29 +71,42 @@ app.use('/api/challenges', requireAuth, challengesRouter);
 app.use('/api/stats', requireAuth, statsRouter);
 
 app.use((_req, res) => {
-  res.status(404).json({ message: 'Route not found' });
+  res.status(404).send();
 });
 
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error('❌', err);
 
   if (err instanceof MongooseError.ValidationError) {
-    const messages = Object.values(err.errors).map((e) => e.message);
-    res.status(400).json({ message: 'Validation error', errors: messages });
+    res.status(400).json({
+      errors: Object.entries(err.errors).map(([field, e]) => ({
+        id: field,
+        type: 'invalid',
+        message: e.message,
+      })),
+    });
     return;
   }
 
   if (err instanceof MongooseError.CastError) {
-    res.status(400).json({ message: `Invalid ${err.path}: ${err.value}` });
+    res.status(400).json({
+      errors: [{ id: err.path, type: 'invalid' }],
+    });
     return;
   }
 
   if (err instanceof Error && 'status' in err) {
-    res.status(err.status as number).json({ message: err.message });
+    const status = err.status as number;
+    if (status === 409) {
+      const code = 'code' in err ? (err as { code: string }).code : undefined;
+      res.status(409).json({ ...(code && { code }) });
+    } else {
+      res.status(status).send();
+    }
     return;
   }
 
-  res.status(500).json({ message: 'Internal server error' });
+  res.status(500).send();
 });
 
 connectDB()

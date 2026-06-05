@@ -12,7 +12,7 @@ export const getBooks = asyncHandler(async (req, res) => {
 export const getBookById = asyncHandler(async (req, res) => {
   const book = await bookService.getById(req.userId, String(req.params.id));
   if (!book) {
-    res.status(404).json({ message: 'Book not found' });
+    res.status(404).send();
     return;
   }
   res.json(book);
@@ -29,7 +29,7 @@ export const updateBook = asyncHandler(async (req, res) => {
     req.body,
   );
   if (!book) {
-    res.status(404).json({ message: 'Book not found' });
+    res.status(404).send();
     return;
   }
   res.json(book);
@@ -38,7 +38,7 @@ export const updateBook = asyncHandler(async (req, res) => {
 export const deleteBook = asyncHandler(async (req, res) => {
   const book = await bookService.delete(req.userId, String(req.params.id));
   if (!book) {
-    res.status(404).json({ message: 'Book not found' });
+    res.status(404).send();
     return;
   }
   res.status(204).send();

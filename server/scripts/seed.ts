@@ -270,7 +270,9 @@ async function seed() {
   const hash = await bcrypt.hash(PASSWORD, 12);
   const user = await User.create({ email: EMAIL, password: hash });
   const userId = user._id;
-  console.log(`👤 User created: ${EMAIL} / ${PASSWORD}`);
+  console.log(
+    `👤 User created: ${EMAIL}${process.env.NODE_ENV !== 'production' ? ` / ${PASSWORD}` : ''}`,
+  );
 
   // Création des livres + reads
   for (const {
@@ -349,7 +351,9 @@ async function seed() {
   await mongoose.disconnect();
   console.log('\n✦ Seed complete!');
   console.log(`   Email    : ${EMAIL}`);
-  console.log(`   Password : ${PASSWORD}`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`   Password : ${PASSWORD}`);
+  }
 }
 
 seed().catch((err) => {

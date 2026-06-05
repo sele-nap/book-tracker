@@ -16,7 +16,7 @@ export const addBookToChallenge = asyncHandler(async (req, res) => {
     String(req.params.bookId),
   );
   if (!challenge) {
-    res.status(404).json({ message: 'Challenge not found' });
+    res.status(404).send();
     return;
   }
   res.json(challenge);
@@ -28,7 +28,7 @@ export const getChallengeProgress = asyncHandler(async (req, res) => {
     String(req.params.id),
   );
   if (!challenge) {
-    res.status(404).json({ message: 'Challenge not found' });
+    res.status(404).send();
     return;
   }
   res.json({

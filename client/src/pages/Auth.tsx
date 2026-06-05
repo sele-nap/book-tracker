@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { ApiError } from '../api/client.js';
 import LanguageToggle from '../components/LanguageToggle.js';
-import { useAuth } from '../contexts/auth.js';
+import { useAuth } from '../hooks/useAuth.js';
 import { useLanguage } from '../hooks/useLanguage.js';
 
 export default function Auth() {
@@ -27,9 +28,8 @@ export default function Auth() {
         await register(email, password);
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : '';
-      if (msg.includes('already in use')) setError(t.auth.errorEmail);
-      else if (msg.includes('least 8')) setError(t.auth.errorWeak);
+      const code = err instanceof ApiError ? err.code : undefined;
+      if (code === 'EMAIL_TAKEN') setError(t.auth.errorEmail);
       else setError(t.auth.errorInvalid);
     } finally {
       setSubmitting(false);

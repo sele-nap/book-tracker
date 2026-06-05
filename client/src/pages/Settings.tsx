@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authApi } from '../api/auth.js';
-import { useAuth } from '../contexts/auth.js';
+import { ApiError } from '../api/client.js';
+import { useAuth } from '../hooks/useAuth.js';
 import { useLanguage } from '../hooks/useLanguage.js';
 import { useToast } from '../hooks/useToast.js';
 
@@ -43,7 +44,7 @@ const inputCls =
 export default function Settings() {
   const { t } = useLanguage();
   const { user, logout } = useAuth();
-  const { addToast } = useToast();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   const [emailForm, setEmailForm] = useState({
@@ -74,12 +75,12 @@ export default function Settings() {
         email: emailForm.newEmail,
         currentPassword: emailForm.currentPassword,
       });
-      addToast(t.settings.successEmail);
+      toast(t.settings.successEmail);
       setEmailForm({ newEmail: '', currentPassword: '' });
     } catch (err) {
-      const msg = err instanceof Error ? err.message : '';
+      const code = err instanceof ApiError ? err.code : undefined;
       setEmailError(
-        msg.includes('already')
+        code === 'EMAIL_TAKEN'
           ? t.settings.errorEmail
           : t.settings.errorPassword,
       );
@@ -97,7 +98,7 @@ export default function Settings() {
         currentPassword: pwForm.currentPassword,
         newPassword: pwForm.newPassword,
       });
-      addToast(t.settings.successPassword);
+      toast(t.settings.successPassword);
       setPwForm({ currentPassword: '', newPassword: '' });
     } catch {
       setPwError(t.settings.errorPassword);

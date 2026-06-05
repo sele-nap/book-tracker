@@ -1,5 +1,16 @@
 const BASE_URL = '/api';
 
+export class ApiError extends Error {
+  readonly status: number;
+  readonly code?: string;
+
+  constructor(message: string, status: number, code?: string) {
+    super(message);
+    this.status = status;
+    this.code = code;
+  }
+}
+
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     credentials: 'include',
@@ -8,8 +19,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   });
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: res.statusText }));
-    throw new Error(error.message ?? res.statusText);
+    const body = await res.json().catch(() => ({ message: res.statusText }));
+    throw new ApiError(body.message ?? res.statusText, res.status, body.code);
   }
 
   if (res.status === 204) return undefined as T;
