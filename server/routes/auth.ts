@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import {
-  deleteMe,
-  login,
-  logout,
-  me,
-  register,
-  updateMe,
+  deleteUserMe,
+  getUserMe,
+  patchUserMe,
+  postPublicLogin,
+  postPublicRegister,
+  postUserLogout,
 } from '../controllers/authController.js';
 import { requireAuth } from '../middleware/requireAuth.js';
 import { validate } from '../utils/validate.js';
@@ -27,23 +27,28 @@ const authLimiter = rateLimit({
   message: { message: 'Too many attempts, please try again later.' },
 });
 
-router.post('/register', authLimiter, validate(registerSchema), register);
-router.post('/login', authLimiter, validate(loginSchema), login);
-router.get('/me', requireAuth, me);
+router.post(
+  '/register',
+  authLimiter,
+  validate(registerSchema),
+  postPublicRegister,
+);
+router.post('/login', authLimiter, validate(loginSchema), postPublicLogin);
+router.get('/me', requireAuth, getUserMe);
 router.patch(
   '/me',
   requireAuth,
   authLimiter,
   validate(updateMeSchema),
-  updateMe,
+  patchUserMe,
 );
 router.delete(
   '/me',
   requireAuth,
   authLimiter,
   validate(deleteMeSchema),
-  deleteMe,
+  deleteUserMe,
 );
-router.post('/logout', requireAuth, logout);
+router.post('/logout', requireAuth, postUserLogout);
 
 export default router;

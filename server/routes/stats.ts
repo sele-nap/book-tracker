@@ -1,18 +1,18 @@
 import { Router } from 'express';
 import {
-  avgRatingByGenre,
-  globalStats,
-  readsByGenre,
-  readsByMonth,
-  streak,
+  getUserStatsByGenre,
+  getUserStatsByMonth,
+  getUserStatsGlobal,
+  getUserStatsRatingsByGenre,
+  getUserStatsStreak,
 } from '../controllers/statsController.js';
 
 const router = Router();
 
-router.get('/by-month', readsByMonth);
-router.get('/by-genre', readsByGenre);
-router.get('/ratings-by-genre', avgRatingByGenre);
-router.get('/global', globalStats);
-router.get('/streak', streak);
+router.get('/by-month', getUserStatsByMonth);
+router.get('/by-genre', getUserStatsByGenre);
+router.get('/ratings-by-genre', getUserStatsRatingsByGenre);
+router.get('/global', getUserStatsGlobal);
+router.get('/streak', getUserStatsStreak);
 
 export default router;

@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import {
-  createRead,
-  deleteRead,
-  getReadByBook,
-  getReads,
-  getReadsByStatus,
-  getTimeline,
-  updateRead,
+  deleteUserRead,
+  getUserReadByBook,
+  getUserReads,
+  getUserReadsByStatus,
+  getUserReadsTimeline,
+  patchUserRead,
+  postUserRead,
 } from '../controllers/readController.js';
 import { validate } from '../utils/validate.js';
 import {
@@ -16,12 +16,12 @@ import {
 
 const router = Router();
 
-router.get('/', getReads);
-router.get('/timeline', getTimeline);
-router.get('/status/:status', getReadsByStatus);
-router.get('/book/:bookId', getReadByBook);
-router.post('/', validate(createReadSchema), createRead);
-router.patch('/:id', validate(updateReadSchema), updateRead);
-router.delete('/:id', deleteRead);
+router.get('/', getUserReads);
+router.get('/timeline', getUserReadsTimeline);
+router.get('/status/:status', getUserReadsByStatus);
+router.get('/book/:bookId', getUserReadByBook);
+router.post('/', validate(createReadSchema), postUserRead);
+router.patch('/:id', validate(updateReadSchema), patchUserRead);
+router.delete('/:id', deleteUserRead);
 
 export default router;

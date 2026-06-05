@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import {
-  createBook,
-  deleteBook,
-  getBookById,
-  getBooks,
-  searchBooks,
-  updateBook,
+  deleteUserBook,
+  getUserBook,
+  getUserBooks,
+  getUserBooksSearch,
+  patchUserBook,
+  postUserBook,
 } from '../controllers/bookController.js';
 import { validate } from '../utils/validate.js';
 import {
@@ -15,11 +15,11 @@ import {
 
 const router = Router();
 
-router.get('/search', searchBooks);
-router.get('/', getBooks);
-router.get('/:id', getBookById);
-router.post('/', validate(createBookSchema), createBook);
-router.patch('/:id', validate(updateBookSchema), updateBook);
-router.delete('/:id', deleteBook);
+router.get('/search', getUserBooksSearch);
+router.get('/', getUserBooks);
+router.get('/:id', getUserBook);
+router.post('/', validate(createBookSchema), postUserBook);
+router.patch('/:id', validate(updateBookSchema), patchUserBook);
+router.delete('/:id', deleteUserBook);
 
 export default router;

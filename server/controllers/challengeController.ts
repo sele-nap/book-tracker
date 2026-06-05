@@ -1,15 +1,15 @@
 import { challengeService } from '../services/challengeService.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
-export const getChallenges = asyncHandler(async (req, res) => {
+export const getUserChallenges = asyncHandler(async (req, res) => {
   res.json(await challengeService.getAll(req.userId));
 });
 
-export const createChallenge = asyncHandler(async (req, res) => {
+export const postUserChallenge = asyncHandler(async (req, res) => {
   res.status(201).json(await challengeService.create(req.userId, req.body));
 });
 
-export const addBookToChallenge = asyncHandler(async (req, res) => {
+export const patchUserChallengeBook = asyncHandler(async (req, res) => {
   const challenge = await challengeService.addBook(
     req.userId,
     String(req.params.id),
@@ -22,7 +22,7 @@ export const addBookToChallenge = asyncHandler(async (req, res) => {
   res.json(challenge);
 });
 
-export const getChallengeProgress = asyncHandler(async (req, res) => {
+export const getUserChallengeProgress = asyncHandler(async (req, res) => {
   const challenge = await challengeService.getById(
     req.userId,
     String(req.params.id),

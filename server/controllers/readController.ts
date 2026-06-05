@@ -2,15 +2,15 @@ import type { ReadStatus } from '../models/Read.js';
 import { readService } from '../services/readService.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
-export const getReads = asyncHandler(async (req, res) => {
+export const getUserReads = asyncHandler(async (req, res) => {
   res.json(await readService.getAll(req.userId));
 });
 
-export const getTimeline = asyncHandler(async (req, res) => {
+export const getUserReadsTimeline = asyncHandler(async (req, res) => {
   res.json(await readService.getTimeline(req.userId));
 });
 
-export const getReadsByStatus = asyncHandler(async (req, res) => {
+export const getUserReadsByStatus = asyncHandler(async (req, res) => {
   res.json(
     await readService.getByStatus(
       req.userId,
@@ -19,7 +19,7 @@ export const getReadsByStatus = asyncHandler(async (req, res) => {
   );
 });
 
-export const getReadByBook = asyncHandler(async (req, res) => {
+export const getUserReadByBook = asyncHandler(async (req, res) => {
   const read = await readService.getByBook(
     req.userId,
     String(req.params.bookId),
@@ -31,11 +31,11 @@ export const getReadByBook = asyncHandler(async (req, res) => {
   res.json(read);
 });
 
-export const createRead = asyncHandler(async (req, res) => {
+export const postUserRead = asyncHandler(async (req, res) => {
   res.status(201).json(await readService.create(req.userId, req.body));
 });
 
-export const updateRead = asyncHandler(async (req, res) => {
+export const patchUserRead = asyncHandler(async (req, res) => {
   const read = await readService.update(
     req.userId,
     String(req.params.id),
@@ -48,7 +48,7 @@ export const updateRead = asyncHandler(async (req, res) => {
   res.json(read);
 });
 
-export const deleteRead = asyncHandler(async (req, res) => {
+export const deleteUserRead = asyncHandler(async (req, res) => {
   const read = await readService.delete(req.userId, String(req.params.id));
   if (!read) {
     res.status(404).send();

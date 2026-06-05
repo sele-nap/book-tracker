@@ -1,20 +1,20 @@
 import { Router } from 'express';
 import {
-  addBookToShelf,
-  createShelf,
-  deleteShelf,
-  getShelves,
-  removeBookFromShelf,
+  deleteUserShelf,
+  deleteUserShelfBook,
+  getUserShelves,
+  patchUserShelfBook,
+  postUserShelf,
 } from '../controllers/shelfController.js';
 import { validate } from '../utils/validate.js';
 import { createShelfSchema } from '../validators/shelfValidator.js';
 
 const router = Router();
 
-router.get('/', getShelves);
-router.post('/', validate(createShelfSchema), createShelf);
-router.patch('/:id/books/:bookId', addBookToShelf);
-router.delete('/:id/books/:bookId', removeBookFromShelf);
-router.delete('/:id', deleteShelf);
+router.get('/', getUserShelves);
+router.post('/', validate(createShelfSchema), postUserShelf);
+router.patch('/:id/books/:bookId', patchUserShelfBook);
+router.delete('/:id/books/:bookId', deleteUserShelfBook);
+router.delete('/:id', deleteUserShelf);
 
 export default router;
