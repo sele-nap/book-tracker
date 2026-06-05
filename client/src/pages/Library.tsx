@@ -1,11 +1,3 @@
-import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
-import {
-  BookBookmark,
-  CheckCircle,
-  List,
-  Minus,
-  Moon,
-} from '@phosphor-icons/react';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useSWR from 'swr';
@@ -15,6 +7,8 @@ import AddBookForm from '../components/AddBookForm';
 import ApiError from '../components/ApiError';
 import BookCard from '../components/BookCard';
 import EmptyState from '../components/EmptyState';
+import LibraryFilters from '../components/LibraryFilters';
+import LibraryPagination from '../components/LibraryPagination';
 import Modal from '../components/Modal';
 import { LibrarySkeleton } from '../components/Skeleton';
 import { useLanguage } from '../hooks/useLanguage';
@@ -43,6 +37,10 @@ export default function Library() {
     };
   }, [search]);
 
+  useEffect(() => {
+    document.title = `${t.library.title} — Book Tracker`;
+  }, [t]);
+
   const {
     data: booksPage,
     isLoading: booksLoading,
@@ -57,33 +55,16 @@ export default function Library() {
     mutate: refetchReads,
   } = useSWR<Read[]>('/reads', readsApi.getAll);
 
-  const STATUS_FILTERS: {
-    value: 'all' | ReadStatus;
-    label: string;
-    icon: PhosphorIcon;
-  }[] = [
-    { value: 'all', label: t.library.filters.all, icon: List },
-    { value: 'reading', label: t.library.filters.reading, icon: BookBookmark },
-    { value: 'finished', label: t.library.filters.finished, icon: CheckCircle },
-    { value: 'wishlist', label: t.library.filters.wishlist, icon: Moon },
-    { value: 'dropped', label: t.library.filters.dropped, icon: Minus },
-  ];
-
   const readsByBookId = new Map(reads?.map((r) => [r.book._id, r]) ?? []);
-
-  const books = (booksPage?.books ?? []).filter((b) => {
-    if (statusFilter === 'all') return true;
-    return readsByBookId.get(b._id)?.status === statusFilter;
-  });
+  const books = (booksPage?.books ?? []).filter(
+    (b) =>
+      statusFilter === 'all' ||
+      readsByBookId.get(b._id)?.status === statusFilter,
+  );
 
   const loading = booksLoading || readsLoading;
-  const totalPages = booksPage?.pages ?? 1;
 
-  useEffect(() => {
-    document.title = `${t.library.title} — Book Tracker`;
-  }, [t]);
-
-  const goTo = (p: number) => {
+  const handlePageChange = (p: number) => {
     setPage(p);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -102,6 +83,7 @@ export default function Library() {
           />
         </Modal>
       )}
+
       <div className="flex flex-wrap items-start justify-between gap-3 mb-8">
         <div>
           <h1 className="text-3xl mb-1">{t.library.title}</h1>
@@ -117,42 +99,15 @@ export default function Library() {
         </button>
       </div>
 
-      <label htmlFor="library-search" className="sr-only">
-        {t.library.search}
-      </label>
-      <input
-        id="library-search"
-        type="search"
-        placeholder={t.library.search}
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full bg-dusk border border-mist/40 rounded-lg px-4 py-2.5 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 mb-4"
+      <LibraryFilters
+        search={search}
+        onSearchChange={setSearch}
+        statusFilter={statusFilter}
+        onStatusChange={(v) => {
+          setStatusFilter(v);
+          setPage(1);
+        }}
       />
-
-      <div
-        role="group"
-        aria-label="Filter by status"
-        className="flex flex-wrap gap-2 mb-8"
-      >
-        {STATUS_FILTERS.map(({ value, label, icon: Icon }) => (
-          <button
-            key={value}
-            onClick={() => {
-              setStatusFilter(value);
-              setPage(1);
-            }}
-            aria-pressed={statusFilter === value}
-            className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-colors ${
-              statusFilter === value
-                ? 'bg-wine text-cream'
-                : 'bg-bark text-parchment hover:bg-mist/30'
-            }`}
-          >
-            <Icon size={12} weight="light" aria-hidden="true" />
-            {label}
-          </button>
-        ))}
-      </div>
 
       {loading ? (
         <LibrarySkeleton />
@@ -188,41 +143,11 @@ export default function Library() {
         </div>
       )}
 
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2 mt-10">
-          <button
-            onClick={() => goTo(page - 1)}
-            disabled={page === 1}
-            aria-label="Previous page"
-            className="text-xs px-3 py-1.5 rounded-full bg-bark text-parchment hover:bg-mist/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          >
-            ←
-          </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-            <button
-              key={p}
-              onClick={() => goTo(p)}
-              aria-label={`Go to page ${p}`}
-              aria-current={p === page ? 'page' : undefined}
-              className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
-                p === page
-                  ? 'bg-wine text-cream'
-                  : 'bg-bark text-parchment hover:bg-mist/30'
-              }`}
-            >
-              {p}
-            </button>
-          ))}
-          <button
-            onClick={() => goTo(page + 1)}
-            disabled={page === totalPages}
-            aria-label="Next page"
-            className="text-xs px-3 py-1.5 rounded-full bg-bark text-parchment hover:bg-mist/30 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          >
-            →
-          </button>
-        </div>
-      )}
+      <LibraryPagination
+        page={page}
+        totalPages={booksPage?.pages ?? 1}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }
