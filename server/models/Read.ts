@@ -3,6 +3,7 @@ import { Document, Schema, Types, model } from 'mongoose';
 export type ReadStatus = 'reading' | 'finished' | 'dropped' | 'wishlist';
 
 export interface IRead extends Document {
+  userId: Types.ObjectId;
   book: Types.ObjectId;
   status: ReadStatus;
   startedAt?: Date;
@@ -15,6 +16,12 @@ export interface IRead extends Document {
 
 const readSchema = new Schema<IRead>(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      index: true,
+    },
     book: { type: Schema.Types.ObjectId, ref: 'Book', required: true },
     status: {
       type: String,

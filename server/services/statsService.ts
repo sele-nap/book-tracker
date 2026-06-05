@@ -1,8 +1,10 @@
+import { Types } from 'mongoose';
 import { Read } from '../models/Read.js';
 
 export const statsService = {
-  async global() {
+  async global(userId: Types.ObjectId) {
     const result = await Read.aggregate([
+      { $match: { userId } },
       {
         $facet: {
           byStatus: [
@@ -53,10 +55,11 @@ export const statsService = {
     return result[0];
   },
 
-  async byMonth(year: number) {
+  async byMonth(userId: Types.ObjectId, year: number) {
     return Read.aggregate([
       {
         $match: {
+          userId,
           status: 'finished',
           finishedAt: {
             $gte: new Date(`${year}-01-01`),
@@ -70,9 +73,9 @@ export const statsService = {
     ]);
   },
 
-  async byGenre() {
+  async byGenre(userId: Types.ObjectId) {
     return Read.aggregate([
-      { $match: { status: 'finished' } },
+      { $match: { userId, status: 'finished' } },
       {
         $lookup: {
           from: 'books',
@@ -89,9 +92,9 @@ export const statsService = {
     ]);
   },
 
-  async ratingsByGenre() {
+  async ratingsByGenre(userId: Types.ObjectId) {
     return Read.aggregate([
-      { $match: { status: 'finished', rating: { $exists: true } } },
+      { $match: { userId, status: 'finished', rating: { $exists: true } } },
       {
         $lookup: {
           from: 'books',
@@ -121,9 +124,10 @@ export const statsService = {
     ]);
   },
 
-  async streak() {
+  async streak(userId: Types.ObjectId) {
     const oneYearAgo = new Date(Date.now() - 365 * 86400000);
     const reads = await Read.find({
+      userId,
       status: 'finished',
       finishedAt: { $exists: true, $gte: oneYearAgo },
     })

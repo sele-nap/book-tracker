@@ -1,3 +1,4 @@
+import { Book as BookIcon, CircleNotch } from '@phosphor-icons/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Book, Read } from '../api/books';
@@ -63,7 +64,16 @@ export default function BookDetail() {
     navigate('/');
   };
 
-  if (!book) return <p className="text-stone text-center mt-16">✦</p>;
+  if (!book)
+    return (
+      <div className="flex justify-center mt-16">
+        <CircleNotch
+          size={20}
+          weight="light"
+          className="animate-spin text-stone"
+        />
+      </div>
+    );
 
   return (
     <div>
@@ -100,8 +110,12 @@ export default function BookDetail() {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl opacity-30">
-                📖
+              <div className="w-full h-full flex items-center justify-center">
+                <BookIcon
+                  size={36}
+                  weight="light"
+                  className="opacity-20 text-parchment"
+                />
               </div>
             )}
           </div>
@@ -211,7 +225,12 @@ export default function BookDetail() {
             className="mt-2 text-xs bg-wine hover:bg-rose text-cream px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50"
           >
             {savingReview ? (
-              <span aria-hidden="true">✦</span>
+              <CircleNotch
+                size={12}
+                weight="light"
+                className="animate-spin"
+                aria-hidden="true"
+              />
             ) : (
               t.bookDetail.saveReview
             )}

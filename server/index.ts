@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, {
   type NextFunction,
@@ -8,6 +9,8 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { Error as MongooseError } from 'mongoose';
 import connectDB from './config/db.js';
+import { requireAuth } from './middleware/requireAuth.js';
+import authRouter from './routes/auth.js';
 import booksRouter from './routes/books.js';
 import challengesRouter from './routes/challenges.js';
 import readsRouter from './routes/reads.js';
@@ -48,17 +51,19 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (_req, res) => {
   res.json({ message: 'Book Tracker API 📚' });
 });
 
-app.use('/api/books', booksRouter);
-app.use('/api/search', searchRouter);
-app.use('/api/reads', readsRouter);
-app.use('/api/shelves', shelvesRouter);
-app.use('/api/challenges', challengesRouter);
-app.use('/api/stats', statsRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/books', requireAuth, booksRouter);
+app.use('/api/search', requireAuth, searchRouter);
+app.use('/api/reads', requireAuth, readsRouter);
+app.use('/api/shelves', requireAuth, shelvesRouter);
+app.use('/api/challenges', requireAuth, challengesRouter);
+app.use('/api/stats', requireAuth, statsRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ message: 'Route not found' });
@@ -75,6 +80,11 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 
   if (err instanceof MongooseError.CastError) {
     res.status(400).json({ message: `Invalid ${err.path}: ${err.value}` });
+    return;
+  }
+
+  if (err instanceof Error && 'status' in err) {
+    res.status(err.status as number).json({ message: err.message });
     return;
   }
 

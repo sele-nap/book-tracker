@@ -6,11 +6,11 @@ export const getBooks = asyncHandler(async (req, res) => {
   const limit = Math.min(parseInt(String(req.query.limit ?? '20')), 100);
   const page = Math.max(parseInt(String(req.query.page ?? '1')), 1);
   const q = req.query.q ? String(req.query.q) : undefined;
-  res.json(await bookService.getPaginated(page, limit, q));
+  res.json(await bookService.getPaginated(req.userId, page, limit, q));
 });
 
 export const getBookById = asyncHandler(async (req, res) => {
-  const book = await bookService.getById(String(req.params.id));
+  const book = await bookService.getById(req.userId, String(req.params.id));
   if (!book) {
     res.status(404).json({ message: 'Book not found' });
     return;
@@ -19,11 +19,15 @@ export const getBookById = asyncHandler(async (req, res) => {
 });
 
 export const createBook = asyncHandler(async (req, res) => {
-  res.status(201).json(await bookService.create(req.body));
+  res.status(201).json(await bookService.create(req.userId, req.body));
 });
 
 export const updateBook = asyncHandler(async (req, res) => {
-  const book = await bookService.update(String(req.params.id), req.body);
+  const book = await bookService.update(
+    req.userId,
+    String(req.params.id),
+    req.body,
+  );
   if (!book) {
     res.status(404).json({ message: 'Book not found' });
     return;
@@ -32,7 +36,7 @@ export const updateBook = asyncHandler(async (req, res) => {
 });
 
 export const deleteBook = asyncHandler(async (req, res) => {
-  const book = await bookService.delete(String(req.params.id));
+  const book = await bookService.delete(req.userId, String(req.params.id));
   if (!book) {
     res.status(404).json({ message: 'Book not found' });
     return;
@@ -46,5 +50,5 @@ export const searchBooks = asyncHandler(async (req: Request, res: Response) => {
     res.status(400).json({ message: 'Query param "q" is required' });
     return;
   }
-  res.json(await bookService.search(q));
+  res.json(await bookService.search(req.userId, q));
 });

@@ -1,3 +1,4 @@
+import { Book, Check, CircleNotch, Flame } from '@phosphor-icons/react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Read } from '../api/books';
@@ -93,9 +94,11 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
             className="w-full h-full object-cover"
           />
         ) : (
-          <span aria-hidden="true" className="text-2xl opacity-30">
-            📖
-          </span>
+          <Book
+            size={22}
+            weight="light"
+            className="opacity-20 text-parchment"
+          />
         )}
       </Link>
 
@@ -106,8 +109,8 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
         <p className="text-stone text-xs mt-0.5">{book.author}</p>
 
         {read.startedAt && (
-          <p className="text-stone text-xs mt-1">
-            <span aria-hidden="true">🕯️ </span>
+          <p className="text-stone text-xs mt-1 flex items-center gap-1">
+            <Flame size={11} weight="light" aria-hidden="true" />
             {new Date(read.startedAt).toLocaleDateString()}
           </p>
         )}
@@ -141,7 +144,16 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
               aria-busy={saving}
               className="text-xs bg-bark border border-mist/40 rounded-lg px-3 py-1 text-parchment hover:text-cream transition-colors"
             >
-              {saving ? <span aria-hidden="true">✦</span> : t.reading.save}
+              {saving ? (
+                <CircleNotch
+                  size={12}
+                  weight="light"
+                  className="animate-spin"
+                  aria-hidden="true"
+                />
+              ) : (
+                t.reading.save
+              )}
             </button>
           </div>
 
@@ -150,7 +162,8 @@ function ReadingCard({ read, onUpdate }: { read: Read; onUpdate: () => void }) {
               onClick={() => markAs('finished')}
               className="text-xs px-3 py-1 rounded-full bg-wine/20 text-blush hover:bg-wine/40 transition-colors"
             >
-              ✦ {t.reading.markFinished}
+              <Check size={12} weight="light" aria-hidden="true" />{' '}
+              {t.reading.markFinished}
             </button>
             <button
               onClick={() => markAs('dropped')}

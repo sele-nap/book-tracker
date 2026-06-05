@@ -1,28 +1,29 @@
+import type { Types } from 'mongoose';
 import { Challenge } from '../models/Challenge.js';
 
 export const challengeService = {
-  async getAll() {
-    return Challenge.find().populate('books');
+  async getAll(userId: Types.ObjectId) {
+    return Challenge.find({ userId }).populate('books');
   },
 
-  async create(data: {
-    year: number;
-    goalBooks: number;
-    targetGenres?: string[];
-  }) {
+  async create(
+    userId: Types.ObjectId,
+    data: { year: number; goalBooks: number; targetGenres?: string[] },
+  ) {
     return Challenge.create({
       ...data,
+      userId,
       expiresAt: new Date(data.year + 1, 0, 1),
     });
   },
 
-  async getById(id: string) {
-    return Challenge.findById(id).populate('books');
+  async getById(userId: Types.ObjectId, id: string) {
+    return Challenge.findOne({ _id: id, userId }).populate('books');
   },
 
-  async addBook(id: string, bookId: string) {
-    return Challenge.findByIdAndUpdate(
-      id,
+  async addBook(userId: Types.ObjectId, id: string, bookId: string) {
+    return Challenge.findOneAndUpdate(
+      { _id: id, userId },
       { $addToSet: { books: bookId } },
       { new: true },
     ).populate('books');

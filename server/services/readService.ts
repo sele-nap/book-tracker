@@ -1,41 +1,53 @@
+import type { Types } from 'mongoose';
 import type { ReadStatus } from '../models/Read.js';
 import { Read } from '../models/Read.js';
 
 export const readService = {
-  async getAll() {
-    return Read.find().populate('book').sort({ createdAt: -1 });
+  async getAll(userId: Types.ObjectId) {
+    return Read.find({ userId }).populate('book').sort({ createdAt: -1 });
   },
 
-  async getByStatus(status: ReadStatus) {
-    return Read.find({ status }).populate('book');
+  async getByStatus(userId: Types.ObjectId, status: ReadStatus) {
+    return Read.find({ userId, status }).populate('book');
   },
 
-  async getByBook(bookId: string) {
-    return Read.findOne({ book: bookId }).populate('book');
+  async getByBook(userId: Types.ObjectId, bookId: string) {
+    return Read.findOne({ userId, book: bookId }).populate('book');
   },
 
-  async create(data: Record<string, unknown>) {
+  async create(userId: Types.ObjectId, data: Record<string, unknown>) {
     if (data.status === 'finished' && !data.finishedAt)
       data.finishedAt = new Date();
     if (data.status === 'reading' && !data.startedAt)
       data.startedAt = new Date();
-    return Read.create(data);
+    return Read.create({ ...data, userId });
   },
 
-  async update(id: string, data: Record<string, unknown>) {
+  async update(
+    userId: Types.ObjectId,
+    id: string,
+    data: Record<string, unknown>,
+  ) {
     if (data.status === 'finished' && !data.finishedAt)
       data.finishedAt = new Date();
     if (data.status === 'reading' && !data.startedAt)
       data.startedAt = new Date();
-    return Read.findByIdAndUpdate(id, data, { new: true, runValidators: true });
+    return Read.findOneAndUpdate({ _id: id, userId }, data, {
+      new: true,
+      runValidators: true,
+    });
   },
 
-  async delete(id: string) {
-    return Read.findByIdAndDelete(id);
+  async delete(userId: Types.ObjectId, id: string) {
+    return Read.findOneAndDelete({ _id: id, userId });
   },
 
-  async getTimeline() {
-    return Read.find({ status: 'finished', finishedAt: { $exists: true } })
+  async getTimeline(userId: Types.ObjectId) {
+    return Read.find({
+      userId,
+      status: 'finished',
+      finishedAt: { $exists: true },
+    })
       .populate('book')
       .sort({ finishedAt: -1 });
   },

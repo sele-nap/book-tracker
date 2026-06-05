@@ -1,3 +1,4 @@
+import { CircleNotch } from '@phosphor-icons/react';
 import { useState } from 'react';
 import type { Book, BookLanguage, Read, ReadStatus } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
@@ -262,7 +263,16 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
         aria-busy={loading}
         className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-lg transition-colors font-body"
       >
-        {loading ? <span aria-hidden="true">✦</span> : t.bookDetail.edit}
+        {loading ? (
+          <CircleNotch
+            size={14}
+            weight="light"
+            className="animate-spin mx-auto"
+            aria-hidden="true"
+          />
+        ) : (
+          t.bookDetail.edit
+        )}
       </button>
     </form>
   );

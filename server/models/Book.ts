@@ -1,8 +1,9 @@
-import { Document, Schema, model } from 'mongoose';
+import { Document, Schema, Types, model } from 'mongoose';
 
 export type BookLanguage = 'vo' | 'vf' | 'other';
 
 export interface IBook extends Document {
+  userId: Types.ObjectId;
   title: string;
   author: string;
   genre: string[];
@@ -16,6 +17,12 @@ export interface IBook extends Document {
 
 const bookSchema = new Schema<IBook>(
   {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      index: true,
+    },
     title: { type: String, required: true, trim: true },
     author: { type: String, required: true, trim: true },
     genre: [{ type: String, trim: true }],

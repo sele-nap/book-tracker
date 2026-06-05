@@ -1,3 +1,4 @@
+import { Book } from '@phosphor-icons/react';
 import { useLanguage } from '../hooks/useLanguage';
 import StarRating from './StarRating';
 
@@ -47,7 +48,11 @@ export default function BookCard({
             className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <span className="text-4xl opacity-30">📖</span>
+          <Book
+            size={32}
+            weight="light"
+            className="opacity-20 text-parchment"
+          />
         )}
       </div>
 

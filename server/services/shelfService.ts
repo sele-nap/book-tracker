@@ -1,31 +1,32 @@
+import type { Types } from 'mongoose';
 import { Shelf } from '../models/Shelf.js';
 
 export const shelfService = {
-  async getAll() {
-    return Shelf.find().populate('books');
+  async getAll(userId: Types.ObjectId) {
+    return Shelf.find({ userId }).populate('books');
   },
 
-  async create(data: Record<string, unknown>) {
-    return Shelf.create(data);
+  async create(userId: Types.ObjectId, data: Record<string, unknown>) {
+    return Shelf.create({ ...data, userId });
   },
 
-  async addBook(id: string, bookId: string) {
-    return Shelf.findByIdAndUpdate(
-      id,
+  async addBook(userId: Types.ObjectId, id: string, bookId: string) {
+    return Shelf.findOneAndUpdate(
+      { _id: id, userId },
       { $addToSet: { books: bookId } },
       { new: true },
     ).populate('books');
   },
 
-  async removeBook(id: string, bookId: string) {
-    return Shelf.findByIdAndUpdate(
-      id,
+  async removeBook(userId: Types.ObjectId, id: string, bookId: string) {
+    return Shelf.findOneAndUpdate(
+      { _id: id, userId },
       { $pull: { books: bookId } },
       { new: true },
     ).populate('books');
   },
 
-  async delete(id: string) {
-    return Shelf.findByIdAndDelete(id);
+  async delete(userId: Types.ObjectId, id: string) {
+    return Shelf.findOneAndDelete({ _id: id, userId });
   },
 };

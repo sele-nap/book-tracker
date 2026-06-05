@@ -1,3 +1,11 @@
+import type { Icon as PhosphorIcon } from '@phosphor-icons/react';
+import {
+  BookBookmark,
+  CheckCircle,
+  List,
+  Minus,
+  Moon,
+} from '@phosphor-icons/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { BooksPage, Read, ReadStatus } from '../api/books';
@@ -53,12 +61,16 @@ export default function Library() {
     refetch: refetchReads,
   } = useApi<Read[]>(fetchReads);
 
-  const STATUS_FILTERS: { value: 'all' | ReadStatus; label: string }[] = [
-    { value: 'all', label: t.library.filters.all },
-    { value: 'reading', label: t.library.filters.reading },
-    { value: 'finished', label: t.library.filters.finished },
-    { value: 'wishlist', label: t.library.filters.wishlist },
-    { value: 'dropped', label: t.library.filters.dropped },
+  const STATUS_FILTERS: {
+    value: 'all' | ReadStatus;
+    label: string;
+    icon: PhosphorIcon;
+  }[] = [
+    { value: 'all', label: t.library.filters.all, icon: List },
+    { value: 'reading', label: t.library.filters.reading, icon: BookBookmark },
+    { value: 'finished', label: t.library.filters.finished, icon: CheckCircle },
+    { value: 'wishlist', label: t.library.filters.wishlist, icon: Moon },
+    { value: 'dropped', label: t.library.filters.dropped, icon: Minus },
   ];
 
   const readsByBookId = new Map(reads?.map((r) => [r.book._id, r]) ?? []);
@@ -126,7 +138,7 @@ export default function Library() {
         aria-label="Filter by status"
         className="flex flex-wrap gap-2 mb-8"
       >
-        {STATUS_FILTERS.map(({ value, label }) => (
+        {STATUS_FILTERS.map(({ value, label, icon: Icon }) => (
           <button
             key={value}
             onClick={() => {
@@ -134,12 +146,13 @@ export default function Library() {
               setPage(1);
             }}
             aria-pressed={statusFilter === value}
-            className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
+            className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-colors ${
               statusFilter === value
                 ? 'bg-wine text-cream'
                 : 'bg-bark text-parchment hover:bg-mist/30'
             }`}
           >
+            <Icon size={12} weight="light" aria-hidden="true" />
             {label}
           </button>
         ))}

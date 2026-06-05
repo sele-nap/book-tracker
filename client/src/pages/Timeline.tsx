@@ -1,3 +1,4 @@
+import { Book, Sparkle } from '@phosphor-icons/react';
 import { useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import type { Read } from '../api/books';
@@ -87,8 +88,12 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-base opacity-20">
-              📖
+            <div className="w-full h-full flex items-center justify-center">
+              <Book
+                size={16}
+                weight="light"
+                className="opacity-20 text-parchment"
+              />
             </div>
           )}
         </div>
@@ -139,7 +144,9 @@ function YearGroup({
     <div>
       <div className="flex items-center gap-3 mb-4">
         <h2 className="font-display text-2xl text-cream">{year}</h2>
-        <span className="text-stone text-xs">{reads.length} ✦</span>
+        <span className="text-stone text-xs flex items-center gap-1">
+          {reads.length} <Sparkle size={10} weight="light" aria-hidden="true" />
+        </span>
       </div>
       <div>
         {reads.map((read) => (

@@ -1,3 +1,4 @@
+import { Book, CircleNotch } from '@phosphor-icons/react';
 import { useEffect, useRef, useState } from 'react';
 import type { BookLanguage, ReadStatus } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
@@ -144,7 +145,7 @@ export default function AddBookForm({ onSuccess }: Props) {
               aria-hidden="true"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-stone text-xs"
             >
-              ✦
+              <CircleNotch size={11} weight="light" className="animate-spin" />
             </span>
           )}
         </div>
@@ -167,9 +168,13 @@ export default function AddBookForm({ onSuccess }: Props) {
                 ) : (
                   <div
                     aria-hidden="true"
-                    className="w-8 h-11 bg-bark rounded shrink-0 flex items-center justify-center text-xs opacity-30"
+                    className="w-8 h-11 bg-bark rounded shrink-0 flex items-center justify-center"
                   >
-                    📖
+                    <Book
+                      size={14}
+                      weight="light"
+                      className="opacity-20 text-parchment"
+                    />
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
@@ -380,7 +385,16 @@ export default function AddBookForm({ onSuccess }: Props) {
         aria-busy={loading}
         className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-lg transition-colors font-body"
       >
-        {loading ? <span aria-hidden="true">✦</span> : t.form.submit}
+        {loading ? (
+          <CircleNotch
+            size={14}
+            weight="light"
+            className="animate-spin mx-auto"
+            aria-hidden="true"
+          />
+        ) : (
+          t.form.submit
+        )}
       </button>
     </form>
   );

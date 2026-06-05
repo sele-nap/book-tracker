@@ -1,17 +1,30 @@
+import {
+  BookBookmark,
+  Books,
+  ChartBar,
+  ClockCounterClockwise,
+  Gear,
+  SignOut,
+  SquaresFour,
+  Trophy,
+} from '@phosphor-icons/react';
 import { NavLink, Outlet } from 'react-router-dom';
-import LanguageToggle from '../components/LanguageToggle';
-import { useLanguage } from '../hooks/useLanguage';
+import LanguageToggle from '../components/LanguageToggle.js';
+import { useAuth } from '../contexts/auth.js';
+import { useLanguage } from '../hooks/useLanguage.js';
 
 export default function RootLayout() {
   const { t } = useLanguage();
+  const { logout } = useAuth();
 
   const nav = [
-    { to: '/', label: t.nav.library, icon: '📚' },
-    { to: '/reading', label: t.nav.reading, icon: '🕯️' },
-    { to: '/timeline', label: t.nav.timeline, icon: '📜' },
-    { to: '/shelves', label: t.nav.shelves, icon: '🍄' },
-    { to: '/stats', label: t.nav.stats, icon: '✦' },
-    { to: '/challenges', label: t.nav.challenges, icon: '🌙' },
+    { to: '/', label: t.nav.library, icon: Books },
+    { to: '/reading', label: t.nav.reading, icon: BookBookmark },
+    { to: '/timeline', label: t.nav.timeline, icon: ClockCounterClockwise },
+    { to: '/shelves', label: t.nav.shelves, icon: SquaresFour },
+    { to: '/stats', label: t.nav.stats, icon: ChartBar },
+    { to: '/challenges', label: t.nav.challenges, icon: Trophy },
+    { to: '/settings', label: t.nav.settings, icon: Gear },
   ];
 
   return (
@@ -42,20 +55,20 @@ export default function RootLayout() {
 
         <nav aria-label="Main navigation">
           <ul className="flex flex-col gap-1">
-            {nav.map(({ to, label, icon }) => (
+            {nav.map(({ to, label, icon: Icon }) => (
               <li key={to}>
                 <NavLink
                   to={to}
                   end={to === '/'}
                   className={({ isActive }) =>
-                    `flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                    `flex items-center gap-3 px-3 py-2 rounded-lg text-base transition-colors ${
                       isActive
                         ? 'bg-wine/40 text-cream'
                         : 'text-parchment hover:bg-bark hover:text-cream'
                     }`
                   }
                 >
-                  <span aria-hidden="true">{icon}</span>
+                  <Icon size={17} weight="light" aria-hidden="true" />
                   <span className="font-body">{label}</span>
                 </NavLink>
               </li>
@@ -63,8 +76,15 @@ export default function RootLayout() {
           </ul>
         </nav>
 
-        <div className="mt-auto px-2 pt-4 border-t border-mist/20 flex justify-center">
+        <div className="mt-auto px-2 pt-4 border-t border-mist/20 flex flex-col gap-2 items-center">
           <LanguageToggle />
+          <button
+            onClick={() => void logout()}
+            className="flex items-center gap-1.5 text-xs text-stone hover:text-parchment transition-colors"
+          >
+            <SignOut size={13} weight="light" aria-hidden="true" />
+            {t.auth.logout}
+          </button>
         </div>
       </aside>
 
@@ -81,20 +101,18 @@ export default function RootLayout() {
         aria-label="Main navigation"
         className="md:hidden fixed bottom-0 inset-x-0 bg-dusk border-t border-mist/30 flex items-center z-40"
       >
-        {nav.map(({ to, label, icon }) => (
+        {nav.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
             end={to === '/'}
             className={({ isActive }) =>
-              `flex-1 flex flex-col items-center gap-0.5 py-2.5 text-xs transition-colors ${
+              `flex-1 flex flex-col items-center gap-0.5 py-2.5 text-sm transition-colors ${
                 isActive ? 'text-cream' : 'text-stone'
               }`
             }
           >
-            <span aria-hidden="true" className="text-base leading-none">
-              {icon}
-            </span>
+            <Icon size={20} weight="light" aria-hidden="true" />
             <span className="font-body leading-tight truncate max-w-full px-1">
               {label}
             </span>

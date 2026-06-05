@@ -1,16 +1,17 @@
 import { challengeService } from '../services/challengeService.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
-export const getChallenges = asyncHandler(async (_req, res) => {
-  res.json(await challengeService.getAll());
+export const getChallenges = asyncHandler(async (req, res) => {
+  res.json(await challengeService.getAll(req.userId));
 });
 
 export const createChallenge = asyncHandler(async (req, res) => {
-  res.status(201).json(await challengeService.create(req.body));
+  res.status(201).json(await challengeService.create(req.userId, req.body));
 });
 
 export const addBookToChallenge = asyncHandler(async (req, res) => {
   const challenge = await challengeService.addBook(
+    req.userId,
     String(req.params.id),
     String(req.params.bookId),
   );
@@ -22,7 +23,10 @@ export const addBookToChallenge = asyncHandler(async (req, res) => {
 });
 
 export const getChallengeProgress = asyncHandler(async (req, res) => {
-  const challenge = await challengeService.getById(String(req.params.id));
+  const challenge = await challengeService.getById(
+    req.userId,
+    String(req.params.id),
+  );
   if (!challenge) {
     res.status(404).json({ message: 'Challenge not found' });
     return;

@@ -1,3 +1,4 @@
+import { Book as BookIcon, CircleNotch } from '@phosphor-icons/react';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Book } from '../api/books';
@@ -59,9 +60,13 @@ function ShelfCard({
             ) : (
               <div
                 aria-hidden="true"
-                className="w-full h-full flex items-center justify-center text-xl opacity-20"
+                className="w-full h-full flex items-center justify-center"
               >
-                📖
+                <BookIcon
+                  size={18}
+                  weight="light"
+                  className="opacity-20 text-parchment"
+                />
               </div>
             )}
           </Link>
@@ -137,7 +142,11 @@ function ManageShelfModal({
             onClick={searchBooks}
             className="text-sm bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
-            {searching ? '✦' : t.shelves.search}
+            {searching ? (
+              <CircleNotch size={13} weight="light" className="animate-spin" />
+            ) : (
+              t.shelves.search
+            )}
           </button>
         </div>
 

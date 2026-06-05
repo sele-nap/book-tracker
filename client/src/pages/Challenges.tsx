@@ -1,3 +1,9 @@
+import {
+  Book as BookIcon,
+  Check,
+  CircleNotch,
+  Star,
+} from '@phosphor-icons/react';
 import { useCallback, useEffect, useState } from 'react';
 import type { Book } from '../api/books';
 import { booksApi } from '../api/books';
@@ -36,7 +42,14 @@ function ChallengeCard({
             {t.challenges.books}
           </p>
         </div>
-        {done && <span className="text-amber text-lg">✦</span>}
+        {done && (
+          <Star
+            size={18}
+            weight="fill"
+            className="text-amber"
+            aria-hidden="true"
+          />
+        )}
       </div>
 
       <div>
@@ -101,9 +114,13 @@ function ChallengeCard({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="w-full h-full flex items-center justify-center text-sm opacity-20">
-                    📖
-                  </span>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <BookIcon
+                      size={12}
+                      weight="light"
+                      className="opacity-20 text-parchment"
+                    />
+                  </div>
                 )}
               </div>
             ))}
@@ -172,7 +189,11 @@ function AddBookModal({
             onClick={searchBooks}
             className="text-sm bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
           >
-            {searching ? '✦' : t.challenges.search}
+            {searching ? (
+              <CircleNotch size={13} weight="light" className="animate-spin" />
+            ) : (
+              t.challenges.search
+            )}
           </button>
         </div>
 
@@ -188,8 +209,9 @@ function AddBookModal({
                   <p className="text-stone text-xs">{b.author}</p>
                 </div>
                 {alreadyIn.has(b._id) ? (
-                  <span className="text-xs text-sage">
-                    ✦ {t.challenges.alreadyIn}
+                  <span className="text-xs text-sage flex items-center gap-1">
+                    <Check size={12} weight="light" aria-hidden="true" />{' '}
+                    {t.challenges.alreadyIn}
                   </span>
                 ) : (
                   <button
@@ -332,7 +354,15 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
         disabled={loading}
         className="w-full bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-lg transition-colors"
       >
-        {loading ? '✦' : t.challenges.create}
+        {loading ? (
+          <CircleNotch
+            size={14}
+            weight="light"
+            className="animate-spin mx-auto"
+          />
+        ) : (
+          t.challenges.create
+        )}
       </button>
     </form>
   );
