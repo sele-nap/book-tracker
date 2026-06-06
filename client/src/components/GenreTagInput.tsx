@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 
 const inputClass =
-  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 transition-colors';
+  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/70 transition-colors';
 
 type Props = {
   label: string;
@@ -10,6 +10,7 @@ type Props = {
 };
 
 export default function GenreTagInput({ label, genres, onChange }: Props) {
+  const id = useId();
   const [input, setInput] = useState('');
 
   const add = () => {
@@ -22,9 +23,12 @@ export default function GenreTagInput({ label, genres, onChange }: Props) {
 
   return (
     <div>
-      <label className="block text-xs text-parchment mb-1">{label}</label>
+      <label htmlFor={id} className="block text-xs text-parchment mb-1">
+        {label}
+      </label>
       <div className="flex gap-2">
         <input
+          id={id}
           className={inputClass}
           value={input}
           onChange={(e) => setInput(e.target.value)}

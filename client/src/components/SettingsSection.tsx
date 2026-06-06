@@ -1,5 +1,5 @@
 export const inputCls =
-  'bg-night border border-mist/30 rounded-lg px-4 py-3 text-base text-cream placeholder:text-stone focus:outline-none focus:border-wine/60';
+  'bg-night border border-mist/30 rounded-lg px-4 py-3 text-base text-cream placeholder:text-stone focus-visible:outline-none focus:border-wine/60';
 
 export function SettingsSection({
   title,

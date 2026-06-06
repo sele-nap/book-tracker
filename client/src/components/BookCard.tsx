@@ -50,6 +50,7 @@ export default function BookCard({
           <Book
             size={32}
             weight="light"
+            aria-hidden="true"
             className="opacity-20 text-parchment"
           />
         )}

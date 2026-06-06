@@ -10,7 +10,7 @@ import GenreTagInput from './GenreTagInput';
 type Props = { onSuccess: () => void };
 
 const inputClass =
-  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 transition-colors';
+  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/70 transition-colors';
 const labelClass = 'block text-xs text-parchment mb-1';
 
 type Fields = {
@@ -199,8 +199,9 @@ export default function AddBookForm({ onSuccess }: Props) {
       )}
 
       <div>
-        <label className={labelClass}>{t.form.cover}</label>
+        <label htmlFor="add-cover" className={labelClass}>{t.form.cover}</label>
         <input
+          id="add-cover"
           className={inputClass}
           value={fields.coverUrl}
           onChange={set('coverUrl')}

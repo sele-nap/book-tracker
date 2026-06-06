@@ -183,7 +183,7 @@ function AddBookModal({
               if (e.key === 'Enter') searchBooks();
             }}
             placeholder={t.challenges.searchBooks}
-            className="flex-1 bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
+            className="flex-1 bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/50"
           />
           <button
             onClick={searchBooks}
@@ -258,7 +258,7 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
   };
 
   const inputClass =
-    'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50';
+    'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/50';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

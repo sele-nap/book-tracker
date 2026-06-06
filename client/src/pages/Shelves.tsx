@@ -136,7 +136,7 @@ function ManageShelfModal({
               if (e.key === 'Enter') searchBooks();
             }}
             placeholder={t.shelves.searchBooks}
-            className="flex-1 bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
+            className="flex-1 bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/50"
           />
           <button
             onClick={searchBooks}
@@ -274,7 +274,7 @@ export default function Shelves() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="fantasy favs…"
                 required
-                className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
+                className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/50"
               />
             </div>
             <div>
@@ -289,7 +289,7 @@ export default function Shelves() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="my favourite books…"
-                className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/50"
+                className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/50"
               />
             </div>
             <button

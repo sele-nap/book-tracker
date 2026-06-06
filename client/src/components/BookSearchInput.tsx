@@ -1,11 +1,11 @@
 import { Book, CircleNotch } from '@phosphor-icons/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import type { BookSearchResult } from '../api/bookSearch';
 import { searchBooks } from '../api/bookSearch';
 import { useDebounce } from '../hooks/useDebounce';
 
 const inputClass =
-  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/70 transition-colors';
+  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/70 transition-colors';
 
 const SOURCE_LABEL: Record<BookSearchResult['source'], string> = {
   ol: 'OL',
@@ -22,6 +22,7 @@ type Props = {
 };
 
 export default function BookSearchInput({ label, onSelect }: Props) {
+  const id = useId();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<BookSearchResult[]>([]);
   const [fetchedFor, setFetchedFor] = useState('');
@@ -60,9 +61,12 @@ export default function BookSearchInput({ label, onSelect }: Props) {
 
   return (
     <div>
-      <label className="block text-xs text-parchment mb-1">{label}</label>
+      <label htmlFor={id} className="block text-xs text-parchment mb-1">
+        {label}
+      </label>
       <div className="relative">
         <input
+          id={id}
           className={inputClass}
           value={query}
           onChange={(e) => setQuery(e.target.value)}

@@ -136,7 +136,7 @@ export default function ReadingCard({
               value={pageInput}
               onChange={(e) => setPageInput(e.target.value)}
               placeholder={t.reading.currentPage}
-              className="w-24 bg-bark border border-mist/40 rounded-lg px-2 py-1 text-cream text-xs outline-none focus:border-mist/60"
+              className="w-24 bg-bark border border-mist/40 rounded-lg px-2 py-1 text-cream text-xs focus-visible:outline-none focus:border-mist/60"
             />
             <button
               onClick={savePage}

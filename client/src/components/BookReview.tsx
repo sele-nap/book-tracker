@@ -43,7 +43,7 @@ export default function BookReview({
         onChange={(e) => setReviewText(e.target.value)}
         placeholder={t.bookDetail.reviewPlaceholder}
         rows={5}
-        className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm outline-none focus:border-mist/60 transition-colors resize-none"
+        className="w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/60 transition-colors resize-none"
       />
       {isDirty && (
         <button
