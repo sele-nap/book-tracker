@@ -38,8 +38,8 @@ export default function BookCard({
   const { t } = useLanguage();
 
   return (
-    <div className="bg-dusk border border-mist/30 rounded-2xl overflow-hidden hover:border-mist/50 hover:-translate-y-1.5 hover:scale-[1.01] hover:shadow-2xl hover:shadow-night/70 transition-all duration-300 group">
-      <div className="h-40 bg-bark flex items-center justify-center overflow-hidden">
+    <div className="bg-dusk border border-mist/30 rounded-2xl overflow-hidden hover:border-mist/50 hover:-translate-y-1.5 hover:scale-[1.01] hover:shadow-2xl hover:shadow-night/70 transition-all duration-300 group flex flex-col h-full">
+      <div className="h-40 shrink-0 bg-bark flex items-center justify-center overflow-hidden">
         {coverUrl ? (
           <img
             src={coverUrl}
@@ -56,7 +56,7 @@ export default function BookCard({
         )}
       </div>
 
-      <div className="p-4">
+      <div className="p-4 flex flex-col flex-1">
         <div className="flex items-center gap-1.5 flex-wrap">
           <span
             className={`text-xs px-2 py-0.5 rounded-full ${statusStyles[status]}`}
@@ -75,23 +75,25 @@ export default function BookCard({
         <h3 className="font-display text-cream text-sm mt-2 leading-snug line-clamp-2">
           {title}
         </h3>
-        <p className="text-stone text-xs mt-1">{author}</p>
+        <p className="text-stone text-xs mt-1 line-clamp-1">{author}</p>
 
-        {rating && (
-          <div className="text-xs mt-2">
-            <StarRating value={rating} />
+        <div className="mt-auto pt-2 flex flex-col gap-1.5">
+          {rating && (
+            <div className="text-xs">
+              <StarRating value={rating} />
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-1">
+            {genre.slice(0, 2).map((g) => (
+              <span
+                key={g}
+                className="text-xs text-parchment/60 bg-bark px-2 py-0.5 rounded-full"
+              >
+                {g}
+              </span>
+            ))}
           </div>
-        )}
-
-        <div className="flex flex-wrap gap-1 mt-2">
-          {genre.slice(0, 2).map((g) => (
-            <span
-              key={g}
-              className="text-xs text-parchment/60 bg-bark px-2 py-0.5 rounded-full"
-            >
-              {g}
-            </span>
-          ))}
         </div>
       </div>
     </div>

@@ -122,6 +122,7 @@ export default function Library() {
                 key={book._id}
                 to={`/books/${book._id}`}
                 aria-label={`${book.title} by ${book.author}`}
+                className="block h-full"
               >
                 <BookCard
                   title={book.title}
