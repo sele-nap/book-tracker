@@ -40,8 +40,9 @@ export default function SettingsDeleteForm() {
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <p className="text-base text-parchment">{t.settings.confirmDelete}</p>
-          <Field label={t.settings.currentPassword}>
+          <Field label={t.settings.currentPassword} htmlFor="settings-delete-pw">
             <input
+              id="settings-delete-pw"
               type="password"
               required
               autoComplete="current-password"

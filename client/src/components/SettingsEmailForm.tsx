@@ -38,8 +38,9 @@ export default function SettingsEmailForm() {
   return (
     <SettingsSection title={t.settings.emailSection}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <Field label={t.settings.newEmail}>
+        <Field label={t.settings.newEmail} htmlFor="settings-new-email">
           <input
+            id="settings-new-email"
             type="email"
             required
             autoComplete="email"
@@ -50,8 +51,9 @@ export default function SettingsEmailForm() {
             className={inputCls}
           />
         </Field>
-        <Field label={t.settings.currentPassword}>
+        <Field label={t.settings.currentPassword} htmlFor="settings-email-current-pw">
           <input
+            id="settings-email-current-pw"
             type="password"
             required
             autoComplete="current-password"

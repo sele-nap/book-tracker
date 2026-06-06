@@ -1,4 +1,5 @@
 import type { Types } from 'mongoose';
+import { Book } from '../models/Book.js';
 import { Challenge } from '../models/Challenge.js';
 
 export const challengeService = {
@@ -22,6 +23,8 @@ export const challengeService = {
   },
 
   async addBook(userId: Types.ObjectId, id: string, bookId: string) {
+    const book = await Book.findOne({ _id: bookId, userId });
+    if (!book) return null;
     return Challenge.findOneAndUpdate(
       { _id: id, userId },
       { $addToSet: { books: bookId } },

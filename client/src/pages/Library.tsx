@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useSWR from 'swr';
 import type { BooksPage, Read, ReadStatus } from '../api/books';
@@ -11,6 +11,7 @@ import LibraryFilters from '../components/LibraryFilters';
 import LibraryPagination from '../components/LibraryPagination';
 import Modal from '../components/Modal';
 import { LibrarySkeleton } from '../components/Skeleton';
+import { useDebounce } from '../hooks/useDebounce';
 import { useLanguage } from '../hooks/useLanguage';
 import { useToast } from '../hooks/useToast';
 
@@ -20,22 +21,10 @@ export default function Library() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [search, setSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | ReadStatus>('all');
   const [showAddModal, setShowAddModal] = useState(false);
   const [page, setPage] = useState(1);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      setDebouncedSearch(search);
-      setPage(1);
-    }, 350);
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, [search]);
+  const debouncedSearch = useDebounce(search, 350);
 
   useEffect(() => {
     document.title = `${t.library.title} — Book Tracker`;
@@ -55,7 +44,10 @@ export default function Library() {
     mutate: refetchReads,
   } = useSWR<Read[]>('/reads', readsApi.getAll);
 
-  const readsByBookId = new Map(reads?.map((r) => [r.book._id, r]) ?? []);
+  const readsByBookId = useMemo(
+    () => new Map(reads?.map((r) => [r.book._id, r]) ?? []),
+    [reads],
+  );
   const books = (booksPage?.books ?? []).filter(
     (b) =>
       statusFilter === 'all' ||
@@ -101,7 +93,10 @@ export default function Library() {
 
       <LibraryFilters
         search={search}
-        onSearchChange={setSearch}
+        onSearchChange={(v) => {
+          setSearch(v);
+          setPage(1);
+        }}
         statusFilter={statusFilter}
         onStatusChange={(v) => {
           setStatusFilter(v);

@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { SWRConfig } from 'swr';
+import { ApiError } from './api/client.js';
 import RequireAuth from './components/RequireAuth.js';
 import { ToastProvider } from './components/Toaster.js';
 import { AuthProvider } from './contexts/auth.js';
@@ -20,21 +22,35 @@ export default function App() {
       <ToastProvider>
         <AuthProvider>
           <BrowserRouter>
-            <Routes>
-              <Route path="/login" element={<Auth />} />
-              <Route element={<RequireAuth />}>
-                <Route element={<RootLayout />}>
-                  <Route index element={<Library />} />
-                  <Route path="books/:id" element={<BookDetail />} />
-                  <Route path="reading" element={<Reading />} />
-                  <Route path="shelves" element={<Shelves />} />
-                  <Route path="stats" element={<Stats />} />
-                  <Route path="challenges" element={<Challenges />} />
-                  <Route path="timeline" element={<Timeline />} />
-                  <Route path="settings" element={<Settings />} />
+            <SWRConfig
+              value={{
+                onError: (err) => {
+                  if (
+                    err instanceof ApiError &&
+                    err.status === 401 &&
+                    window.location.pathname !== '/login'
+                  ) {
+                    window.location.href = '/login';
+                  }
+                },
+              }}
+            >
+              <Routes>
+                <Route path="/login" element={<Auth />} />
+                <Route element={<RequireAuth />}>
+                  <Route element={<RootLayout />}>
+                    <Route index element={<Library />} />
+                    <Route path="books/:id" element={<BookDetail />} />
+                    <Route path="reading" element={<Reading />} />
+                    <Route path="shelves" element={<Shelves />} />
+                    <Route path="stats" element={<Stats />} />
+                    <Route path="challenges" element={<Challenges />} />
+                    <Route path="timeline" element={<Timeline />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
                 </Route>
-              </Route>
-            </Routes>
+              </Routes>
+            </SWRConfig>
           </BrowserRouter>
         </AuthProvider>
       </ToastProvider>

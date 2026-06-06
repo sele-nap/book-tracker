@@ -1,5 +1,6 @@
 import type { Types } from 'mongoose';
 import { Book } from '../models/Book.js';
+import { Read } from '../models/Read.js';
 
 export const bookService = {
   async getPaginated(
@@ -37,7 +38,9 @@ export const bookService = {
   },
 
   async delete(userId: Types.ObjectId, id: string) {
-    return Book.findOneAndDelete({ _id: id, userId });
+    const book = await Book.findOneAndDelete({ _id: id, userId });
+    if (book) await Read.deleteMany({ userId, book: book._id });
+    return book;
   },
 
   async search(userId: Types.ObjectId, q: string) {

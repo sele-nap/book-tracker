@@ -53,7 +53,7 @@ export default function RootLayout() {
           </span>
         </div>
 
-        <nav aria-label="Main navigation">
+        <nav aria-label="Sidebar navigation">
           <ul className="flex flex-col gap-1">
             {nav.map(({ to, label, icon: Icon }) => (
               <li key={to}>

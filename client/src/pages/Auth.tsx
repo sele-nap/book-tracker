@@ -121,6 +121,8 @@ export default function Auth() {
           <button
             onClick={() => {
               setMode(mode === 'login' ? 'register' : 'login');
+              setEmail('');
+              setPassword('');
               setError('');
             }}
             className="mt-5 w-full text-center text-xs text-stone hover:text-parchment transition-colors"

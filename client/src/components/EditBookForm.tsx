@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { Book, BookLanguage, Read, ReadStatus } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
 import { useLanguage } from '../hooks/useLanguage';
+import GenreTagInput from './GenreTagInput';
 
 type Props = { book: Book; read?: Read; onSuccess: () => void };
 
@@ -13,7 +14,6 @@ const labelClass = 'block text-xs text-parchment mb-1';
 export default function EditBookForm({ book, read, onSuccess }: Props) {
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
-  const [genreInput, setGenreInput] = useState('');
 
   const [fields, setFields] = useState({
     title: book.title,
@@ -35,16 +35,6 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
       >,
     ) =>
       setFields((f) => ({ ...f, [key]: e.target.value }));
-
-  const addGenre = () => {
-    const g = genreInput.trim().toLowerCase();
-    if (g && !fields.genre.includes(g))
-      setFields((f) => ({ ...f, genre: [...f.genre, g] }));
-    setGenreInput('');
-  };
-
-  const removeGenre = (g: string) =>
-    setFields((f) => ({ ...f, genre: f.genre.filter((x) => x !== g) }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,54 +122,11 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
         </div>
       </div>
 
-      <div>
-        <label htmlFor="edit-genre" className={labelClass}>
-          {t.form.genre}
-        </label>
-        <div className="flex gap-2">
-          <input
-            id="edit-genre"
-            className={inputClass}
-            value={genreInput}
-            onChange={(e) => setGenreInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                addGenre();
-              }
-            }}
-            placeholder="fantasy…"
-          />
-          <button
-            type="button"
-            onClick={addGenre}
-            aria-label="Add genre"
-            className="text-xs bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
-          >
-            +
-          </button>
-        </div>
-        {fields.genre.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
-            {fields.genre.map((g) => (
-              <span
-                key={g}
-                className="flex items-center gap-1 text-xs bg-mist/20 text-parchment px-2 py-0.5 rounded-full"
-              >
-                {g}
-                <button
-                  type="button"
-                  onClick={() => removeGenre(g)}
-                  aria-label={`Remove genre ${g}`}
-                  className="text-stone hover:text-cream"
-                >
-                  ✕
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+      <GenreTagInput
+        label={t.form.genre}
+        genres={fields.genre}
+        onChange={(genre) => setFields((f) => ({ ...f, genre }))}
+      />
 
       <div className="grid grid-cols-2 gap-3">
         <div>

@@ -32,8 +32,9 @@ export default function SettingsPasswordForm() {
   return (
     <SettingsSection title={t.settings.passwordSection}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <Field label={t.settings.currentPassword}>
+        <Field label={t.settings.currentPassword} htmlFor="settings-pw-current">
           <input
+            id="settings-pw-current"
             type="password"
             required
             autoComplete="current-password"
@@ -44,8 +45,9 @@ export default function SettingsPasswordForm() {
             className={inputCls}
           />
         </Field>
-        <Field label={t.settings.newPassword}>
+        <Field label={t.settings.newPassword} htmlFor="settings-pw-new">
           <input
+            id="settings-pw-new"
             type="password"
             required
             minLength={8}

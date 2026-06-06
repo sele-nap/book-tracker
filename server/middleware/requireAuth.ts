@@ -12,7 +12,14 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
   }
 
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as { sub: string };
+    const payload = jwt.verify(token, JWT_SECRET) as { sub?: unknown };
+    if (
+      typeof payload.sub !== 'string' ||
+      !Types.ObjectId.isValid(payload.sub)
+    ) {
+      res.status(401).send();
+      return;
+    }
     req.userId = new Types.ObjectId(payload.sub);
     next();
   } catch {

@@ -6,6 +6,7 @@ import type { Book, Read } from '../api/books';
 import { booksApi, readsApi } from '../api/books';
 import BookMeta from '../components/BookMeta';
 import BookReview from '../components/BookReview';
+import ConfirmModal from '../components/ConfirmModal';
 import EditBookForm from '../components/EditBookForm';
 import Modal from '../components/Modal';
 import { useLanguage } from '../hooks/useLanguage';
@@ -17,12 +18,15 @@ export default function BookDetail() {
   const { t } = useLanguage();
   const { toast } = useToast();
   const [showEdit, setShowEdit] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const { data: book, mutate: refetchBook } = useSWR<Book>(
-    id ? ['/books', id] : null,
-    () => booksApi.getById(id!),
-  );
+  const {
+    data: book,
+    error: bookErr,
+    isLoading: bookLoading,
+    mutate: refetchBook,
+  } = useSWR<Book>(id ? ['/books', id] : null, () => booksApi.getById(id!));
   const { data: read, mutate: refetchRead } = useSWR<Read | null>(
     id ? ['/reads/book', id] : null,
     () =>
@@ -45,15 +49,14 @@ export default function BookDetail() {
   }, [book]);
 
   const handleDelete = async () => {
-    if (!book || !window.confirm(t.bookDetail.confirmDelete)) return;
+    if (!book) return;
     setDeleting(true);
-    if (read) await readsApi.delete(read._id);
     await booksApi.delete(book._id);
     toast(t.toast.bookDeleted);
     navigate('/');
   };
 
-  if (!book)
+  if (bookLoading)
     return (
       <div className="flex justify-center mt-16">
         <CircleNotch
@@ -61,6 +64,19 @@ export default function BookDetail() {
           weight="light"
           className="animate-spin text-stone"
         />
+      </div>
+    );
+
+  if (bookErr || !book)
+    return (
+      <div className="flex flex-col items-center mt-16 gap-4">
+        <p className="text-parchment">{t.bookDetail.notFound}</p>
+        <button
+          onClick={() => navigate('/')}
+          className="text-sm text-stone hover:text-cream transition-colors"
+        >
+          {t.bookDetail.back}
+        </button>
       </div>
     );
 
@@ -88,11 +104,24 @@ export default function BookDetail() {
         </Modal>
       )}
 
+      {showDeleteConfirm && (
+        <ConfirmModal
+          title={t.bookDetail.delete}
+          message={t.bookDetail.confirmDelete}
+          confirmLabel={t.bookDetail.delete}
+          cancelLabel={t.settings.cancel}
+          onConfirm={handleDelete}
+          onClose={() => setShowDeleteConfirm(false)}
+          loading={deleting}
+          danger
+        />
+      )}
+
       <BookMeta
         book={book}
         read={read}
         onEdit={() => setShowEdit(true)}
-        onDelete={handleDelete}
+        onDelete={() => setShowDeleteConfirm(true)}
         deleting={deleting}
       />
 
