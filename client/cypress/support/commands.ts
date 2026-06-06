@@ -1,5 +1,4 @@
-const TEST_EMAIL = 'test@booktracker.dev';
-const TEST_PASSWORD = 'password123';
+import { TEST_EMAIL, TEST_PASSWORD } from './constants';
 
 Cypress.Commands.add(
   'login',

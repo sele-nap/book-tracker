@@ -1,5 +1,4 @@
-const EMAIL = 'test@booktracker.dev';
-const PASSWORD = 'password123';
+import { TEST_EMAIL, TEST_PASSWORD } from '../support/constants';
 
 describe('Auth', () => {
   before(() => cy.seed());
@@ -8,14 +7,14 @@ describe('Auth', () => {
     beforeEach(() => cy.visit('/login'));
 
     it('redirects to library after successful login', () => {
-      cy.get('input[type="email"]').type(EMAIL);
-      cy.get('input[type="password"]').type(PASSWORD);
+      cy.get('input[type="email"]').type(TEST_EMAIL);
+      cy.get('input[type="password"]').type(TEST_PASSWORD);
       cy.get('button[type="submit"]').click();
       cy.url().should('eq', Cypress.config('baseUrl') + '/');
     });
 
     it('shows error on wrong credentials', () => {
-      cy.get('input[type="email"]').type(EMAIL);
+      cy.get('input[type="email"]').type(TEST_EMAIL);
       cy.get('input[type="password"]').type('wrongpassword');
       cy.get('button[type="submit"]').click();
       cy.get('[role="alert"]').should('be.visible');
@@ -46,7 +45,7 @@ describe('Auth', () => {
     it('shows error when email already taken', () => {
       cy.visit('/login');
       cy.contains('button', /pas encore|no account/i).click();
-      cy.get('input[type="email"]').type(EMAIL);
+      cy.get('input[type="email"]').type(TEST_EMAIL);
       cy.get('input[type="password"]').type('somepassword123');
       cy.get('button[type="submit"]').click();
       cy.get('[role="alert"]').should('be.visible');

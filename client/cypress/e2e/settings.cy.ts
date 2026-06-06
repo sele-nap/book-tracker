@@ -1,5 +1,4 @@
-const EMAIL = 'test@booktracker.dev';
-const PASSWORD = 'password123';
+import { TEST_EMAIL, TEST_PASSWORD } from '../support/constants';
 
 describe('Settings', () => {
   before(() => cy.seed());
@@ -7,7 +6,7 @@ describe('Settings', () => {
 
   it('displays current email', () => {
     cy.visit('/settings');
-    cy.contains(EMAIL).should('be.visible');
+    cy.contains(TEST_EMAIL).should('be.visible');
   });
 
   it('shows error on wrong current password (email form)', () => {
@@ -32,12 +31,11 @@ describe('Settings', () => {
 
   it('changes password successfully', () => {
     cy.visit('/settings');
-    cy.get('input[autocomplete="current-password"]').eq(1).type(PASSWORD);
+    cy.get('input[autocomplete="current-password"]').eq(1).type(TEST_PASSWORD);
     cy.get('input[autocomplete="new-password"]').type('newpassword123');
     cy.get('button[type="submit"]').eq(1).click();
-    // toast or no error = success, then re-seed for next tests
     cy.get('[role="alert"]').should('not.exist');
-    cy.task('seed'); // reset so other tests aren't affected
+    cy.task('seed');
   });
 
   it('shows danger zone with delete button', () => {
