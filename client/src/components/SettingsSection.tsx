@@ -9,7 +9,7 @@ export function SettingsSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="bg-dusk border border-mist/20 rounded-2xl p-6 flex flex-col gap-4">
+    <section className="bg-dusk border border-mist/20 rounded-2xl p-4 sm:p-6 flex flex-col gap-4">
       <h2 className="font-display text-xl text-cream">{title}</h2>
       {children}
     </section>

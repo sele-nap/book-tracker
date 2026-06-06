@@ -93,7 +93,7 @@ export default function AddBookForm({ onSuccess }: Props) {
     >
       <BookSearchInput label={t.form.search} onSelect={fillFrom} />
 
-      <div className="border-t border-mist/20 pt-4 grid grid-cols-2 gap-3">
+      <div className="border-t border-mist/20 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="col-span-2">
           <label htmlFor="add-title" className={labelClass}>
             {t.form.title} *
@@ -156,7 +156,7 @@ export default function AddBookForm({ onSuccess }: Props) {
         onChange={(genre) => setFields((f) => ({ ...f, genre }))}
       />
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label htmlFor="add-language" className={labelClass}>
             {t.bookLanguage.label}
@@ -236,7 +236,7 @@ export default function AddBookForm({ onSuccess }: Props) {
         type="submit"
         disabled={loading}
         aria-busy={loading}
-        className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-lg transition-colors font-body"
+        className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-2xl transition-all duration-200 hover:scale-[1.02] font-body"
       >
         {loading ? (
           <CircleNotch

@@ -85,7 +85,7 @@ export default function Library() {
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="bg-wine hover:bg-rose text-cream text-sm px-4 py-2 rounded-lg transition-colors font-body"
+          className="bg-wine hover:bg-rose text-cream text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
         >
           {t.library.add}
         </button>
@@ -114,7 +114,7 @@ export default function Library() {
       ) : books.length === 0 ? (
         <EmptyState message={t.library.empty} variant="book" />
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 animate-fade-in">
           {books.map((book) => {
             const read = readsByBookId.get(book._id);
             return (

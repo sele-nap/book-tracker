@@ -40,7 +40,10 @@ export default function SettingsDeleteForm() {
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <p className="text-base text-parchment">{t.settings.confirmDelete}</p>
-          <Field label={t.settings.currentPassword} htmlFor="settings-delete-pw">
+          <Field
+            label={t.settings.currentPassword}
+            htmlFor="settings-delete-pw"
+          >
             <input
               id="settings-delete-pw"
               type="password"
@@ -60,7 +63,7 @@ export default function SettingsDeleteForm() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-rose-800/60 hover:bg-rose-700/60 text-cream text-base font-body px-5 py-2.5 rounded-lg transition-colors disabled:opacity-50"
+              className="bg-rose-800/60 hover:bg-rose-700/60 text-cream text-base font-body px-5 py-2.5 rounded-2xl transition-all duration-200 disabled:opacity-50"
             >
               {loading ? '…' : t.settings.confirm}
             </button>

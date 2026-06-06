@@ -51,9 +51,9 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
   const duration = readDuration(read.startedAt, read.finishedAt);
 
   return (
-    <div className="flex gap-4 group">
+    <div className="flex gap-2 sm:gap-4 group">
       {/* Timeline spine */}
-      <div className="flex flex-col items-center shrink-0 w-10">
+      <div className="flex flex-col items-center shrink-0 w-7 sm:w-10">
         <div className="w-2.5 h-2.5 rounded-full bg-wine mt-1.5 shrink-0 group-hover:bg-blush transition-colors" />
         <div className="w-px flex-1 bg-mist/20 mt-1" />
       </div>
@@ -61,7 +61,7 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
       {/* Card */}
       <Link
         to={`/books/${read.book._id}`}
-        className="flex gap-3 pb-6 flex-1 hover:opacity-80 transition-opacity"
+        className="flex gap-2 sm:gap-3 pb-5 sm:pb-6 flex-1 hover:opacity-80 transition-opacity"
       >
         {/* Date label */}
         <div className="shrink-0 w-10 text-right mt-0.5">

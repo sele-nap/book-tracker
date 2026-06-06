@@ -80,11 +80,11 @@ export default function ReadingCard({
   };
 
   return (
-    <div className="bg-dusk border border-mist/30 rounded-xl p-5 flex gap-4">
+    <div className="bg-dusk border border-mist/30 rounded-2xl p-5 flex gap-4 hover:border-mist/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-night/60 transition-all duration-300">
       <Link
         to={`/books/${book._id}`}
         aria-label={book.title}
-        className="w-14 h-20 bg-bark rounded-lg shrink-0 flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity"
+        className="w-14 h-20 bg-bark rounded-xl shrink-0 flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity"
       >
         {book.coverUrl ? (
           <img
@@ -136,13 +136,13 @@ export default function ReadingCard({
               value={pageInput}
               onChange={(e) => setPageInput(e.target.value)}
               placeholder={t.reading.currentPage}
-              className="w-24 bg-bark border border-mist/40 rounded-lg px-2 py-1 text-cream text-xs focus:border-mist/60"
+              className="w-24 bg-bark border border-mist/40 rounded-full px-3 py-1 text-cream text-xs focus:border-mist/60"
             />
             <button
               onClick={savePage}
               disabled={saving}
               aria-busy={saving}
-              className="text-xs bg-bark border border-mist/40 rounded-lg px-3 py-1 text-parchment hover:text-cream transition-colors"
+              className="text-xs bg-bark border border-mist/40 rounded-full px-3 py-1 text-parchment hover:text-cream transition-colors"
             >
               {saving ? (
                 <CircleNotch
@@ -160,14 +160,14 @@ export default function ReadingCard({
           <div className="flex gap-2 pt-1 border-t border-mist/20">
             <button
               onClick={() => markAs('finished')}
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-sage/40 text-sage hover:bg-sage/10 transition-colors"
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-sage/40 text-sage hover:bg-sage/10 transition-colors"
             >
               <Check size={11} weight="bold" aria-hidden="true" />
               {t.reading.markFinished}
             </button>
             <button
               onClick={() => markAs('dropped')}
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-mist/30 text-stone hover:border-mist/50 hover:text-parchment transition-colors"
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-mist/30 text-stone hover:border-mist/50 hover:text-parchment transition-colors"
             >
               <span aria-hidden="true">×</span>
               {t.reading.markDropped}

@@ -33,7 +33,7 @@ function ChallengeCard({
 
   return (
     <div
-      className={`bg-dusk border rounded-2xl p-6 space-y-5 ${done ? 'border-amber/50' : 'border-mist/30'}`}
+      className={`bg-dusk border rounded-3xl p-6 space-y-5 hover:-translate-y-1.5 hover:scale-[1.01] hover:shadow-2xl hover:shadow-night/70 transition-all duration-300 ${done ? 'border-amber/50 hover:border-amber/70' : 'border-mist/30 hover:border-mist/50'}`}
     >
       <div className="flex items-start justify-between">
         <div>
@@ -379,7 +379,7 @@ export default function Challenges() {
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="bg-wine hover:bg-rose text-cream text-sm px-4 py-2 rounded-lg transition-colors font-body"
+          className="bg-wine hover:bg-rose text-cream text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
         >
           {t.challenges.new}
         </button>
@@ -395,7 +395,7 @@ export default function Challenges() {
       ) : !challenges?.length ? (
         <EmptyState message={t.challenges.noChallenges} variant="moon" />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in">
           {challenges.map((c) => (
             <ChallengeCard
               key={c._id}

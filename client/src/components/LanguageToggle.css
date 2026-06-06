@@ -4,12 +4,12 @@
   left: 50%;
   width: 4px;
   height: 4px;
-  background: #c49a50;
+  background: #c49848;
   border-radius: 50%;
   pointer-events: none;
   z-index: 0;
   animation: particle-float 1s ease-out forwards;
-  box-shadow: 0 0 8px #c49a50;
+  box-shadow: 0 0 8px #c49848;
 }
 
 @keyframes particle-float {

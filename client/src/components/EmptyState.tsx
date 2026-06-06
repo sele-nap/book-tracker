@@ -11,17 +11,17 @@ const illustrations: Record<Variant, ReactElement> = {
         width="36"
         height="44"
         rx="4"
-        fill="#2a2330"
-        stroke="#3d3547"
+        fill="#3c2e58"
+        stroke="#564474"
         strokeWidth="1.5"
       />
-      <rect x="22" y="20" width="4" height="44" rx="2" fill="#3d3547" />
+      <rect x="22" y="20" width="4" height="44" rx="2" fill="#564474" />
       <line
         x1="30"
         y1="32"
         x2="48"
         y2="32"
-        stroke="#3d3547"
+        stroke="#564474"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -30,7 +30,7 @@ const illustrations: Record<Variant, ReactElement> = {
         y1="38"
         x2="48"
         y2="38"
-        stroke="#3d3547"
+        stroke="#564474"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -39,17 +39,17 @@ const illustrations: Record<Variant, ReactElement> = {
         y1="44"
         x2="42"
         y2="44"
-        stroke="#3d3547"
+        stroke="#564474"
         strokeWidth="1.5"
         strokeLinecap="round"
       />
-      <text x="52" y="26" fontSize="10" fill="#c49a50" opacity="0.7">
+      <text x="52" y="26" fontSize="10" fill="#c49848" opacity="0.7">
         ✦
       </text>
-      <text x="14" y="22" fontSize="8" fill="#c49a50" opacity="0.5">
+      <text x="14" y="22" fontSize="8" fill="#c49848" opacity="0.5">
         ✦
       </text>
-      <text x="50" y="52" fontSize="7" fill="#c49a50" opacity="0.4">
+      <text x="50" y="52" fontSize="7" fill="#c49848" opacity="0.4">
         ✦
       </text>
     </svg>
@@ -62,28 +62,28 @@ const illustrations: Record<Variant, ReactElement> = {
         width="14"
         height="24"
         rx="3"
-        fill="#2a2330"
-        stroke="#3d3547"
+        fill="#3c2e58"
+        stroke="#564474"
         strokeWidth="1.5"
       />
-      <rect x="30" y="62" width="20" height="5" rx="2" fill="#3d3547" />
+      <rect x="30" y="62" width="20" height="5" rx="2" fill="#564474" />
       <line
         x1="40"
         y1="42"
         x2="40"
         y2="36"
-        stroke="#8a7a6a"
+        stroke="#c0a0cc"
         strokeWidth="1.2"
       />
-      <ellipse cx="40" cy="33" rx="4" ry="5" fill="#c49a50" opacity="0.6" />
-      <ellipse cx="40" cy="32" rx="2" ry="3" fill="#e8dfc8" opacity="0.8" />
-      <text x="52" y="38" fontSize="9" fill="#c49a50" opacity="0.5">
+      <ellipse cx="40" cy="33" rx="4" ry="5" fill="#c49848" opacity="0.6" />
+      <ellipse cx="40" cy="32" rx="2" ry="3" fill="#faf0fc" opacity="0.8" />
+      <text x="52" y="38" fontSize="9" fill="#c49848" opacity="0.5">
         ✦
       </text>
-      <text x="20" y="44" fontSize="7" fill="#c49a50" opacity="0.4">
+      <text x="20" y="44" fontSize="7" fill="#c49848" opacity="0.4">
         ✦
       </text>
-      <text x="54" y="52" fontSize="6" fill="#c49a50" opacity="0.3">
+      <text x="54" y="52" fontSize="6" fill="#c49848" opacity="0.3">
         ✦
       </text>
     </svg>
@@ -97,8 +97,8 @@ const illustrations: Record<Variant, ReactElement> = {
           <circle cx="50" cy="37" r="17" fill="black" />
         </mask>
         <radialGradient id="moon-glow" cx="35%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#c49a50" stopOpacity="0.18" />
-          <stop offset="100%" stopColor="#c49a50" stopOpacity="0" />
+          <stop offset="0%" stopColor="#c49848" stopOpacity="0.18" />
+          <stop offset="100%" stopColor="#c49848" stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -116,8 +116,8 @@ const illustrations: Record<Variant, ReactElement> = {
         cx="37"
         cy="41"
         r="19"
-        fill="#2a2330"
-        stroke="#c49a50"
+        fill="#3c2e58"
+        stroke="#c49848"
         strokeWidth="1.2"
         strokeOpacity="0.7"
         mask="url(#moon-crescent-mask)"
@@ -129,7 +129,7 @@ const illustrations: Record<Variant, ReactElement> = {
         cy="37"
         r="17"
         fill="none"
-        stroke="#c49a50"
+        stroke="#c49848"
         strokeWidth="0.6"
         strokeOpacity="0.25"
         mask="url(#moon-crescent-mask)"
@@ -141,7 +141,7 @@ const illustrations: Record<Variant, ReactElement> = {
         cy="43"
         r="2.5"
         fill="none"
-        stroke="#3d3547"
+        stroke="#564474"
         strokeWidth="0.8"
         mask="url(#moon-crescent-mask)"
       />
@@ -150,7 +150,7 @@ const illustrations: Record<Variant, ReactElement> = {
         cy="53"
         r="1.6"
         fill="none"
-        stroke="#3d3547"
+        stroke="#564474"
         strokeWidth="0.7"
         mask="url(#moon-crescent-mask)"
       />
@@ -159,22 +159,22 @@ const illustrations: Record<Variant, ReactElement> = {
         cy="34"
         r="1.8"
         fill="none"
-        stroke="#3d3547"
+        stroke="#564474"
         strokeWidth="0.6"
         mask="url(#moon-crescent-mask)"
       />
 
       {/* Stars */}
-      <text x="54" y="24" fontSize="10" fill="#c49a50" opacity="0.7">
+      <text x="54" y="24" fontSize="10" fill="#c49848" opacity="0.7">
         ✦
       </text>
-      <text x="17" y="22" fontSize="7" fill="#c49a50" opacity="0.5">
+      <text x="17" y="22" fontSize="7" fill="#c49848" opacity="0.5">
         ✦
       </text>
-      <text x="59" y="53" fontSize="8" fill="#c49a50" opacity="0.45">
+      <text x="59" y="53" fontSize="8" fill="#c49848" opacity="0.45">
         ✦
       </text>
-      <text x="14" y="58" fontSize="5" fill="#c49a50" opacity="0.3">
+      <text x="14" y="58" fontSize="5" fill="#c49848" opacity="0.3">
         ✦
       </text>
     </svg>
@@ -183,29 +183,29 @@ const illustrations: Record<Variant, ReactElement> = {
     <svg viewBox="0 0 80 80" className="w-20 h-20" fill="none">
       <path
         d="M30 50 Q29 58 31 63 Q40 68 49 63 Q51 58 50 50Z"
-        fill="#2a2330"
-        stroke="#3d3547"
+        fill="#3c2e58"
+        stroke="#564474"
         strokeWidth="1.2"
       />
       <path
         d="M14 46 Q15 24 40 18 Q65 24 66 46 Q54 38 40 37 Q26 38 14 46Z"
-        fill="#2a2330"
-        stroke="#3d3547"
+        fill="#3c2e58"
+        stroke="#564474"
         strokeWidth="1.5"
       />
       <path
         d="M14 46 Q26 52 40 53 Q54 52 66 46"
-        stroke="#3d3547"
+        stroke="#564474"
         strokeWidth="1.2"
         fill="none"
       />
-      <ellipse cx="32" cy="34" rx="5" ry="4" fill="#3d3547" />
-      <ellipse cx="50" cy="30" rx="4.5" ry="3.5" fill="#3d3547" />
-      <ellipse cx="41" cy="24" rx="3.5" ry="3" fill="#3d3547" />
-      <text x="10" y="30" fontSize="8" fill="#c49a50" opacity="0.5">
+      <ellipse cx="32" cy="34" rx="5" ry="4" fill="#564474" />
+      <ellipse cx="50" cy="30" rx="4.5" ry="3.5" fill="#564474" />
+      <ellipse cx="41" cy="24" rx="3.5" ry="3" fill="#564474" />
+      <text x="10" y="30" fontSize="8" fill="#c49848" opacity="0.5">
         ✦
       </text>
-      <text x="60" y="28" fontSize="7" fill="#c49a50" opacity="0.4">
+      <text x="60" y="28" fontSize="7" fill="#c49848" opacity="0.4">
         ✦
       </text>
     </svg>

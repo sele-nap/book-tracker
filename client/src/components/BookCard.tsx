@@ -38,7 +38,7 @@ export default function BookCard({
   const { t } = useLanguage();
 
   return (
-    <div className="bg-dusk border border-mist/30 rounded-xl overflow-hidden hover:border-mist/60 transition-colors group">
+    <div className="bg-dusk border border-mist/30 rounded-2xl overflow-hidden hover:border-mist/50 hover:-translate-y-1.5 hover:scale-[1.01] hover:shadow-2xl hover:shadow-night/70 transition-all duration-300 group">
       <div className="h-40 bg-bark flex items-center justify-center overflow-hidden">
         {coverUrl ? (
           <img

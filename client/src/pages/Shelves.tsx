@@ -26,7 +26,7 @@ function ShelfCard({
   const previews = shelf.books.slice(0, 4);
 
   return (
-    <div className="bg-dusk border border-mist/30 rounded-xl p-5 flex flex-col gap-4 hover:border-mist/60 transition-colors">
+    <div className="bg-dusk border border-mist/30 rounded-2xl p-5 flex flex-col gap-4 hover:border-mist/50 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-night/60 transition-all duration-300">
       <div className="flex items-start justify-between">
         <div>
           <h3 className="font-display text-cream">{shelf.name}</h3>
@@ -337,7 +337,7 @@ export default function Shelves() {
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="bg-wine hover:bg-rose text-cream text-sm px-4 py-2 rounded-lg transition-colors font-body"
+          className="bg-wine hover:bg-rose text-cream text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
         >
           {t.shelves.new}
         </button>
@@ -353,7 +353,7 @@ export default function Shelves() {
       ) : !shelves?.length ? (
         <EmptyState message={t.shelves.noShelves} variant="mushroom" />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
           {shelves.map((shelf) => (
             <ShelfCard
               key={shelf._id}

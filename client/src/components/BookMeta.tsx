@@ -29,9 +29,9 @@ export default function BookMeta({
   const { t } = useLanguage();
 
   return (
-    <div className="flex flex-col md:flex-row gap-8">
-      <div className="shrink-0">
-        <div className="w-40 h-56 bg-bark rounded-xl overflow-hidden">
+    <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+      <div className="shrink-0 flex justify-center md:justify-start">
+        <div className="w-32 h-44 sm:w-40 sm:h-56 bg-bark rounded-xl overflow-hidden">
           {book.coverUrl ? (
             <img
               src={book.coverUrl}

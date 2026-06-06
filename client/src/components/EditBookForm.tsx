@@ -69,7 +69,7 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
       onSubmit={handleSubmit}
       className="flex flex-col gap-4 max-h-[75vh] overflow-y-auto pr-1"
     >
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="col-span-2">
           <label htmlFor="edit-title" className={labelClass}>
             {t.form.title} *
@@ -128,7 +128,7 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
         onChange={(genre) => setFields((f) => ({ ...f, genre }))}
       />
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
           <label htmlFor="edit-language" className={labelClass}>
             {t.bookLanguage.label}
@@ -208,7 +208,7 @@ export default function EditBookForm({ book, read, onSuccess }: Props) {
         type="submit"
         disabled={loading}
         aria-busy={loading}
-        className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-lg transition-colors font-body"
+        className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-2xl transition-all duration-200 hover:scale-[1.02] font-body"
       >
         {loading ? (
           <CircleNotch

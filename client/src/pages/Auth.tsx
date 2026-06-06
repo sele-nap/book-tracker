@@ -54,7 +54,7 @@ export default function Auth() {
           </span>
         </div>
 
-        <div className="bg-dusk border border-mist/20 rounded-2xl p-8">
+        <div className="bg-dusk border border-mist/20 rounded-2xl p-5 sm:p-8">
           <h1 className="font-display text-lg text-cream mb-6">
             {mode === 'login' ? t.auth.login : t.auth.register}
           </h1>
@@ -108,7 +108,7 @@ export default function Auth() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 bg-wine/80 hover:bg-wine text-cream text-sm font-body py-2.5 rounded-lg transition-colors disabled:opacity-50"
+              className="mt-2 bg-wine/80 hover:bg-wine text-cream text-sm font-body py-2.5 rounded-2xl transition-all duration-200 disabled:opacity-50"
             >
               {submitting
                 ? '…'

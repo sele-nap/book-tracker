@@ -45,7 +45,7 @@ export default function Modal({ title, onClose, children }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-night/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-night/80 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div
@@ -53,9 +53,14 @@ export default function Modal({ title, onClose, children }: Props) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="bg-dusk border border-mist/30 rounded-2xl w-full max-w-lg mx-4 p-6 shadow-2xl"
+        className="bg-dusk border border-mist/30 rounded-3xl w-full max-w-lg mx-3 p-4 sm:p-6 shadow-2xl shadow-night/60 animate-scale-in relative overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Top accent line */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-wine/50 to-transparent"
+        />
         <div className="flex items-center justify-between mb-6">
           <h2 id={titleId} className="text-xl font-display text-cream">
             {title}
@@ -63,7 +68,7 @@ export default function Modal({ title, onClose, children }: Props) {
           <button
             onClick={onClose}
             aria-label="Close"
-            className="text-stone hover:text-cream transition-colors text-lg leading-none"
+            className="text-stone hover:text-cream transition-colors duration-200 text-lg leading-none"
           >
             ✕
           </button>

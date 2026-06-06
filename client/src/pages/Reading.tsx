@@ -40,7 +40,7 @@ export default function Reading() {
       ) : !reads?.length ? (
         <EmptyState message={t.reading.empty} variant="candle" />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 animate-fade-in">
           {reads.map((read) => (
             <ReadingCard key={read._id} read={read} onUpdate={refetch} />
           ))}
