@@ -25,7 +25,6 @@
   --font-body: 'Crimson Text', 'Georgia', serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
-
 @layer base {
   html {
     background-color: var(--color-night);
@@ -59,7 +58,14 @@
     border-radius: 3px;
   }
 
-  /* 2.4.7 — inputs show focus via border-color; all other controls get a ring */
+  /* 2.4.7 — inputs show focus via border-color change; suppress default outline */
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: none;
+  }
+
+  /* All other interactive elements get a visible wine ring */
   :focus-visible:not(input, select, textarea) {
     outline: 2px solid var(--color-wine);
     outline-offset: 2px;

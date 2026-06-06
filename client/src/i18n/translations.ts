@@ -76,6 +76,7 @@ export const translations = {
       add: '+ ajouter',
       remove: 'retirer',
       confirmDelete: 'Supprimer cette étagère définitivement ?',
+      confirmDeleteLabel: 'Supprimer',
     },
     stats: {
       title: 'Stats',
@@ -249,6 +250,7 @@ export const translations = {
       add: '+ add',
       remove: 'remove',
       confirmDelete: 'Delete this shelf permanently?',
+      confirmDeleteLabel: 'Delete',
     },
     stats: {
       title: 'Stats',

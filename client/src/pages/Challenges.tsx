@@ -4,7 +4,7 @@ import {
   CircleNotch,
   Star,
 } from '@phosphor-icons/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import useSWR from 'swr';
 import type { Book } from '../api/books';
 import { booksApi } from '../api/books';
@@ -12,6 +12,7 @@ import type { Challenge } from '../api/challenges';
 import { challengesApi } from '../api/challenges';
 import ApiError from '../components/ApiError';
 import EmptyState from '../components/EmptyState';
+import GenreTagInput from '../components/GenreTagInput';
 import Modal from '../components/Modal';
 import { ChallengesSkeleton } from '../components/Skeleton';
 import { useLanguage } from '../hooks/useLanguage';
@@ -105,7 +106,6 @@ function ChallengeCard({
               <div
                 key={b._id}
                 className="w-9 h-12 bg-bark rounded overflow-hidden shrink-0"
-                title={b.title}
               >
                 {b.coverUrl ? (
                   <img
@@ -114,7 +114,10 @@ function ChallengeCard({
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center">
+                  <div
+                    aria-hidden="true"
+                    className="w-full h-full flex items-center justify-center"
+                  >
                     <BookIcon
                       size={12}
                       weight="light"
@@ -150,6 +153,7 @@ function AddBookModal({
   onUpdate: () => void;
 }) {
   const { t } = useLanguage();
+  const searchId = useId();
   const [search, setSearch] = useState('');
   const [results, setResults] = useState<Book[]>([]);
   const [searching, setSearching] = useState(false);
@@ -176,7 +180,11 @@ function AddBookModal({
     >
       <div className="space-y-4">
         <div className="flex gap-2">
+          <label htmlFor={searchId} className="sr-only">
+            {t.challenges.searchBooks}
+          </label>
           <input
+            id={searchId}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => {
@@ -234,15 +242,8 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
   const { t } = useLanguage();
   const [year, setYear] = useState(String(new Date().getFullYear()));
   const [goal, setGoal] = useState('');
-  const [genreInput, setGenreInput] = useState('');
   const [genres, setGenres] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const addGenre = () => {
-    const g = genreInput.trim().toLowerCase();
-    if (g && !genres.includes(g)) setGenres((gs) => [...gs, g]);
-    setGenreInput('');
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -299,55 +300,11 @@ function CreateChallengeForm({ onSuccess }: { onSuccess: () => void }) {
         </div>
       </div>
 
-      <div>
-        <label
-          htmlFor="challenge-genre"
-          className="block text-xs text-parchment mb-1"
-        >
-          {t.challenges.targetGenres}
-        </label>
-        <div className="flex gap-2">
-          <input
-            id="challenge-genre"
-            className={inputClass}
-            value={genreInput}
-            onChange={(e) => setGenreInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                addGenre();
-              }
-            }}
-            placeholder="fantasy…"
-          />
-          <button
-            type="button"
-            onClick={addGenre}
-            className="text-xs bg-bark border border-mist/40 rounded-lg px-3 text-parchment hover:text-cream transition-colors"
-          >
-            +
-          </button>
-        </div>
-        {genres.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-2">
-            {genres.map((g) => (
-              <span
-                key={g}
-                className="flex items-center gap-1 text-xs bg-mist/20 text-parchment px-2 py-0.5 rounded-full"
-              >
-                {g}
-                <button
-                  type="button"
-                  onClick={() => setGenres((gs) => gs.filter((x) => x !== g))}
-                  className="text-stone hover:text-cream"
-                >
-                  ✕
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+      <GenreTagInput
+        label={t.challenges.targetGenres}
+        genres={genres}
+        onChange={setGenres}
+      />
 
       <button
         type="submit"

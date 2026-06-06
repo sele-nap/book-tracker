@@ -1,5 +1,5 @@
 import { Book as BookIcon, CircleNotch } from '@phosphor-icons/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useSWR from 'swr';
 import type { Book } from '../api/books';
@@ -7,6 +7,7 @@ import { booksApi } from '../api/books';
 import type { Shelf } from '../api/shelves';
 import { shelvesApi } from '../api/shelves';
 import ApiError from '../components/ApiError';
+import ConfirmModal from '../components/ConfirmModal';
 import EmptyState from '../components/EmptyState';
 import Modal from '../components/Modal';
 import { ShelvesSkeleton } from '../components/Skeleton';
@@ -101,6 +102,7 @@ function ManageShelfModal({
   onUpdate: () => void;
 }) {
   const { t } = useLanguage();
+  const searchId = useId();
   const [search, setSearch] = useState('');
   const [results, setResults] = useState<Book[]>([]);
   const [searching, setSearching] = useState(false);
@@ -129,7 +131,11 @@ function ManageShelfModal({
     <Modal title={shelf.name} onClose={onClose}>
       <div className="space-y-4">
         <div className="flex gap-2">
+          <label htmlFor={searchId} className="sr-only">
+            {t.shelves.searchBooks}
+          </label>
           <input
+            id={searchId}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => {
@@ -218,6 +224,7 @@ export default function Shelves() {
   const { t } = useLanguage();
   const [showCreate, setShowCreate] = useState(false);
   const [activeShelf, setActiveShelf] = useState<Shelf | null>(null);
+  const [shelfToDelete, setShelfToDelete] = useState<Shelf | null>(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
@@ -242,9 +249,10 @@ export default function Shelves() {
     refetch();
   };
 
-  const deleteShelf = async (id: string) => {
-    if (!window.confirm(t.shelves.confirmDelete)) return;
-    await shelvesApi.delete(id);
+  const deleteShelf = async () => {
+    if (!shelfToDelete) return;
+    await shelvesApi.delete(shelfToDelete._id);
+    setShelfToDelete(null);
     refetch();
   };
 
@@ -258,6 +266,18 @@ export default function Shelves() {
 
   return (
     <div>
+      {shelfToDelete && (
+        <ConfirmModal
+          title={t.shelves.confirmDelete}
+          message={shelfToDelete.name}
+          confirmLabel={t.shelves.confirmDeleteLabel}
+          cancelLabel={t.settings.cancel}
+          danger
+          onConfirm={deleteShelf}
+          onClose={() => setShelfToDelete(null)}
+        />
+      )}
+
       {showCreate && (
         <Modal title={t.shelves.create} onClose={() => setShowCreate(false)}>
           <form onSubmit={createShelf} className="space-y-4">
@@ -338,7 +358,7 @@ export default function Shelves() {
             <ShelfCard
               key={shelf._id}
               shelf={shelf}
-              onDelete={() => deleteShelf(shelf._id)}
+              onDelete={() => setShelfToDelete(shelf)}
               onOpen={() => setActiveShelf(shelf)}
             />
           ))}
