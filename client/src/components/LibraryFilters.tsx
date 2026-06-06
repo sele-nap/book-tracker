@@ -49,7 +49,7 @@ export default function LibraryFilters({
         placeholder={t.library.search}
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
-        className="w-full bg-dusk border border-mist/40 rounded-lg px-4 py-2.5 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/70 mb-4"
+        className="w-full bg-dusk border border-mist/40 rounded-lg px-4 py-2.5 text-cream placeholder:text-stone text-sm focus:border-mist/70 mb-4"
       />
 
       <div

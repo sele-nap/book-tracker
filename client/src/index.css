@@ -59,11 +59,18 @@
   }
 }
 
-/* 2.4.7 — Focus Visible: all interactive elements get a visible ring */
+/* 2.4.7 — Focus Visible: buttons, links and other controls get a visible ring */
 :focus-visible {
   outline: 2px solid var(--color-wine);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+/* Inputs already show focus via border-color change — no extra outline needed */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
 }
 
 @keyframes fade-in {

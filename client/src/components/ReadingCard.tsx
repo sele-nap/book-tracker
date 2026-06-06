@@ -136,7 +136,7 @@ export default function ReadingCard({
               value={pageInput}
               onChange={(e) => setPageInput(e.target.value)}
               placeholder={t.reading.currentPage}
-              className="w-24 bg-bark border border-mist/40 rounded-lg px-2 py-1 text-cream text-xs focus-visible:outline-none focus:border-mist/60"
+              className="w-24 bg-bark border border-mist/40 rounded-lg px-2 py-1 text-cream text-xs focus:border-mist/60"
             />
             <button
               onClick={savePage}
@@ -157,19 +157,20 @@ export default function ReadingCard({
             </button>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 pt-1 border-t border-mist/20">
             <button
               onClick={() => markAs('finished')}
-              className="text-xs px-3 py-1 rounded-full bg-wine/20 text-blush hover:bg-wine/40 transition-colors"
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-sage/40 text-sage hover:bg-sage/10 transition-colors"
             >
-              <Check size={12} weight="light" aria-hidden="true" />{' '}
+              <Check size={11} weight="bold" aria-hidden="true" />
               {t.reading.markFinished}
             </button>
             <button
               onClick={() => markAs('dropped')}
-              className="text-xs px-3 py-1 rounded-full bg-stone/10 text-stone hover:bg-stone/20 transition-colors"
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-mist/30 text-stone hover:border-mist/50 hover:text-parchment transition-colors"
             >
-              — {t.reading.markDropped}
+              <span aria-hidden="true">×</span>
+              {t.reading.markDropped}
             </button>
           </div>
         </div>

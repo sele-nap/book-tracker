@@ -5,7 +5,7 @@ import { searchBooks } from '../api/bookSearch';
 import { useDebounce } from '../hooks/useDebounce';
 
 const inputClass =
-  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/70 transition-colors';
+  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus:border-mist/70 transition-colors';
 
 const SOURCE_LABEL: Record<BookSearchResult['source'], string> = {
   ol: 'OL',

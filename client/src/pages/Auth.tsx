@@ -74,7 +74,7 @@ export default function Auth() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-night border border-mist/30 rounded-lg px-3 py-2 text-sm text-cream placeholder:text-stone focus-visible:outline-none focus:border-wine/60"
+                className="bg-night border border-mist/30 rounded-lg px-3 py-2 text-sm text-cream placeholder:text-stone focus:border-wine/60"
               />
             </div>
 
@@ -95,7 +95,7 @@ export default function Auth() {
                 minLength={mode === 'register' ? 8 : undefined}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-night border border-mist/30 rounded-lg px-3 py-2 text-sm text-cream placeholder:text-stone focus-visible:outline-none focus:border-wine/60"
+                className="bg-night border border-mist/30 rounded-lg px-3 py-2 text-sm text-cream placeholder:text-stone focus:border-wine/60"
               />
             </div>
 

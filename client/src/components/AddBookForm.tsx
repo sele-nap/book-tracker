@@ -10,7 +10,7 @@ import GenreTagInput from './GenreTagInput';
 type Props = { onSuccess: () => void };
 
 const inputClass =
-  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/70 transition-colors';
+  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus:border-mist/70 transition-colors';
 const labelClass = 'block text-xs text-parchment mb-1';
 
 type Fields = {
@@ -95,7 +95,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       <div className="border-t border-mist/20 pt-4 grid grid-cols-2 gap-3">
         <div className="col-span-2">
-          <label htmlFor="add-title" className={labelClass}>{t.form.title} *</label>
+          <label htmlFor="add-title" className={labelClass}>
+            {t.form.title} *
+          </label>
           <input
             id="add-title"
             className={inputClass}
@@ -106,7 +108,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div className="col-span-2">
-          <label htmlFor="add-author" className={labelClass}>{t.form.author} *</label>
+          <label htmlFor="add-author" className={labelClass}>
+            {t.form.author} *
+          </label>
           <input
             id="add-author"
             className={inputClass}
@@ -117,7 +121,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div>
-          <label htmlFor="add-pages" className={labelClass}>{t.form.pages}</label>
+          <label htmlFor="add-pages" className={labelClass}>
+            {t.form.pages}
+          </label>
           <input
             id="add-pages"
             className={inputClass}
@@ -129,7 +135,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           />
         </div>
         <div>
-          <label htmlFor="add-year" className={labelClass}>{t.form.year}</label>
+          <label htmlFor="add-year" className={labelClass}>
+            {t.form.year}
+          </label>
           <input
             id="add-year"
             className={inputClass}
@@ -150,7 +158,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="add-language" className={labelClass}>{t.bookLanguage.label}</label>
+          <label htmlFor="add-language" className={labelClass}>
+            {t.bookLanguage.label}
+          </label>
           <select
             id="add-language"
             className={inputClass}
@@ -164,7 +174,9 @@ export default function AddBookForm({ onSuccess }: Props) {
           </select>
         </div>
         <div>
-          <label htmlFor="add-status" className={labelClass}>{t.form.status}</label>
+          <label htmlFor="add-status" className={labelClass}>
+            {t.form.status}
+          </label>
           <select
             id="add-status"
             className={inputClass}
@@ -181,7 +193,9 @@ export default function AddBookForm({ onSuccess }: Props) {
 
       {fields.status === 'finished' && (
         <div>
-          <label htmlFor="add-rating" className={labelClass}>{t.form.rating}</label>
+          <label htmlFor="add-rating" className={labelClass}>
+            {t.form.rating}
+          </label>
           <select
             id="add-rating"
             className={inputClass}
@@ -199,7 +213,9 @@ export default function AddBookForm({ onSuccess }: Props) {
       )}
 
       <div>
-        <label htmlFor="add-cover" className={labelClass}>{t.form.cover}</label>
+        <label htmlFor="add-cover" className={labelClass}>
+          {t.form.cover}
+        </label>
         <input
           id="add-cover"
           className={inputClass}

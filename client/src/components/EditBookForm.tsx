@@ -8,7 +8,7 @@ import GenreTagInput from './GenreTagInput';
 type Props = { book: Book; read?: Read; onSuccess: () => void };
 
 const inputClass =
-  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus-visible:outline-none focus:border-mist/70 transition-colors';
+  'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus:border-mist/70 transition-colors';
 const labelClass = 'block text-xs text-parchment mb-1';
 
 export default function EditBookForm({ book, read, onSuccess }: Props) {
