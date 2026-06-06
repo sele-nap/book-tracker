@@ -63,7 +63,7 @@ function ChallengeCard({
         </div>
         <div className="h-2 bg-bark rounded-full overflow-hidden">
           <div
-            className={`h-full rounded-full transition-all duration-700 ${done ? 'bg-amber' : 'bg-gradient-to-r from-wine to-blush'}`}
+            className={`h-full rounded-full transition-all duration-700 ${done ? 'bg-amber' : 'bg-linear-to-r from-wine to-blush'}`}
             style={{ width: `${pct}%` }}
           />
         </div>

@@ -36,7 +36,7 @@ function ProgressBar({
         className="h-1.5 bg-bark rounded-full overflow-hidden"
       >
         <div
-          className="h-full bg-gradient-to-r from-wine to-blush rounded-full transition-all duration-500"
+          className="h-full bg-linear-to-r from-wine to-blush rounded-full transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
