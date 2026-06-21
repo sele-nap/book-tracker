@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/User.js';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000; // 30 days
+const COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000;
 
 export const COOKIE_OPTIONS = {
   httpOnly: true,

@@ -93,7 +93,7 @@ const illustrations: Record<Variant, ReactElement> = {
       <defs>
         <mask id="moon-crescent-mask">
           <rect width="80" height="80" fill="white" />
-          {/* cutout circle that bites into the right side, creating the crescent */}
+
           <circle cx="50" cy="37" r="17" fill="black" />
         </mask>
         <radialGradient id="moon-glow" cx="35%" cy="40%" r="60%">
@@ -102,7 +102,6 @@ const illustrations: Record<Variant, ReactElement> = {
         </radialGradient>
       </defs>
 
-      {/* Soft glow halo behind the crescent */}
       <circle
         cx="37"
         cy="41"
@@ -111,7 +110,6 @@ const illustrations: Record<Variant, ReactElement> = {
         mask="url(#moon-crescent-mask)"
       />
 
-      {/* Moon body */}
       <circle
         cx="37"
         cy="41"
@@ -123,7 +121,6 @@ const illustrations: Record<Variant, ReactElement> = {
         mask="url(#moon-crescent-mask)"
       />
 
-      {/* Inner concave edge highlight */}
       <circle
         cx="50"
         cy="37"
@@ -135,7 +132,6 @@ const illustrations: Record<Variant, ReactElement> = {
         mask="url(#moon-crescent-mask)"
       />
 
-      {/* Subtle craters */}
       <circle
         cx="30"
         cy="43"
@@ -164,7 +160,6 @@ const illustrations: Record<Variant, ReactElement> = {
         mask="url(#moon-crescent-mask)"
       />
 
-      {/* Stars */}
       <text x="54" y="24" fontSize="10" fill="#c49848" opacity="0.7">
         ✦
       </text>

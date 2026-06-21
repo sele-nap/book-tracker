@@ -52,18 +52,15 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
 
   return (
     <div className="flex gap-2 sm:gap-4 group">
-      {/* Timeline spine */}
       <div className="flex flex-col items-center shrink-0 w-7 sm:w-10">
         <div className="w-2.5 h-2.5 rounded-full bg-wine mt-1.5 shrink-0 group-hover:bg-blush transition-colors" />
         <div className="w-px flex-1 bg-mist/20 mt-1" />
       </div>
 
-      {/* Card */}
       <Link
         to={`/books/${read.book._id}`}
         className="flex gap-2 sm:gap-3 pb-5 sm:pb-6 flex-1 hover:opacity-80 transition-opacity"
       >
-        {/* Date label */}
         <div className="shrink-0 w-10 text-right mt-0.5">
           {finished ? (
             <>
@@ -79,7 +76,6 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
           )}
         </div>
 
-        {/* Cover */}
         <div className="w-10 h-14 bg-bark rounded overflow-hidden shrink-0">
           {read.book.coverUrl ? (
             <img
@@ -98,7 +94,6 @@ function TimelineEntry({ read, locale }: { read: Read; locale: string }) {
           )}
         </div>
 
-        {/* Info */}
         <div className="flex-1 min-w-0">
           <h3 className="font-display text-cream text-sm leading-snug truncate">
             {read.book.title}

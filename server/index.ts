@@ -28,13 +28,13 @@ const PORT = process.env.PORT ?? 3000;
 
 const allowedOrigins = process.env.CLIENT_URL
   ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
-  : ['http://localhost:5173'];
+  : ['http://localhost:5173', 'http://localhost:5174'];
 
 app.use(helmet());
 
 app.use(
   rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 15 * 60 * 1000,
     max: 300,
     standardHeaders: true,
     legacyHeaders: false,

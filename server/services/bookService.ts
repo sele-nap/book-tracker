@@ -9,7 +9,19 @@ export const bookService = {
     limit: number,
     q?: string,
   ) {
-    const filter = q ? { userId, $text: { $search: q } } : { userId };
+    const filter = q
+      ? {
+          userId,
+          $or: [
+            {
+              title: new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'),
+            },
+            {
+              author: new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'),
+            },
+          ],
+        }
+      : { userId };
     const skip = (page - 1) * limit;
     const [books, total] = await Promise.all([
       Book.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
@@ -44,6 +56,10 @@ export const bookService = {
   },
 
   async search(userId: Types.ObjectId, q: string) {
-    return Book.find({ userId, $text: { $search: q } });
+    const pattern = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    return Book.find({
+      userId,
+      $or: [{ title: pattern }, { author: pattern }],
+    });
   },
 };

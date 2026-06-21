@@ -77,6 +77,8 @@ export const translations = {
       remove: 'retirer',
       confirmDelete: 'Supprimer cette étagère définitivement ?',
       confirmDeleteLabel: 'Supprimer',
+      namePlaceholder: 'mes fantasy préférés…',
+      descriptionPlaceholder: 'mes livres favoris…',
     },
     stats: {
       title: 'Stats ✨',
@@ -251,6 +253,8 @@ export const translations = {
       remove: 'remove',
       confirmDelete: 'Delete this shelf permanently?',
       confirmDeleteLabel: 'Delete',
+      namePlaceholder: 'fantasy favs…',
+      descriptionPlaceholder: 'my favourite books…',
     },
     stats: {
       title: 'Stats ✨',

@@ -11,14 +11,26 @@ export default function Modal({ title, onClose, children }: Props) {
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const first = dialog.querySelector<HTMLElement>(
+      'button,input,select,textarea,[tabindex]:not([tabindex="-1"])',
+    );
+    first?.focus();
+  }, []);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
         return;
       }
 
-      if (e.key === 'Tab' && dialogRef.current) {
-        const focusable = dialogRef.current.querySelectorAll<HTMLElement>(
+      if (e.key === 'Tab' && dialog) {
+        const focusable = dialog.querySelectorAll<HTMLElement>(
           'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])',
         );
         const first = focusable[0];
@@ -34,12 +46,6 @@ export default function Modal({ title, onClose, children }: Props) {
     };
 
     window.addEventListener('keydown', onKey);
-    // focus the first focusable element on open
-    const first = dialogRef.current?.querySelector<HTMLElement>(
-      'button,input,select,textarea,[tabindex]:not([tabindex="-1"])',
-    );
-    first?.focus();
-
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
@@ -56,7 +62,6 @@ export default function Modal({ title, onClose, children }: Props) {
         className="bg-dusk border border-mist/30 rounded-3xl w-full max-w-lg mx-3 p-4 sm:p-6 shadow-2xl shadow-night/60 animate-scale-in relative overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Top accent line */}
         <div
           aria-hidden="true"
           className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-wine/50 to-transparent"

@@ -43,7 +43,6 @@ export default function RootLayout() {
 
   return (
     <div className="flex min-h-screen bg-night text-cream">
-      {/* Skip link */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:bg-wine focus:text-cream focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm"
@@ -51,7 +50,6 @@ export default function RootLayout() {
         Skip to main content
       </a>
 
-      {/* Sidebar — desktop only */}
       <aside className="hidden md:flex w-56 shrink-0 border-r border-mist/20 flex-col py-8 px-4 gap-2 relative">
         <div
           aria-hidden="true"
@@ -118,7 +116,6 @@ export default function RootLayout() {
         </div>
       </aside>
 
-      {/* Main content */}
       <main
         id="main-content"
         className="flex-1 p-4 md:p-8 overflow-y-auto pb-28 md:pb-8"
@@ -126,7 +123,6 @@ export default function RootLayout() {
         <Outlet />
       </main>
 
-      {/* ── Mobile floating pill nav ── */}
       <nav
         aria-label="Main navigation"
         className="md:hidden fixed bottom-5 left-1/2 -translate-x-1/2 z-40
@@ -155,10 +151,8 @@ export default function RootLayout() {
           </NavLink>
         ))}
 
-        {/* Divider */}
         <div aria-hidden="true" className="w-px h-5 bg-mist/30 mx-1" />
 
-        {/* More button */}
         <button
           onClick={() => setSheetOpen(true)}
           aria-label="More navigation options"
@@ -173,27 +167,22 @@ export default function RootLayout() {
         </button>
       </nav>
 
-      {/* ── Bottom sheet ── */}
       {sheetOpen && (
         <div
           className="md:hidden fixed inset-0 z-50 flex flex-col justify-end"
           onClick={() => setSheetOpen(false)}
         >
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-night/70 backdrop-blur-sm animate-fade-in" />
 
-          {/* Sheet */}
           <div
             className="relative bg-dusk border-t border-mist/20 rounded-t-3xl p-6 pb-10 animate-scale-in"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Handle */}
             <div
               aria-hidden="true"
               className="w-10 h-1 bg-mist/40 rounded-full mx-auto mb-6"
             />
 
-            {/* Close */}
             <button
               onClick={() => setSheetOpen(false)}
               aria-label="Close menu"
@@ -202,7 +191,6 @@ export default function RootLayout() {
               <X size={18} weight="light" />
             </button>
 
-            {/* Secondary nav */}
             <nav aria-label="More navigation">
               <ul className="flex flex-col gap-1">
                 {secondaryNav.map(({ to, label, icon: Icon }) => (
@@ -229,7 +217,6 @@ export default function RootLayout() {
               </ul>
             </nav>
 
-            {/* Footer */}
             <div className="flex items-center justify-between mt-6 pt-5 border-t border-mist/20 px-4">
               <LanguageToggle />
               <button

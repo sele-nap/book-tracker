@@ -9,7 +9,6 @@ export default function LibraryPagination({
 }) {
   if (totalPages <= 1) return null;
 
-  // On small screens only show neighbours; always show first/last
   const pages: (number | '…')[] = [];
   for (let p = 1; p <= totalPages; p++) {
     if (p === 1 || p === totalPages || Math.abs(p - page) <= 1) {

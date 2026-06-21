@@ -51,6 +51,7 @@ export const getUserBooksSearch = asyncHandler(
       res.status(400).json({ errors: [{ id: 'q', type: 'required' }] });
       return;
     }
+    res.set('Cache-Control', 'no-store');
     res.json(await bookService.search(req.userId, q));
   },
 );

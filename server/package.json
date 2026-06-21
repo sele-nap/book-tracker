@@ -6,7 +6,9 @@
     "dev": "node --env-file=.env ./node_modules/.bin/tsx watch index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "seed": "node --env-file=.env ./node_modules/.bin/tsx scripts/seed.ts"
+    "seed": "node --env-file=.env ./node_modules/.bin/tsx scripts/seed.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -30,6 +32,7 @@
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }
