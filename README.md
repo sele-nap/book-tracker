@@ -1,6 +1,6 @@
 # 📚 Book Tracker
 
-A cozy witchy grimoire to track your reading life — because a TBR pile is just a to-do list with better vibes.
+A cozy witchy grimoire to track your reading life, because a TBR pile is just a to-do list with better vibes.
 
 ## Stack
 
