@@ -36,10 +36,10 @@ export default function ConfirmModal({
           type="button"
           onClick={onConfirm}
           disabled={loading}
-          className={`text-sm text-cream px-4 py-2 rounded-lg transition-colors disabled:opacity-50 ${
+          className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors disabled:opacity-50 ${
             danger
-              ? 'bg-rose-800/60 hover:bg-rose-700/60'
-              : 'bg-wine/80 hover:bg-wine'
+              ? 'bg-rose-800/60 hover:bg-rose-700/60 text-cream'
+              : 'bg-wine/80 hover:bg-wine text-night'
           }`}
         >
           {loading ? '…' : confirmLabel}

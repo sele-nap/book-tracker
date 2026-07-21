@@ -30,10 +30,10 @@ export default function LanguageToggle() {
       <button
         onClick={handleToggle}
         aria-label={`Switch to ${locale === 'fr' ? 'English' : 'French'}`}
-        className="flex w-fit cursor-pointer appearance-none rounded-full border border-moss/60 p-0.5 relative z-1 shadow-[0_2px_10px_rgba(0,0,0,0.4)] transition-[border-color,box-shadow] duration-300 hover:border-wine hover:shadow-[0_4px_15px_rgba(122,45,62,0.3)]"
+        className="flex w-fit cursor-pointer appearance-none rounded-full border border-moss/60 p-0.5 relative z-1 shadow-[0_2px_10px_rgba(0,0,0,0.4)] transition-[border-color,box-shadow] duration-300 hover:border-wine hover:shadow-[0_4px_15px_rgba(203,166,247,0.25)]"
         style={{
           background:
-            'linear-gradient(135deg, rgba(42,35,48,0.8), rgba(58,92,58,0.5))',
+            'linear-gradient(135deg, rgba(24,24,37,0.8), rgba(49,50,68,0.5))',
         }}
       >
         {(['fr', 'en'] as const).map((l) => (
@@ -41,7 +41,7 @@ export default function LanguageToggle() {
             key={l}
             className={`pointer-events-none relative px-2.5 py-0.5 font-mono text-[0.625rem] font-semibold uppercase tracking-wider transition-all duration-300 ${
               locale === l
-                ? 'rounded-full bg-wine/50 text-cream [text-shadow:0_0_6px_rgba(196,154,80,0.4)]'
+                ? 'rounded-full bg-wine/50 text-cream [text-shadow:0_0_6px_rgba(250,179,135,0.4)]'
                 : 'text-stone'
             }`}
           >

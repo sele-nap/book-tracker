@@ -79,7 +79,7 @@ export default function CreateChallengeForm({
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-lg transition-colors"
+        className="w-full bg-wine hover:bg-rose disabled:opacity-50 text-night font-medium text-sm py-2.5 rounded-lg transition-colors"
       >
         {loading ? (
           <CircleNotch

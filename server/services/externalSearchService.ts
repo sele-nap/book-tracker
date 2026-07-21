@@ -6,7 +6,8 @@ export type BookSearchResult = {
   pages?: number;
   coverUrl?: string;
   language?: 'vo' | 'vf';
-  source: 'ol' | 'gb';
+  genres?: string[];
+  source: 'ol' | 'gb' | 'bnf';
 };
 
 type OLResult = {
@@ -28,6 +29,7 @@ type GBVolumeInfo = {
   pageCount?: number;
   language?: string;
   imageLinks?: { thumbnail?: string };
+  categories?: string[];
 };
 
 type GBItem = { id: string; volumeInfo: GBVolumeInfo };
@@ -73,7 +75,7 @@ function detectLanguage(languages?: string[]): 'vo' | 'vf' | undefined {
 }
 
 async function searchOpenLibrary(query: string): Promise<BookSearchResult[]> {
-  const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=8&fields=key,title,author_name,first_publish_year,number_of_pages_median,cover_i,language`;
+  const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&language=fre&limit=8&fields=key,title,author_name,first_publish_year,number_of_pages_median,cover_i,language`;
   const res = await fetchWithTimeout(url);
   const data = (await res.json()) as OLResponse;
   return data.docs.map((r) => ({
@@ -111,8 +113,87 @@ async function searchGoogleBooks(query: string): Promise<BookSearchResult[]> {
         : item.volumeInfo.language
           ? 'vo'
           : undefined,
+    genres: item.volumeInfo.categories
+      ?.flatMap((c) => c.split(' / '))
+      .filter((g, i, arr) => arr.indexOf(g) === i)
+      .slice(0, 3),
     source: 'gb' as const,
   }));
+}
+
+function decodeXmlEntities(str: string): string {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+}
+
+function extractTags(block: string, tag: string): string[] {
+  const re = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\\/${tag}>`, 'g');
+  const matches: string[] = [];
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(block))) {
+    matches.push(decodeXmlEntities(m[1].trim()));
+  }
+  return matches;
+}
+
+function cleanBnfAuthor(raw?: string): string | undefined {
+  if (!raw) return undefined;
+  const beforeParen = raw.split('(')[0].trim().replace(/[.,]$/, '');
+  const [last, ...rest] = beforeParen.split(', ');
+  if (rest.length === 0 || !last) return beforeParen || undefined;
+  return `${rest.join(', ')} ${last}`.trim();
+}
+
+function parseBnfRecord(block: string): BookSearchResult | undefined {
+  const types = extractTags(block, 'dc:type');
+  if (!types.some((t) => /texte/i.test(t))) return undefined;
+
+  const rawTitle = extractTags(block, 'dc:title')[0];
+  if (!rawTitle) return undefined;
+  const title = rawTitle.split(' / ')[0].trim();
+
+  const identifiers = extractTags(block, 'dc:identifier');
+  const key = identifiers.find((id) => id.startsWith('http')) ?? title;
+  const isbn = identifiers
+    .find((id) => id.startsWith('ISBN '))
+    ?.slice(5)
+    .replace(/[^0-9Xx]/g, '');
+
+  const dateStr = extractTags(block, 'dc:date')[0];
+  const year = dateStr?.match(/\d{4}/)?.[0];
+
+  const formatStr = extractTags(block, 'dc:format')[0];
+  const pages = formatStr?.match(/(\d+)\s*p\./)?.[1];
+
+  const language = extractTags(block, 'dc:language')[0];
+
+  return {
+    key: `bnf-${key}`,
+    title,
+    author: cleanBnfAuthor(extractTags(block, 'dc:creator')[0]),
+    year: year ? parseInt(year, 10) : undefined,
+    pages: pages ? parseInt(pages, 10) : undefined,
+    coverUrl: isbn
+      ? `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg?default=false`
+      : undefined,
+    language: language ? (language === 'fre' ? 'vf' : 'vo') : undefined,
+    source: 'bnf' as const,
+  };
+}
+
+async function searchBnF(query: string): Promise<BookSearchResult[]> {
+  const cql = `(bib.title all "${query}") or (bib.author all "${query}")`;
+  const url = `https://catalogue.bnf.fr/api/SRU?version=1.2&operation=searchRetrieve&query=${encodeURIComponent(cql)}&recordSchema=dublincore&maximumRecords=8`;
+  const res = await fetchWithTimeout(url);
+  const xml = await res.text();
+  const blocks = xml.match(/<srw:record>[\s\S]*?<\/srw:record>/g) ?? [];
+  return blocks
+    .map(parseBnfRecord)
+    .filter((r): r is BookSearchResult => r !== undefined);
 }
 
 export async function searchExternalBooks(
@@ -122,14 +203,16 @@ export async function searchExternalBooks(
   const cached = cache.get(cacheKey);
   if (cached && cached.expiresAt > Date.now()) return cached.results;
 
-  const [olRaw, gbRaw] = await Promise.allSettled([
+  const [olRaw, gbRaw, bnfRaw] = await Promise.allSettled([
     searchOpenLibrary(query),
     searchGoogleBooks(query),
+    searchBnF(query),
   ]);
 
   const results = deduplicate([
     ...settled(olRaw, 'OpenLibrary'),
     ...settled(gbRaw, 'Google Books'),
+    ...settled(bnfRaw, 'BnF'),
   ]).slice(0, 10);
 
   if (cache.size > 500) cache.clear();

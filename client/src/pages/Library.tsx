@@ -80,12 +80,12 @@ export default function Library() {
         <div>
           <h1 className="text-3xl mb-1">{t.library.title}</h1>
           <p className="text-parchment">
-            {booksPage?.total ?? '—'} {t.library.bookCount} ✨
+            {booksPage?.total ?? '—'} {t.library.bookCount}
           </p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="bg-wine hover:bg-rose text-cream text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
+          className="bg-wine hover:bg-rose text-night font-medium text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
         >
           {t.library.add}
         </button>

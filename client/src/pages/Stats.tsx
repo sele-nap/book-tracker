@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -54,20 +54,30 @@ const MONTHS_EN = [
 ];
 
 const COLORS = [
-  '#b856a0',
-  '#d07ab8',
-  '#e8a4d0',
-  '#c49a50',
-  '#8aaa70',
-  '#5a8a50',
-  '#564474',
+  '#cba6f7',
+  '#f5c2e7',
+  '#f2cdcd',
+  '#fab387',
+  '#a6e3a1',
+  '#94e2d5',
+  '#585b70',
 ];
 
+const measureCanvas =
+  typeof document !== 'undefined' ? document.createElement('canvas') : null;
+
+function measureTextWidth(text: string, font: string): number {
+  const ctx = measureCanvas?.getContext('2d');
+  if (!ctx) return text.length * 7;
+  ctx.font = font;
+  return ctx.measureText(text).width;
+}
+
 const tooltipStyle = {
-  backgroundColor: '#2e2244',
-  border: '1px solid #564474',
+  backgroundColor: '#181825',
+  border: '1px solid #585b70',
   borderRadius: '8px',
-  color: '#faf0fc',
+  color: '#cdd6f4',
   fontSize: '12px',
 };
 
@@ -98,6 +108,16 @@ export default function Stats() {
     '/stats/streak',
     statsApi.streak,
   );
+
+  const genreAxisWidth = useMemo(() => {
+    if (!ratings?.length) return 64;
+    const longest = Math.max(
+      ...ratings.map((r) =>
+        measureTextWidth(r.genre, '11px Manrope, sans-serif'),
+      ),
+    );
+    return Math.min(160, Math.max(64, Math.ceil(longest) + 16));
+  }, [ratings]);
 
   useEffect(() => {
     document.title = `${t.stats.title} — Book Tracker`;
@@ -167,7 +187,7 @@ export default function Stats() {
                   key={y}
                   onClick={() => setYear(y)}
                   aria-pressed={year === y}
-                  className={`text-xs px-2.5 py-1 rounded-full transition-colors ${year === y ? 'bg-wine text-cream' : 'text-stone hover:text-parchment'}`}
+                  className={`text-xs px-2.5 py-1 rounded-full transition-colors font-medium ${year === y ? 'bg-wine text-night' : 'text-stone hover:text-parchment font-normal'}`}
                 >
                   {y}
                 </button>
@@ -178,28 +198,28 @@ export default function Stats() {
             <BarChart data={monthData} barSize={14}>
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="#564474"
+                stroke="#585b70"
                 vertical={false}
               />
               <XAxis
                 dataKey="month"
-                tick={{ fill: '#c0a0cc', fontSize: 11 }}
+                tick={{ fill: '#a6adc8', fontSize: 11 }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
-                tick={{ fill: '#c0a0cc', fontSize: 11 }}
+                tick={{ fill: '#a6adc8', fontSize: 11 }}
                 axisLine={false}
                 tickLine={false}
                 allowDecimals={false}
               />
               <Tooltip
                 contentStyle={tooltipStyle}
-                cursor={{ fill: 'rgba(184,86,160,0.12)' }}
+                cursor={{ fill: 'rgba(203,166,247,0.12)' }}
               />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                 {monthData.map((_, i) => (
-                  <Cell key={i} fill={i % 2 === 0 ? '#b856a0' : '#d07ab8'} />
+                  <Cell key={i} fill={i % 2 === 0 ? '#cba6f7' : '#f5c2e7'} />
                 ))}
               </Bar>
             </BarChart>
@@ -244,27 +264,27 @@ export default function Stats() {
             <BarChart data={ratings ?? []} barSize={20} layout="vertical">
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="#564474"
+                stroke="#585b70"
                 horizontal={false}
               />
               <XAxis
                 type="number"
                 domain={[0, 5]}
-                tick={{ fill: '#c0a0cc', fontSize: 11 }}
+                tick={{ fill: '#a6adc8', fontSize: 11 }}
                 axisLine={false}
                 tickLine={false}
               />
               <YAxis
                 type="category"
                 dataKey="genre"
-                tick={{ fill: '#c0a0cc', fontSize: 11 }}
+                tick={{ fill: '#a6adc8', fontSize: 11 }}
                 axisLine={false}
                 tickLine={false}
-                width={64}
+                width={genreAxisWidth}
               />
               <Tooltip
                 contentStyle={tooltipStyle}
-                cursor={{ fill: 'rgba(184,86,160,0.12)' }}
+                cursor={{ fill: 'rgba(203,166,247,0.12)' }}
                 formatter={(v) => [`${v} ★`, '']}
               />
               <Bar dataKey="avgRating" radius={[0, 4, 4, 0]}>

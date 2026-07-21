@@ -108,7 +108,7 @@ export default function Auth() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 bg-wine/80 hover:bg-wine text-cream text-sm font-body py-2.5 rounded-2xl transition-all duration-200 disabled:opacity-50"
+              className="mt-2 bg-wine/80 hover:bg-wine text-night font-medium text-sm font-body py-2.5 rounded-2xl transition-all duration-200 disabled:opacity-50"
             >
               {submitting
                 ? '…'

@@ -64,10 +64,10 @@ export default function LibraryFilters({
               key={value}
               onClick={() => onStatusChange(value)}
               aria-pressed={statusFilter === value}
-              className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-colors ${
+              className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-colors font-medium ${
                 statusFilter === value
-                  ? 'bg-wine text-cream'
-                  : 'bg-bark text-parchment hover:bg-mist/30'
+                  ? 'bg-wine text-night'
+                  : 'bg-bark text-parchment hover:bg-mist/30 font-normal'
               }`}
             >
               <Icon size={12} weight="light" aria-hidden="true" />

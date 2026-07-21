@@ -67,7 +67,7 @@ export default function SettingsPasswordForm() {
         <button
           type="submit"
           disabled={loading}
-          className="self-start bg-wine/80 hover:bg-wine text-cream text-base font-body px-5 py-2.5 rounded-2xl transition-all duration-200 disabled:opacity-50"
+          className="self-start bg-wine/80 hover:bg-wine text-night font-medium text-base font-body px-5 py-2.5 rounded-2xl transition-all duration-200 disabled:opacity-50"
         >
           {loading ? '…' : t.settings.save}
         </button>

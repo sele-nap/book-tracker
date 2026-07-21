@@ -8,7 +8,8 @@ export type BookSearchResult = {
   pages?: number;
   coverUrl?: string;
   language?: 'vo' | 'vf';
-  source: 'ol' | 'gb';
+  genres?: string[];
+  source: 'ol' | 'gb' | 'bnf';
 };
 
 export async function searchBooks(query: string): Promise<BookSearchResult[]> {

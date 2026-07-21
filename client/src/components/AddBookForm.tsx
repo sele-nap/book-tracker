@@ -56,6 +56,7 @@ export default function AddBookForm({ onSuccess }: Props) {
       publishedYear: result.year ? String(result.year) : f.publishedYear,
       coverUrl: result.coverUrl ?? f.coverUrl,
       language: result.language ?? f.language,
+      genre: result.genres?.length ? result.genres : f.genre,
     }));
   };
 
@@ -236,7 +237,7 @@ export default function AddBookForm({ onSuccess }: Props) {
         type="submit"
         disabled={loading}
         aria-busy={loading}
-        className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-cream text-sm py-2.5 rounded-2xl transition-all duration-200 hover:scale-[1.02] font-body"
+        className="mt-2 bg-wine hover:bg-rose disabled:opacity-50 text-night font-medium text-sm py-2.5 rounded-2xl transition-all duration-200 hover:scale-[1.02] font-body"
       >
         {loading ? (
           <CircleNotch

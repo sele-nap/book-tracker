@@ -11,7 +11,7 @@ import {
   X,
 } from '@phosphor-icons/react';
 import { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import LanguageToggle from '../components/LanguageToggle.js';
 import { useAuth } from '../hooks/useAuth.js';
 import { useLanguage } from '../hooks/useLanguage.js';
@@ -45,7 +45,7 @@ export default function RootLayout() {
     <div className="flex min-h-screen bg-night text-cream">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:bg-wine focus:text-cream focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:bg-wine focus:text-night focus:font-medium focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm"
       >
         Skip to main content
       </a>
@@ -56,19 +56,22 @@ export default function RootLayout() {
           className="absolute inset-0 bg-linear-to-b from-wine/5 via-transparent to-transparent pointer-events-none"
         />
 
-        <div className="flex items-center gap-3 px-2 mb-6 relative">
+        <Link
+          to="/"
+          className="flex items-center gap-3 px-2 mb-6 relative rounded-lg focus-visible:outline-2 focus-visible:outline-wine focus-visible:outline-offset-2"
+        >
           <img
             src="/logo.svg"
             alt=""
             aria-hidden="true"
-            className="w-10 h-10 drop-shadow-[0_0_8px_rgba(144,96,176,0.5)]"
+            className="w-10 h-10 drop-shadow-[0_0_8px_rgba(203,166,247,0.5)]"
           />
           <span className="font-display text-lg text-cream tracking-wide leading-tight">
             Book
             <br />
             Tracker
           </span>
-        </div>
+        </Link>
 
         <nav aria-label="Sidebar navigation" className="relative">
           <ul className="flex flex-col gap-0.5">
@@ -80,7 +83,7 @@ export default function RootLayout() {
                   className={({ isActive }) =>
                     `flex items-center gap-3 px-3 py-2.5 rounded-lg text-base transition-all duration-200 ${
                       isActive
-                        ? 'bg-wine/20 text-cream border-l-2 border-wine shadow-[inset_0_0_16px_rgba(144,96,176,0.12)]'
+                        ? 'bg-wine/20 text-cream border-l-2 border-wine shadow-[inset_0_0_16px_rgba(203,166,247,0.12)]'
                         : 'text-parchment hover:bg-bark/80 hover:text-cream border-l-2 border-transparent'
                     }`
                   }

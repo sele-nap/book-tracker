@@ -1,8 +1,9 @@
-import { Book, CircleNotch } from '@phosphor-icons/react';
+import { CircleNotch } from '@phosphor-icons/react';
 import { useEffect, useId, useState } from 'react';
 import type { BookSearchResult } from '../api/bookSearch';
 import { searchBooks } from '../api/bookSearch';
 import { useDebounce } from '../hooks/useDebounce';
+import SearchResultCover from './SearchResultCover';
 
 const inputClass =
   'w-full bg-bark border border-mist/40 rounded-lg px-3 py-2 text-cream placeholder:text-stone text-sm focus:border-mist/70 transition-colors';
@@ -10,10 +11,12 @@ const inputClass =
 const SOURCE_LABEL: Record<BookSearchResult['source'], string> = {
   ol: 'OL',
   gb: 'GB',
+  bnf: 'BnF',
 };
 const SOURCE_CLASS: Record<BookSearchResult['source'], string> = {
   ol: 'bg-mist/30 text-parchment',
   gb: 'bg-fern/20 text-fern',
+  bnf: 'bg-amber/20 text-amber',
 };
 
 type Props = {
@@ -94,24 +97,7 @@ export default function BookSearchInput({ label, onSelect }: Props) {
               onClick={() => handleSelect(r)}
               className="w-full flex items-center gap-3 px-3 py-2 hover:bg-bark/60 transition-colors text-left"
             >
-              {r.coverUrl ? (
-                <img
-                  src={r.coverUrl}
-                  alt=""
-                  className="w-8 h-11 object-cover rounded shrink-0"
-                />
-              ) : (
-                <div
-                  aria-hidden="true"
-                  className="w-8 h-11 bg-bark rounded shrink-0 flex items-center justify-center"
-                >
-                  <Book
-                    size={14}
-                    weight="light"
-                    className="opacity-20 text-parchment"
-                  />
-                </div>
-              )}
+              <SearchResultCover coverUrl={r.coverUrl} />
               <div className="min-w-0 flex-1">
                 <p className="text-cream text-xs font-display truncate">
                   {r.title}

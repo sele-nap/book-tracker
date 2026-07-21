@@ -43,10 +43,10 @@ export default function LibraryPagination({
             onClick={() => onPageChange(p)}
             aria-label={`Go to page ${p}`}
             aria-current={p === page ? 'page' : undefined}
-            className={`${btnBase} ${
+            className={`${btnBase} font-medium ${
               p === page
-                ? 'bg-wine text-cream'
-                : 'bg-bark text-parchment hover:bg-mist/30'
+                ? 'bg-wine text-night'
+                : 'bg-bark text-parchment hover:bg-mist/30 font-normal'
             }`}
           >
             {p}

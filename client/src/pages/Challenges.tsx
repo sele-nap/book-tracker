@@ -65,7 +65,7 @@ export default function Challenges() {
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="bg-wine hover:bg-rose text-cream text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
+          className="bg-wine hover:bg-rose text-night font-medium text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
         >
           {t.challenges.new}
         </button>

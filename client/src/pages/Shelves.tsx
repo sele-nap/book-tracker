@@ -105,7 +105,7 @@ export default function Shelves() {
             </div>
             <button
               type="submit"
-              className="w-full bg-wine hover:bg-rose text-cream text-sm py-2.5 rounded-lg transition-colors"
+              className="w-full bg-wine hover:bg-rose text-night font-medium text-sm py-2.5 rounded-lg transition-colors"
             >
               {t.shelves.create}
             </button>
@@ -128,7 +128,7 @@ export default function Shelves() {
         </div>
         <button
           onClick={() => setShowCreate(true)}
-          className="bg-wine hover:bg-rose text-cream text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
+          className="bg-wine hover:bg-rose text-night font-medium text-sm px-5 py-2 rounded-full transition-all duration-200 hover:scale-105 font-body"
         >
           {t.shelves.new}
         </button>

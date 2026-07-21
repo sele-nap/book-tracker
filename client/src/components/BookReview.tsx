@@ -50,7 +50,7 @@ export default function BookReview({
           onClick={handleSave}
           disabled={saving}
           aria-busy={saving}
-          className="mt-2 text-xs bg-wine hover:bg-rose text-cream px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+          className="mt-2 text-xs font-medium bg-wine hover:bg-rose text-night px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50"
         >
           {saving ? (
             <CircleNotch
